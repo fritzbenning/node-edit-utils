@@ -1,8 +1,10 @@
 import { clickHandler } from './clickHandler';
 
-export const setupEventListeners = (): (() => void) => {
+export const setupEventListeners = (
+  onNodeSelected: (node: HTMLElement | null) => void
+): (() => void) => {
   const handleClick = (event: MouseEvent) => {
-    clickHandler(event);
+    clickHandler(event, onNodeSelected);
   };
 
   document.addEventListener('click', handleClick);
