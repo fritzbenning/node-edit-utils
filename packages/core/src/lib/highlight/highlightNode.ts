@@ -1,17 +1,33 @@
 import { createHighlightFrame } from "./createHighlightFrame";
 import { getElementBounds } from "./helpers/getElementBounds";
+import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
+import { connectResizeObserver } from "./observer/connectResizeObserver";
+import { updateHighlightFrame } from "./updateHighlightFrame";
 
-export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElement): void => {
+let resizeObserver: (() => void) | null = null;
+let raf: number | null = null;
+
+export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElement): (() => void) | undefined => {
   if (!node) return;
 
-  const existingHighlightFrame = nodeProvider.querySelector(".highlight-frame");
+  const existingHighlightFrame = getHighlightFrameElement(nodeProvider);
   if (existingHighlightFrame) {
     existingHighlightFrame.remove();
   }
 
-  const { top, left, width, height } = getElementBounds(node, nodeProvider);
-
-  const highlightFrame = createHighlightFrame(top, left, width, height);
+  const highlightFrame = createHighlightFrame(node, nodeProvider);
 
   nodeProvider.appendChild(highlightFrame);
+
+  resizeObserver = connectResizeObserver(nodeProvider, () => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      updateHighlightFrame(node, nodeProvider);
+    });
+  });
+
+  return () => {
+    if (raf) cancelAnimationFrame(raf);
+    resizeObserver?.();
+  };
 };

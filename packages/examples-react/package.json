@@ -12,8 +12,8 @@
   "dependencies": {
     "@node-edit-utils/core": "workspace:*",
     "@node-edit-utils/react": "workspace:*",
-    "@markup-canvas/core": "1.2.3",
-    "@markup-canvas/react": "1.2.3",
+    "@markup-canvas/core": "1.2.4",
+    "@markup-canvas/react": "1.2.4",
     "lucide-react": "^0.546.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
-    "@types/node": "^24.0.0",
+    "@types/node": "^24.9.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
