@@ -3,9 +3,9 @@
   "version": "1.2.2",
   "description": "Utilities for editing nodes in a dom tree.",
   "type": "module",
-  "main": "dist/markup-canvas.cjs.js",
-  "module": "dist/markup-canvas.esm.js",
-  "browser": "dist/markup-canvas.umd.js",
+  "main": "dist/node-edit-utils.cjs.js",
+  "module": "dist/node-edit-utils.esm.js",
+  "browser": "dist/node-edit-utils.umd.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/",

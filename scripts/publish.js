@@ -4,12 +4,12 @@ const path = require("node:path");
 
 const PACKAGES = [
   {
-    name: "@markup-canvas/core",
+    name: "@node-edit-utils/core",
     dir: "packages/core",
     order: 1,
   },
   {
-    name: "@markup-canvas/react",
+    name: "@node-edit-utils/react",
     dir: "packages/react",
     order: 2,
   },

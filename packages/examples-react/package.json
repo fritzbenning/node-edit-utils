@@ -1,0 +1,42 @@
+{
+  "name": "@node-edit-utils/examples-react",
+  "private": true,
+  "version": "1.2.2",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "biome check .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@node-edit-utils/core": "workspace:*",
+    "@node-edit-utils/react": "workspace:*",
+    "lucide-react": "^0.546.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4",
+    "@heroicons/react": "^2.2.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.6",
+    "@types/node": "^24.8.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.11",
+    "@tailwindcss/vite": "^4.1.15",
+    "tailwindcss": "^4.1.15"
+  },
+  "author": "Fritz Benning <mail@fritzbenning.de>",
+  "license": "CC-BY-NC-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fritzbenning/node-edit-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/fritzbenning/node-edit-utils/issues"
+  },
+  "homepage": "https://github.com/fritzbenning/node-edit-utils#readme"
+}

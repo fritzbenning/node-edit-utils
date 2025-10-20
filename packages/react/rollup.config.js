@@ -4,7 +4,7 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 
 const banner = `/**
  * Markup Canvas React
- * React components and hooks for markup-canvas
+ * React components and hooks for node-edit-utils
  * @version ${process.env.npm_package_version || "0.1.0"}
  */`;
 
@@ -27,7 +27,7 @@ export default [
       }),
       nodeResolve(),
     ],
-    external: ["react", "react-dom", "@markup-canvas/core"],
+    external: ["react", "react-dom", "@node-edit-utils/core"],
   },
 
   // CommonJS build
@@ -47,6 +47,6 @@ export default [
       }),
       nodeResolve(),
     ],
-    external: ["react", "react-dom", "@markup-canvas/core"],
+    external: ["react", "react-dom", "@node-edit-utils/core"],
   },
 ];

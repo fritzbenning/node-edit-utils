@@ -16,7 +16,7 @@ export default [
   {
     input: "src/index.ts",
     output: {
-      file: "dist/markup-canvas.esm.js",
+      file: "dist/node-edit-utils.esm.js",
       format: "es",
       banner,
     },
@@ -38,7 +38,7 @@ export default [
   {
     input: "src/index.ts",
     output: {
-      file: "dist/markup-canvas.cjs.js",
+      file: "dist/node-edit-utils.cjs.js",
       format: "cjs",
       banner,
       exports: "named",
@@ -59,7 +59,7 @@ export default [
   {
     input: "src/umd.ts",
     output: {
-      file: "dist/markup-canvas.umd.js",
+      file: "dist/node-edit-utils.umd.js",
       format: "umd",
       name: "MarkupCanvas",
       banner,
@@ -80,7 +80,7 @@ export default [
   {
     input: "src/umd.ts",
     output: {
-      file: "dist/markup-canvas.umd.min.js",
+      file: "dist/node-edit-utils.umd.min.js",
       format: "umd",
       name: "MarkupCanvas",
       banner,

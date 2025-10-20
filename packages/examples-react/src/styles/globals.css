@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@100..900&family=Instrument+Serif&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", "Inter", "sans-serif";
+  --font-serif: "Instrument Serif", "sans-serif";
+  --color-primary: oklch(50.8% 0.118 165.612);
+}

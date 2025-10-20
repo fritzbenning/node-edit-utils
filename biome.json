@@ -32,6 +32,9 @@
         "useKeyWithClickEvents": "off",
         "noStaticElementInteractions": "off"
       },
+      "css": {
+        "noUnknownAtRules": "off"
+      },
       "nursery": {
         "useSortedClasses": {
           "level": "error",
