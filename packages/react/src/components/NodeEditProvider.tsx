@@ -1,11 +1,15 @@
-import { useNodeToolSet } from "@/hooks/useNodeToolSet";
+import type { NodeProviderRef } from "@node-edit-utils/core";
 import { useRef } from "react";
-import { NodeProviderRef } from "@node-edit-utils/core";
+import { useNodeToolSet } from "@/hooks/useNodeToolSet";
 
-export function NodeEditProvider({ children }: { children: React.ReactNode }) {    
+export function NodeEditProvider({ children }: { children: React.ReactNode }) {
   const nodeProviderRef = useRef<NodeProviderRef>(null);
 
   useNodeToolSet(nodeProviderRef);
 
-  return <div ref={nodeProviderRef} data-role="node-provider">{children}</div>;
+  return (
+    <div ref={nodeProviderRef} data-role="node-provider">
+      {children}
+    </div>
+  );
 }

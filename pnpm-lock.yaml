@@ -59,6 +59,12 @@ importers:
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.0)
+      '@markup-canvas/core':
+        specifier: 1.2.3
+        version: 1.2.3
+      '@markup-canvas/react':
+        specifier: 1.2.3
+        version: 1.2.3(@markup-canvas/core@1.2.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@node-edit-utils/core':
         specifier: workspace:*
         version: link:../core
@@ -85,7 +91,7 @@ importers:
         specifier: ^4.1.15
         version: 4.1.15(vite@7.1.11(@types/node@24.8.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0))
       '@types/node':
-        specifier: ^24.8.1
+        specifier: ^24.0.0
         version: 24.8.1
       '@types/react':
         specifier: ^19.2.2
@@ -481,6 +487,16 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@markup-canvas/core@1.2.3':
+    resolution: {integrity: sha512-AzRAwLYWaX0W/0/CXEvztpx+GCJzl4YcswBl0peGTweXgLu+k0iE+l7ir31MuD9HAYeKrt0I9BNR1rhBQVDnBw==}
+
+  '@markup-canvas/react@1.2.3':
+    resolution: {integrity: sha512-axW2zwQ+9zDJKxXKj4Ku/3h6P4kffmuJ6rrgE5Db+Hq9lESsBcg2qilbNZFnyMiheY3Ck9HOx4uYY8jmTmkB4Q==}
+    peerDependencies:
+      '@markup-canvas/core': 1.1.4
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   '@rolldown/pluginutils@1.0.0-beta.38':
     resolution: {integrity: sha512-N/ICGKleNhA5nc9XXQG/kkKHJ7S55u0x0XUJbbkmdCnFuoRkM1Il12q9q0eX19+M7KKUEPw/daUPIRnxhcxAIw==}
@@ -1673,6 +1689,14 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@markup-canvas/core@1.2.3': {}
+
+  '@markup-canvas/react@1.2.3(@markup-canvas/core@1.2.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@markup-canvas/core': 1.2.3
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
 
   '@rolldown/pluginutils@1.0.0-beta.38': {}
 

@@ -4,7 +4,7 @@ export const getElementsFromPoint = (clickX: number, clickY: number): Element[] 
   return Array.from(elements).reduce(
     (acc: { elements: Element[]; found: boolean }, el) => {
       if (acc.found) return acc;
-      if (el.getAttribute('data-role') === 'node-provider') {
+      if (el.getAttribute("data-role") === "node-provider") {
         acc.found = true;
         return acc;
       }

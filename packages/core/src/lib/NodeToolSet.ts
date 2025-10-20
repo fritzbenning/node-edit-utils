@@ -1,6 +1,6 @@
-import { sendPostMessage } from './events/sendPostMessage';
-import { setupEventListeners } from './events/setupEventListeners';
-import { highlightNode } from './select/highlightNode';
+import { sendPostMessage } from "./events/sendPostMessage";
+import { setupEventListeners } from "./events/setupEventListeners";
+import { highlightNode } from "./highlight/highlightNode";
 
 export class NodeToolSet {
   private cleanupEventListeners: (() => void) | null = null;
@@ -13,16 +13,14 @@ export class NodeToolSet {
   }
 
   private init(): void {
-    this.cleanupEventListeners = setupEventListeners(
-      (node: HTMLElement | null) => this.setSelectedNode(node)
-    );
+    this.cleanupEventListeners = setupEventListeners((node: HTMLElement | null) => this.setSelectedNode(node));
     this.bindToWindow(this);
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
     this.selectedNode = node;
-    sendPostMessage('selectedNodeChanged', node?.getAttribute('data-layer-id') ?? null);
-    highlightNode(node as HTMLElement ?? null);
+    sendPostMessage("selectedNodeChanged", node?.getAttribute("data-layer-id") ?? null);
+    highlightNode((node as HTMLElement) ?? null, this.nodeProvider as HTMLElement);
   }
 
   public getSelectedNode(): HTMLElement | null {
@@ -40,8 +38,8 @@ export class NodeToolSet {
     this.cleanup();
   }
 
-  public bindToWindow(instance: NodeToolSet, namespace: string = 'nodeEditUtils'): void {
-    if (typeof window !== 'undefined') {
+  public bindToWindow(instance: NodeToolSet, namespace: string = "nodeEditUtils"): void {
+    if (typeof window !== "undefined") {
       (window as any)[namespace] = instance;
     }
   }

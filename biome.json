@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
   "files": {
     "includes": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.css"],
     "ignoreUnknown": true
@@ -20,7 +20,8 @@
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useUniqueElementIds": "off",
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "noArrayIndexKey": "off"
       },
       "style": {
         "noNonNullAssertion": "off"
@@ -31,9 +32,6 @@
       "a11y": {
         "useKeyWithClickEvents": "off",
         "noStaticElementInteractions": "off"
-      },
-      "css": {
-        "noUnknownAtRules": "off"
       },
       "nursery": {
         "useSortedClasses": {
