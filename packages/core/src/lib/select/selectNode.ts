@@ -22,7 +22,7 @@ export const selectNode = (event: MouseEvent): HTMLElement | null => {
   }
 
   if (targetSameCandidates(candidateCache, candidates)) {
-    attempt >= candidates.length && attempt++;
+    attempt <= candidates.length && attempt++;
   } else {
     attempt = 0;
   }

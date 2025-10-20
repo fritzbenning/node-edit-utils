@@ -1,5 +1,6 @@
 import { sendPostMessage } from './events/sendPostMessage';
 import { setupEventListeners } from './events/setupEventListeners';
+import { highlightNode } from './select/highlightNode';
 
 export class NodeToolSet {
   private cleanupEventListeners: (() => void) | null = null;
@@ -20,7 +21,8 @@ export class NodeToolSet {
 
   private setSelectedNode(node: HTMLElement | null): void {
     this.selectedNode = node;
-    sendPostMessage('selectedNodeChanged', node);
+    sendPostMessage('selectedNodeChanged', node?.getAttribute('data-layer-id') ?? null);
+    highlightNode(node as HTMLElement ?? null);
   }
 
   public getSelectedNode(): HTMLElement | null {
