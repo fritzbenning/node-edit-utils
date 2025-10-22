@@ -1,0 +1,15 @@
+.node-tools {
+    position: absolute;
+    top: calc(100% + (0.25rem / var(--zoom)));
+    will-change: transform, opacity;
+    left: -1px;
+    display: flex;
+    gap: 0.25rem;
+    z-index: 10000;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: top left;
+    transition:
+      transform 0.1s ease,
+      opacity 0.2s ease-in-out;
+    opacity: var(--tool-opacity);
+  }

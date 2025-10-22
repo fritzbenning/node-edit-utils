@@ -1,13 +1,14 @@
 import { createHighlightFrame } from "./createHighlightFrame";
+import { createNodeTools } from "./createNodeTools";
 import { getElementBounds } from "./helpers/getElementBounds";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { connectResizeObserver } from "./observer/connectResizeObserver";
 import { updateHighlightFrame } from "./updateHighlightFrame";
 
-let resizeObserver: (() => void) | null = null;
-let raf: number | null = null;
-
-export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElement): (() => void) | undefined => {
+export const highlightNode = (
+  node: HTMLElement | null,
+  nodeProvider: HTMLElement,
+): (() => void) | undefined => {
   if (!node) return;
 
   const existingHighlightFrame = getHighlightFrameElement(nodeProvider);
@@ -17,7 +18,12 @@ export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElemen
 
   const highlightFrame = createHighlightFrame(node, nodeProvider);
 
+  createNodeTools(highlightFrame)
+
   nodeProvider.appendChild(highlightFrame);
+
+  let resizeObserver: (() => void) | null = null;
+  let raf: number | null = null;
 
   resizeObserver = connectResizeObserver(nodeProvider, () => {
     if (raf) cancelAnimationFrame(raf);

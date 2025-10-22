@@ -1,3 +1,4 @@
+import { clearHighlightFrame } from "@/umd";
 import { selectNode } from "../select/selectNode";
 
 export const clickHandler = (event: MouseEvent, onNodeSelected: (node: HTMLElement | null) => void, nodeProvider: HTMLElement | null): void => {
@@ -5,6 +6,7 @@ export const clickHandler = (event: MouseEvent, onNodeSelected: (node: HTMLEleme
   event.stopPropagation();
   
   if (nodeProvider && !nodeProvider.contains(event.target as Node)) {
+    clearHighlightFrame(nodeProvider);
     return;
   }
   

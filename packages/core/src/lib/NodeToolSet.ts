@@ -4,6 +4,7 @@ import { setupPostMessageListener } from "./events/setupPostMessageListener";
 import { highlightNode } from "./highlight/highlightNode";
 import { updateHighlightFrame } from "./highlight/updateHighlightFrame";
 import { updateHighlightFrameBorder } from "./highlight/updateHighlightFrameBorder";
+import { clearHighlightFrame } from "./highlight/clearHighlightFrame";
 
 export class NodeToolSet {
   private cleanupEventListener: (() => void) | null = null;
@@ -39,6 +40,13 @@ export class NodeToolSet {
 
   public updateHighlightFrameBorder(zoom: number): void {
     this.cleanupHighlightNode = updateHighlightFrameBorder(this.selectedNode as HTMLElement, this.nodeProvider as HTMLElement, zoom) ?? null;
+  }
+
+  public clearHighlightFrame(): void {
+    if (this.nodeProvider) {
+      clearHighlightFrame(this.nodeProvider);
+      this.selectedNode = null;
+    }
   }
 
   public cleanup(): void {

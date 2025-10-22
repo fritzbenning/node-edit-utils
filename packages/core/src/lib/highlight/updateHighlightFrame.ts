@@ -8,8 +8,8 @@ export const updateHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
   
   const { top, left, width, height } = getElementBounds(node, nodeProvider);
 
-  frame.style.top = `${top}px`;
-  frame.style.left = `${left}px`;
-  frame.style.width = `${width}px`;
-  frame.style.height = `${height}px`;
+  frame.style.setProperty("--frame-top", `${top}px`);
+  frame.style.setProperty("--frame-left", `${left}px`);
+  frame.style.setProperty("--frame-width", `${width}px`);
+  frame.style.setProperty("--frame-height", `${height}px`);
 };

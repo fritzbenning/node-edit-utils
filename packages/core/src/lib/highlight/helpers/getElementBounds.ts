@@ -13,10 +13,10 @@ export function getElementBounds(
     const relativeTop = elementRect.top - componentRootRect.top;
     const relativeLeft = elementRect.left - componentRootRect.left;
   
-    const top = (relativeTop - 1) / (window.canvas?.zoom.current ?? 1);
-    const left = (relativeLeft - 1) / (window.canvas?.zoom.current ?? 1);
-    const width = (elementRect.width + 2) / (window.canvas?.zoom.current ?? 1);
-    const height = (elementRect.height + 2) / (window.canvas?.zoom.current ?? 1);
+    const top = Math.round(relativeTop) / (window.canvas?.zoom.current ?? 1);
+    const left = Math.round(relativeLeft) / (window.canvas?.zoom.current ?? 1);
+    const width = Math.round(elementRect.width) / (window.canvas?.zoom.current ?? 1);
+    const height = Math.round(elementRect.height) / (window.canvas?.zoom.current ?? 1);
   
     return {
       top,

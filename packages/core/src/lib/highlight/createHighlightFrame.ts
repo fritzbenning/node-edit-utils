@@ -7,12 +7,17 @@ export const createHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
 
   const frame = document.createElement("div");
   frame.classList.add("highlight-frame");
+    
+  frame.style.setProperty("--frame-top", `${top}px`);
+  frame.style.setProperty("--frame-left", `${left}px`);
+  frame.style.setProperty("--frame-width", `${width}px`);
+  frame.style.setProperty("--frame-height", `${height}px`);
 
   frame.style.position = "absolute";
-  frame.style.top = `${top}px`;
-  frame.style.left = `${left}px`;
-  frame.style.width = `${width}px`;
-  frame.style.height = `${height}px`;
+  frame.style.top = `var(--frame-top)`;
+  frame.style.left = `var(--frame-left)`;
+  frame.style.width = `var(--frame-width)`;
+  frame.style.height = `var(--frame-height)`;
   frame.style.zIndex = "1000";
   frame.style.pointerEvents = "none";
   
