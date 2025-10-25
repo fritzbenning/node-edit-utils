@@ -1,11 +1,11 @@
 export interface EditModeManager {
-  enableEditMode: (
+  edit: (
     node: HTMLElement,
     nodeProvider: HTMLElement | null,
     onEditEnabled?: (node: HTMLElement) => void,
     onEditBlurred?: () => void
   ) => () => void;
-  blurEditMode: () => void;
+  blur: () => void;
   getCurrentEditableNode: () => HTMLElement | null;
   isEditing: () => boolean;
 }

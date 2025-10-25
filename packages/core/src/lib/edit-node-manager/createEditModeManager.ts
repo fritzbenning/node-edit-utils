@@ -1,8 +1,6 @@
 import type { BlurEditModeState } from "./blurEditMode";
-import { blurEditMode as createBlurEditMode } from "./blurEditMode";
-import { enableEditMode as createEnableEditMode } from "./enableEditMode";
-import { getCurrentEditableNode as createGetCurrentEditableNode } from "./getCurrentEditableNode";
-import { isEditing as createIsEditing } from "./isEditing";
+import { blurEditMode } from "./blurEditMode";
+import { enableEditMode } from "./enableEditMode";
 import type { EditModeManager } from "./types";
 
 export const createEditModeManager = (): EditModeManager => {
@@ -14,14 +12,30 @@ export const createEditModeManager = (): EditModeManager => {
     isBlurring: false,
   };
 
-  const blurEditMode = createBlurEditMode(state);
-  const enableEditMode = createEnableEditMode(state, blurEditMode);
-  const getCurrentEditableNode = createGetCurrentEditableNode(state);
-  const isEditing = createIsEditing(state);
+  const edit = (
+    node: HTMLElement,
+    nodeProvider: HTMLElement | null,
+    onEditEnabled?: (node: HTMLElement) => void,
+    onEditBlurred?: () => void
+  ) => {
+    return enableEditMode(state, blur, node, nodeProvider, onEditEnabled, onEditBlurred);
+  };
+
+  const getCurrentEditableNode = () => {
+    return state.currentEditableNode;
+  };
+
+  const isEditing = () => {
+    return state.currentEditableNode !== null;
+  };
+
+  const blur = () => {
+    blurEditMode(state);
+  };
 
   return {
-    enableEditMode,
-    blurEditMode,
+    edit,
+    blur,
     getCurrentEditableNode,
     isEditing,
   };

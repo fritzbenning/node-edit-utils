@@ -38,12 +38,12 @@ export class NodeTools {
     if (node && this.editModeManager.isEditing()) {
       const currentEditable = this.editModeManager.getCurrentEditableNode();
       if (currentEditable && currentEditable !== node) {
-        this.editModeManager.blurEditMode();
+        this.editModeManager.blur();
       }
     }
 
     if (node) {
-      this.editModeManager.enableEditMode(
+      this.editModeManager.edit(
         node,
         this.nodeProvider,
         (editNode) => {
@@ -105,7 +105,7 @@ export class NodeTools {
     }
 
     // Blur edit mode if active
-    this.editModeManager.blurEditMode();
+    this.editModeManager.blur();
   }
 
   public destroy(): void {
