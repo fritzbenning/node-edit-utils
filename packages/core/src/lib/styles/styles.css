@@ -58,12 +58,15 @@
 .tag-label {
   background-color: oklch(62.7% 0.265 303.9);
   color: white;
-  font-size: 0.625rem;
+  font-size: 0.575rem;
   font-weight: 500;
   text-transform: uppercase;
   height: 1.25rem;
-  padding: 0.15rem 0.375rem;
+  padding: 0 0.375rem;
   border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .responsive-container {
