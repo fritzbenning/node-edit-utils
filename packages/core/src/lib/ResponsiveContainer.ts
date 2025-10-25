@@ -21,31 +21,41 @@ export class ResponsiveContainer {
     this.resizeHandle = createResizeHandle(this.container);
     this.container.style.setProperty("--container-width", `${this.currentWidth}px`);
 
-    this.cleanupEventListener = setupEventListener(this.resizeHandle, this.startResize, this.handleResize, this.stopResize);
+    this.cleanupEventListener = setupEventListener(
+      this.resizeHandle,
+      this.startResize,
+      this.handleResize,
+      this.stopResize,
+      this.blurResize
+    );
   }
 
   private startResize = (event: MouseEvent): void => {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.isDragging = true;
     this.startX = event.clientX;
     this.startWidth = this.container.offsetWidth;
-    console.log("startX", this.startX);
-    console.log("startWidth", this.startWidth);
   };
 
   private handleResize = (event: MouseEvent): void => {
-    console.log("this.isDragging in handleResize", this.isDragging);
     if (!this.isDragging) return;
-    console.log("this.isDragging", this.isDragging);
     updateContainerWidth(this.container, event, this.startX, this.startWidth);
   };
 
-  private stopResize = (): void => {
+  private stopResize = (event: MouseEvent): void => {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.isDragging = false;
-    console.log("stopResize");
+  };
+
+  private blurResize = (): void => {
+    this.isDragging = false;
   };
 
   cleanup() {
-    console.log("cleanup");
     this.isDragging = false;
     this.cleanupEventListener?.();
   }

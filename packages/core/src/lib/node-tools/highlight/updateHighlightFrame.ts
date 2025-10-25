@@ -9,8 +9,6 @@ export const updateHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
   nodeProvider.style.setProperty("--zoom", zoom.toFixed(5));
   nodeProvider.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
 
-  console.log("stroke-width", (2 / zoom).toFixed(2));
-
   if (zoom >= 0.3) {
     nodeProvider.style.setProperty("--tool-opacity", `1`);
   } else {

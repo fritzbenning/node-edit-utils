@@ -14,8 +14,6 @@ export const clickHandler = (
     return;
   }
 
-  console.log("clickHandler", event);
-
   const selectedNode = selectNode(event);
   onNodeSelected(selectedNode);
 };
