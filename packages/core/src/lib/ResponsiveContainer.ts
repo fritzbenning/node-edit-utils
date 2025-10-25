@@ -41,12 +41,21 @@ export class ResponsiveContainer {
 
   private handleResize = (event: MouseEvent): void => {
     if (!this.isDragging) return;
+    const canvas: HTMLElement | null = document.querySelector(".canvas-container");
+    if (canvas) {
+      canvas.style.cursor = "ew-resize";
+    }
     updateContainerWidth(this.container, event, this.startX, this.startWidth);
   };
 
   private stopResize = (event: MouseEvent): void => {
     event.preventDefault();
     event.stopPropagation();
+
+    const canvas: HTMLElement | null = document.querySelector(".canvas-container");
+    if (canvas) {
+      canvas.style.cursor = "default";
+    }
 
     this.isDragging = false;
   };
