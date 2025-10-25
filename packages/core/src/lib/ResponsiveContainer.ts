@@ -1,3 +1,4 @@
+import { withRAFThrottle } from "./node-tools/highlight/helpers/createRafThrottle";
 import { updateContainerWidth } from "./responsive-container/container-width/updateContainerWidth";
 import { setupEventListener } from "./responsive-container/events/setupEventListener";
 import { createResizeHandle } from "./responsive-container/resize-handle/createResizeHandle";
@@ -6,6 +7,7 @@ export class ResponsiveContainer {
   private cleanupEventListener: (() => void) | null = null;
   private container: HTMLElement;
   private resizeHandle: HTMLElement | null = null;
+  private throttledHandleResize: ReturnType<typeof withRAFThrottle> | null = null;
 
   private currentWidth: number = 400;
   private isDragging: boolean = false;
@@ -21,10 +23,12 @@ export class ResponsiveContainer {
     this.resizeHandle = createResizeHandle(this.container);
     this.container.style.setProperty("--container-width", `${this.currentWidth}px`);
 
+    this.throttledHandleResize = withRAFThrottle(this.handleResize);
+
     this.cleanupEventListener = setupEventListener(
       this.resizeHandle,
       this.startResize,
-      this.handleResize,
+      this.throttledHandleResize,
       this.stopResize,
       this.blurResize
     );
@@ -66,6 +70,7 @@ export class ResponsiveContainer {
 
   cleanup() {
     this.isDragging = false;
+    this.throttledHandleResize?.cleanup();
     this.cleanupEventListener?.();
   }
 }
