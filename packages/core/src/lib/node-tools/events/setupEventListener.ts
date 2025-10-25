@@ -1,22 +1,24 @@
 import { clickHandler } from "./clickHandler";
 import { handlePostMessage } from "./handlePostMessage";
 
-export const setupEventListener = (onNodeSelected: (node: HTMLElement | null) => void, nodeProvider: HTMLElement | null): (() => void) => {
-  window.addEventListener("message", (event) => {
+export const setupEventListener = (
+  onNodeSelected: (node: HTMLElement | null) => void,
+  nodeProvider: HTMLElement | null,
+  getEditableNode: () => HTMLElement | null
+): (() => void) => {
+  const messageHandler = (event: MessageEvent) => {
     handlePostMessage(event);
-  });
+  };
 
-  document.addEventListener("click", (event) => {
-    clickHandler(event, onNodeSelected, nodeProvider);
-  });
+  const documentClickHandler = (event: MouseEvent) => {
+    clickHandler(event, nodeProvider, getEditableNode(), onNodeSelected);
+  };
+
+  window.addEventListener("message", messageHandler);
+  document.addEventListener("click", documentClickHandler);
 
   return () => {
-    window.removeEventListener("message", (event) => {
-      handlePostMessage(event);
-    });
-
-    document.removeEventListener("click", (event) => {
-      clickHandler(event, onNodeSelected, nodeProvider);
-    });
+    window.removeEventListener("message", messageHandler);
+    document.removeEventListener("click", documentClickHandler);
   };
 };

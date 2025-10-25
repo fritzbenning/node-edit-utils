@@ -15,7 +15,7 @@ export function getElementBounds(
 
   const top = parseFloat((relativeTop / (window.canvas?.zoom.current ?? 1)).toFixed(5));
   const left = parseFloat((relativeLeft / (window.canvas?.zoom.current ?? 1)).toFixed(5));
-  const width = parseFloat((elementRect.width / (window.canvas?.zoom.current ?? 1)).toFixed(5));
+  const width = Math.max(4, parseFloat((elementRect.width / (window.canvas?.zoom.current ?? 1)).toFixed(5)));
   const height = parseFloat((elementRect.height / (window.canvas?.zoom.current ?? 1)).toFixed(5));
 
   return {

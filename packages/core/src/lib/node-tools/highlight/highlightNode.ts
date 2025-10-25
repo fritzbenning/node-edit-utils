@@ -2,7 +2,7 @@ import { createHighlightFrame } from "./createHighlightFrame";
 import { createNodeTools } from "./createNodeTools";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { connectResizeObserver } from "./observer/connectResizeObserver";
-import { updateHighlightFrame } from "./updateHighlightFrame";
+import { refreshHighlightFrame } from "./refreshHighlightFrame";
 
 export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElement): (() => void) | undefined => {
   if (!node) return;
@@ -14,6 +14,11 @@ export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElemen
 
   const highlightFrame = createHighlightFrame(node, nodeProvider);
 
+  // Add class if node is editable
+  if (node.contentEditable === "true") {
+    highlightFrame.classList.add("is-editable");
+  }
+
   createNodeTools(node, highlightFrame);
 
   nodeProvider.appendChild(highlightFrame);
@@ -24,7 +29,7 @@ export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElemen
   resizeObserver = connectResizeObserver(nodeProvider, () => {
     if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
-      updateHighlightFrame(node, nodeProvider, window.canvas?.zoom.current ?? 1);
+      refreshHighlightFrame(node, nodeProvider, window.canvas?.zoom.current ?? 1);
     });
   });
 

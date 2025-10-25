@@ -5,7 +5,7 @@ import { targetSameCandidates } from "./helpers/targetSameCandidates";
 let candidateCache: Element[] = [];
 let attempt = 0;
 
-export const selectNode = (event: MouseEvent): HTMLElement | null => {
+export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null): HTMLElement | null => {
   let selectedNode: HTMLElement | null = null;
 
   const clickX = event.clientX;
@@ -16,6 +16,10 @@ export const selectNode = (event: MouseEvent): HTMLElement | null => {
   const candidates = getElementsFromPoint(clickX, clickY).filter(
     (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase())
   );
+
+  if (editableNode && candidates.includes(editableNode)) {
+    return editableNode;
+  }
 
   if (clickThrough) {
     candidateCache = [];

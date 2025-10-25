@@ -1,7 +1,7 @@
 import { getElementBounds } from "./helpers/getElementBounds";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 
-export const updateHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement, zoom: number) => {
+export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement, zoom: number) => {
   const frame = getHighlightFrameElement(nodeProvider);
 
   if (!frame) return;

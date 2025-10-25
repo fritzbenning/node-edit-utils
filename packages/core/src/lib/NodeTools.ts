@@ -1,10 +1,11 @@
 import { CanvasObserver } from "./canvas/CanvasObserver";
+import { createEditModeManager } from "./edit-node-manager/createEditModeManager";
 import { withRAFThrottle } from "./helpers";
 import { sendPostMessage } from "./node-tools/events/sendPostMessage";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
 import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
 import { highlightNode } from "./node-tools/highlight/highlightNode";
-import { updateHighlightFrame } from "./node-tools/highlight/updateHighlightFrame";
+import { refreshHighlightFrame } from "./node-tools/highlight/refreshHighlightFrame";
 
 export class NodeTools {
   private cleanupEventListener: (() => void) | null = null;
@@ -13,7 +14,9 @@ export class NodeTools {
   private nodeProvider: HTMLElement | null;
   private selectedNode: HTMLElement | null = null;
 
-  private throttledHighlightFrameUpdate = withRAFThrottle(updateHighlightFrame);
+  private editModeManager = createEditModeManager();
+
+  private throttledHighlightFrameRefresh = withRAFThrottle(refreshHighlightFrame);
 
   constructor(element?: HTMLElement | null) {
     this.nodeProvider = element || null;
@@ -21,12 +24,37 @@ export class NodeTools {
   }
 
   private init(): void {
-    this.cleanupEventListener = setupEventListener((node: HTMLElement | null) => this.setSelectedNode(node), this.nodeProvider);
+    this.cleanupEventListener = setupEventListener(
+      (node: HTMLElement | null) => this.setSelectedNode(node),
+      this.nodeProvider,
+      () => this.editModeManager.getCurrentEditableNode()
+    );
     this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
     this.bindToWindow(this);
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
+    // If selecting a different node while editing, blur the current edit mode
+    if (node && this.editModeManager.isEditing()) {
+      const currentEditable = this.editModeManager.getCurrentEditableNode();
+      if (currentEditable && currentEditable !== node) {
+        this.editModeManager.blurEditMode();
+      }
+    }
+
+    if (node) {
+      this.editModeManager.enableEditMode(
+        node,
+        this.nodeProvider,
+        (editNode) => {
+          console.log("Edit mode enabled for:", editNode);
+        },
+        () => {
+          console.log("Edit mode blurred");
+        }
+      );
+    }
+
     this.selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-layer-id") ?? null);
     this.cleanupHighlightNode = highlightNode((node as HTMLElement) ?? null, this.nodeProvider as HTMLElement) ?? null;
@@ -34,7 +62,7 @@ export class NodeTools {
 
   private handleCanvasMutation(): void {
     if (this.selectedNode && this.nodeProvider) {
-      this.throttledHighlightFrameUpdate(
+      this.throttledHighlightFrameRefresh(
         this.selectedNode as HTMLElement,
         this.nodeProvider as HTMLElement,
         window.canvas?.zoom.current ?? 1
@@ -46,8 +74,12 @@ export class NodeTools {
     return this.selectedNode;
   }
 
-  public updateHighlightFrame(zoom: number): void {
-    this.throttledHighlightFrameUpdate(this.selectedNode as HTMLElement, this.nodeProvider as HTMLElement, zoom);
+  public getEditableNode(): HTMLElement | null {
+    return this.editModeManager.getCurrentEditableNode();
+  }
+
+  public refreshHighlightFrame(zoom: number): void {
+    this.throttledHighlightFrameRefresh(this.selectedNode as HTMLElement, this.nodeProvider as HTMLElement, zoom);
   }
 
   public clearHighlightFrame(): void {
@@ -62,7 +94,7 @@ export class NodeTools {
       this.cleanupHighlightNode();
       this.cleanupHighlightNode = null;
     }
-    this.throttledHighlightFrameUpdate.cleanup();
+    this.throttledHighlightFrameRefresh.cleanup();
     if (this.cleanupEventListener) {
       this.cleanupEventListener();
       this.cleanupEventListener = null;
@@ -71,6 +103,9 @@ export class NodeTools {
       this.cleanupCanvasObserver();
       this.cleanupCanvasObserver = null;
     }
+
+    // Blur edit mode if active
+    this.editModeManager.blurEditMode();
   }
 
   public destroy(): void {

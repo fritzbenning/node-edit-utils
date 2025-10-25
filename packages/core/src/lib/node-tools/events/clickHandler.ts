@@ -3,8 +3,9 @@ import { selectNode } from "../select/selectNode";
 
 export const clickHandler = (
   event: MouseEvent,
-  onNodeSelected: (node: HTMLElement | null) => void,
-  nodeProvider: HTMLElement | null
+  nodeProvider: HTMLElement | null,
+  editableNode: HTMLElement | null,
+  onNodeSelected: (node: HTMLElement | null) => void
 ): void => {
   event.preventDefault();
   event.stopPropagation();
@@ -14,6 +15,6 @@ export const clickHandler = (
     return;
   }
 
-  const selectedNode = selectNode(event);
+  const selectedNode = selectNode(event, editableNode);
   onNodeSelected(selectedNode);
 };
