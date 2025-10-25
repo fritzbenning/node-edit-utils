@@ -14,6 +14,10 @@ export const enableEditMode = (
   onEditEnabled?: (node: HTMLElement) => void,
   onEditBlurred?: () => void
 ): (() => void) => {
+  if (state.editableNode === node) {
+    return () => blur();
+  }
+
   // If already editing another node, blur it first
   if (state.editableNode && state.editableNode !== node) {
     blur();
