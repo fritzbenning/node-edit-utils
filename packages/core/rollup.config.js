@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
+import postcss from "rollup-plugin-postcss";
 
 const banner = `/**
  * Markup Canvas
@@ -26,6 +27,10 @@ export default [
       }),
       nodeResolve(),
       commonjs(),
+      postcss({
+        extract: "styles.css",
+        minimize: true,
+      }),
       typescript({
         declaration: true,
         declarationDir: "dist",
@@ -49,6 +54,10 @@ export default [
       }),
       nodeResolve(),
       commonjs(),
+      postcss({
+        extract: false,
+        inject: false,
+      }),
       typescript({
         declaration: false,
       }),
@@ -70,6 +79,10 @@ export default [
       }),
       nodeResolve(),
       commonjs(),
+      postcss({
+        extract: false,
+        inject: false,
+      }),
       typescript({
         declaration: false,
       }),
@@ -91,6 +104,10 @@ export default [
       }),
       nodeResolve(),
       commonjs(),
+      postcss({
+        extract: false,
+        inject: false,
+      }),
       typescript({
         declaration: false,
       }),

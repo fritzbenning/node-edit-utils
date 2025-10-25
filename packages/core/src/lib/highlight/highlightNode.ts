@@ -1,14 +1,10 @@
 import { createHighlightFrame } from "./createHighlightFrame";
 import { createNodeTools } from "./createNodeTools";
-import { getElementBounds } from "./helpers/getElementBounds";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { connectResizeObserver } from "./observer/connectResizeObserver";
 import { updateHighlightFrame } from "./updateHighlightFrame";
 
-export const highlightNode = (
-  node: HTMLElement | null,
-  nodeProvider: HTMLElement,
-): (() => void) | undefined => {
+export const highlightNode = (node: HTMLElement | null, nodeProvider: HTMLElement): (() => void) | undefined => {
   if (!node) return;
 
   const existingHighlightFrame = getHighlightFrameElement(nodeProvider);
@@ -18,7 +14,7 @@ export const highlightNode = (
 
   const highlightFrame = createHighlightFrame(node, nodeProvider);
 
-  createNodeTools(highlightFrame)
+  createNodeTools(node, highlightFrame);
 
   nodeProvider.appendChild(highlightFrame);
 
@@ -28,7 +24,7 @@ export const highlightNode = (
   resizeObserver = connectResizeObserver(nodeProvider, () => {
     if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
-      updateHighlightFrame(node, nodeProvider);
+      updateHighlightFrame(node, nodeProvider, window.canvas?.zoom.current ?? 1);
     });
   });
 

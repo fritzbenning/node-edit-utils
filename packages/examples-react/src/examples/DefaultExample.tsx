@@ -1,17 +1,12 @@
+import { CanvasProvider } from "@node-edit-utils/react";
 import { ProductCard } from "@/components/cards/ProductCard";
-import { NodeEditProvider, ResponsiveHandler } from "@node-edit-utils/react";
-import { MarkupCanvas } from "@markup-canvas/react";
-import { EDITOR_PRESET } from "@markup-canvas/core";
+import "@node-edit-utils/core/styles.css";
 
 function DefaultExample() {
   return (
-    <MarkupCanvas {...EDITOR_PRESET} width={20000} height={15000} name="canvas">
-      <ResponsiveHandler>
-        <NodeEditProvider>
-          <ProductCard name="React T-Shirt" price={29} rating={4} inStock={true} /> 
-        </NodeEditProvider>
-      </ResponsiveHandler>
-    </MarkupCanvas>
+    <CanvasProvider width={20000} height={15000}>
+      <ProductCard name="React T-Shirt" price={29} rating={4} inStock={true} />
+    </CanvasProvider>
   );
 }
 

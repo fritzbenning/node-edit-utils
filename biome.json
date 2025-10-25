@@ -20,8 +20,10 @@
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useUniqueElementIds": "off",
-        "noUnusedImports": "error",
-        "noArrayIndexKey": "off"
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "safe"
+        }
       },
       "style": {
         "noNonNullAssertion": "off"

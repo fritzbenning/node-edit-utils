@@ -1,8 +1,10 @@
-export const createNodeTools = (node: HTMLElement): void => {   
-    const nodeTools = document.createElement("div");
+import { createTagLabel } from "./createTagLabel";
 
-    nodeTools.className = "node-tools";
-    nodeTools.textContent = node.tagName;
+export const createNodeTools = (node: HTMLElement, highlightFrame: HTMLElement): void => {
+  const nodeTools = document.createElement("div");
 
-    node.appendChild(nodeTools);
-}
+  nodeTools.className = "node-tools";
+  highlightFrame.appendChild(nodeTools);
+
+  createTagLabel(node, nodeTools);
+};

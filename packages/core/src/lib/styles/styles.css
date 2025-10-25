@@ -1,15 +1,47 @@
 .node-tools {
-    position: absolute;
-    top: calc(100% + (0.25rem / var(--zoom)));
-    will-change: transform, opacity;
-    left: -1px;
-    display: flex;
-    gap: 0.25rem;
-    z-index: 10000;
-    transform: scale(calc(1 / var(--zoom)));
-    transform-origin: top left;
-    transition:
-      transform 0.1s ease,
-      opacity 0.2s ease-in-out;
-    opacity: var(--tool-opacity);
-  }
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  gap: 0.25rem;
+  z-index: 10000;
+  transform: scale(calc(1 / var(--zoom))) translate3d(0, 100%, 0);
+  transform-origin: bottom left;
+  transition: opacity 0.1s ease-in-out;
+  opacity: var(--tool-opacity);
+  padding-top: 0.25rem;
+}
+
+.highlight-frame {
+  position: absolute;
+  top: var(--frame-top);
+  left: var(--frame-left);
+  width: var(--frame-width);
+  height: var(--frame-height);
+  z-index: 1000;
+  pointer-events: none;
+  /* outline: calc(0.125em / var(--zoom)) solid oklch(62.7% 0.265 303.9); */
+}
+
+.highlight-frame-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.highlight-frame-rect {
+  fill: none;
+  stroke: oklch(62.7% 0.265 303.9);
+  stroke-width: var(--stroke-width);
+}
+
+.tag-label {
+  background-color: oklch(62.7% 0.265 303.9);
+  color: white;
+  font-size: 0.625rem;
+  height: 1.25rem;
+  padding: 0.15rem 0.375rem;
+  border-radius: 0.375rem;
+}

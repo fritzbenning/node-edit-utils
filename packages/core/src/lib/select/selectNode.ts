@@ -1,3 +1,4 @@
+import { IGNORED_DOM_ELEMENTS } from "./constants";
 import { getElementsFromPoint } from "./helpers/getElementsFromPoint";
 import { targetSameCandidates } from "./helpers/targetSameCandidates";
 
@@ -12,7 +13,9 @@ export const selectNode = (event: MouseEvent): HTMLElement | null => {
 
   const clickThrough = event.metaKey || event.ctrlKey;
 
-  const candidates = getElementsFromPoint(clickX, clickY);
+  const candidates = getElementsFromPoint(clickX, clickY).filter(
+    (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase())
+  );
 
   if (clickThrough) {
     candidateCache = [];

@@ -1,15 +1,18 @@
 import type { NodeProviderRef } from "@node-edit-utils/core";
-import { useRef } from "react";
+import { forwardRef } from "react";
 import { useNodeToolSet } from "@/hooks/useNodeToolSet";
 
-export function NodeEditProvider({ children }: { children: React.ReactNode }) {
-  const nodeProviderRef = useRef<NodeProviderRef>(null);
+interface NodeEditProviderProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  isVisible?: boolean;
+}
 
-  useNodeToolSet(nodeProviderRef);
+export const NodeEditProvider = forwardRef<NodeProviderRef, NodeEditProviderProps>(({ children, isVisible = false, ...props }, ref) => {
+  useNodeToolSet(ref as React.RefObject<NodeProviderRef>);
 
   return (
-    <div ref={nodeProviderRef} data-role="node-provider">
+    <div ref={ref} data-role="node-provider" style={{ opacity: isVisible ? "1" : "0", transition: "opacity 0.3s ease-in-out" }} {...props}>
       {children}
     </div>
   );
-}
+});
