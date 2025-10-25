@@ -1,3 +1,17 @@
+.node-provider {
+  ::selection {
+    background: transparent;
+  }
+
+  ::-moz-selection {
+    background: transparent;
+  }
+
+  ::-webkit-selection {
+    background: transparent;
+  }
+}
+
 .node-tools {
   position: absolute;
   left: 0;
@@ -50,4 +64,49 @@
   height: 1.25rem;
   padding: 0.15rem 0.375rem;
   border-radius: 0.375rem;
+}
+
+.responsive-container {
+  position: relative;
+  width: var(--container-width);
+}
+
+.resize-handle {
+  position: absolute;
+  top: 1.25rem;
+  right: -12px;
+  width: 12px;
+  height: 40px;
+  cursor: ew-resize;
+  z-index: 10000;
+  display: flex;
+  opacity: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transform: scale(calc(1 / var(--zoom)));
+  transform-origin: center left;
+  transition:
+    transform 0.1s ease,
+    opacity 0.2s ease-in-out;
+}
+
+.responsive-container:hover .resize-handle {
+  opacity: 1;
+}
+
+.resize-handle::before {
+  content: "";
+  position: relative;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 32px;
+  background: oklch(55.2% 0.016 285.938);
+  border-radius: 4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.resize-handle:hover::before {
+  transform: scaleY(1.3);
 }

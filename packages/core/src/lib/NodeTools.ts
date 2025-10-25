@@ -1,12 +1,12 @@
-import { sendPostMessage } from "./events/sendPostMessage";
-import { setupCanvasObserver } from "./events/setupCanvasObserver";
-import { setupEventListener } from "./events/setupEventListener";
-import { clearHighlightFrame } from "./highlight/clearHighlightFrame";
-import { withRAFThrottle } from "./highlight/helpers/withRAF";
-import { highlightNode } from "./highlight/highlightNode";
-import { updateHighlightFrame } from "./highlight/updateHighlightFrame";
+import { sendPostMessage } from "./node-tools/events/sendPostMessage";
+import { setupCanvasObserver } from "./node-tools/events/setupCanvasObserver";
+import { setupEventListener } from "./node-tools/events/setupEventListener";
+import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
+import { withRAFThrottle } from "./node-tools/highlight/helpers/withRAF";
+import { highlightNode } from "./node-tools/highlight/highlightNode";
+import { updateHighlightFrame } from "./node-tools/highlight/updateHighlightFrame";
 
-export class NodeToolSet {
+export class NodeTools {
   private cleanupEventListener: (() => void) | null = null;
   private cleanupCanvasObserver: (() => void) | null = null;
   private cleanupHighlightNode: (() => void) | null = null;
@@ -22,7 +22,6 @@ export class NodeToolSet {
 
   private init(): void {
     this.cleanupEventListener = setupEventListener((node: HTMLElement | null) => this.setSelectedNode(node), this.nodeProvider);
-    // this.cleanupPostMessageListener = setupPostMessageListener();
     this.cleanupCanvasObserver = setupCanvasObserver(() => this.handleCanvasMutation());
     this.bindToWindow(this);
   }
@@ -68,10 +67,6 @@ export class NodeToolSet {
       this.cleanupEventListener();
       this.cleanupEventListener = null;
     }
-    // if (this.cleanupPostMessageListener) {
-    //   this.cleanupPostMessageListener();
-    //   this.cleanupPostMessageListener = null;
-    // }
     if (this.cleanupCanvasObserver) {
       this.cleanupCanvasObserver();
       this.cleanupCanvasObserver = null;
@@ -82,7 +77,7 @@ export class NodeToolSet {
     this.cleanup();
   }
 
-  public bindToWindow(instance: NodeToolSet, namespace: string = "nodeEditUtils"): void {
+  public bindToWindow(instance: NodeTools, namespace: string = "nodeEditUtils"): void {
     if (typeof window !== "undefined") {
       (window as any)[namespace] = instance;
     }

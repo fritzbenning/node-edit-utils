@@ -1,23 +1,23 @@
 import { EDITOR_PRESET } from "@markup-canvas/core";
 import { MarkupCanvas } from "@markup-canvas/react";
-import type { NodeProviderRef } from "@node-edit-utils/core";
+import type { NodeToolsRef } from "@node-edit-utils/core";
 import { useRef } from "react";
 import { useCanvasStartPosition } from "../hooks/useCanvasStartPosition";
-import { NodeEditProvider } from "./NodeEditProvider";
-import { ResponsiveHandler } from "./ResponsiveHandler";
+import { NodeToolsProvider } from "./NodeToolsProvider";
+import { ResponsiveContainer } from "./ResponsiveContainer";
 
 export function CanvasProvider({ children, width, height }: { children: React.ReactNode; width: number; height: number }) {
-  const nodeEditRef = useRef<NodeProviderRef>(null);
+  const nodeToolsRef = useRef<NodeToolsRef>(null);
 
-  const { x, y, isReady } = useCanvasStartPosition(nodeEditRef);
+  const { x, y, isReady } = useCanvasStartPosition(nodeToolsRef);
 
   return (
     <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} name="canvas" initialPan={{ x, y }}>
-      <ResponsiveHandler>
-        <NodeEditProvider ref={nodeEditRef} isVisible={isReady}>
+      <ResponsiveContainer>
+        <NodeToolsProvider ref={nodeToolsRef} isVisible={isReady}>
           {children}
-        </NodeEditProvider>
-      </ResponsiveHandler>
+        </NodeToolsProvider>
+      </ResponsiveContainer>
     </MarkupCanvas>
   );
 }
