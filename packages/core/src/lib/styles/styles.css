@@ -117,6 +117,7 @@
 
 .is-editable {
   outline: none;
+  user-select: text;
 
   &::selection {
     background: oklch(62.7% 0.265 303.9 / 0.3);

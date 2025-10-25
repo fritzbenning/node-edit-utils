@@ -3,13 +3,15 @@ import { blurEditMode } from "./blurEditMode";
 import { enableEditMode } from "./enableEditMode";
 import type { EditModeManager } from "./types";
 
-export const createEditModeManager = (): EditModeManager => {
+export const createEditTextManager = (): EditModeManager => {
   const state: BlurEditModeState = {
-    currentEditableNode: null,
+    editableNode: null,
+    originalContent: null,
+    isBlurring: false,
+    onBlurCallback: null,
     blurHandler: null,
     mutationCleanup: null,
-    onBlurCallback: null,
-    isBlurring: false,
+    keydownCleanup: null,
   };
 
   const edit = (
@@ -21,12 +23,12 @@ export const createEditModeManager = (): EditModeManager => {
     return enableEditMode(state, blur, node, nodeProvider, onEditEnabled, onEditBlurred);
   };
 
-  const getCurrentEditableNode = () => {
-    return state.currentEditableNode;
+  const getEditableNode = () => {
+    return state.editableNode;
   };
 
   const isEditing = () => {
-    return state.currentEditableNode !== null;
+    return state.editableNode !== null;
   };
 
   const blur = () => {
@@ -36,7 +38,7 @@ export const createEditModeManager = (): EditModeManager => {
   return {
     edit,
     blur,
-    getCurrentEditableNode,
+    getEditableNode,
     isEditing,
   };
 };

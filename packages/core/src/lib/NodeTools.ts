@@ -1,5 +1,5 @@
 import { CanvasObserver } from "./canvas/CanvasObserver";
-import { createEditModeManager } from "./edit-node-manager/createEditModeManager";
+import { createEditTextManager } from "./edit-node-manager/createEditTextManager";
 import { withRAFThrottle } from "./helpers";
 import { sendPostMessage } from "./node-tools/events/sendPostMessage";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
@@ -14,7 +14,7 @@ export class NodeTools {
   private nodeProvider: HTMLElement | null;
   private selectedNode: HTMLElement | null = null;
 
-  private editModeManager = createEditModeManager();
+  private editTextManager = createEditTextManager();
 
   private throttledHighlightFrameRefresh = withRAFThrottle(refreshHighlightFrame);
 
@@ -27,23 +27,22 @@ export class NodeTools {
     this.cleanupEventListener = setupEventListener(
       (node: HTMLElement | null) => this.setSelectedNode(node),
       this.nodeProvider,
-      () => this.editModeManager.getCurrentEditableNode()
+      () => this.editTextManager.getEditableNode()
     );
     this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
     this.bindToWindow(this);
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
-    // If selecting a different node while editing, blur the current edit mode
-    if (node && this.editModeManager.isEditing()) {
-      const currentEditable = this.editModeManager.getCurrentEditableNode();
+    if (this.editTextManager.isEditing()) {
+      const currentEditable = this.editTextManager.getEditableNode();
       if (currentEditable && currentEditable !== node) {
-        this.editModeManager.blur();
+        this.editTextManager.blur();
       }
     }
 
     if (node) {
-      this.editModeManager.edit(
+      this.editTextManager.edit(
         node,
         this.nodeProvider,
         (editNode) => {
@@ -75,7 +74,7 @@ export class NodeTools {
   }
 
   public getEditableNode(): HTMLElement | null {
-    return this.editModeManager.getCurrentEditableNode();
+    return this.editTextManager.getEditableNode();
   }
 
   public refreshHighlightFrame(zoom: number): void {
@@ -104,8 +103,7 @@ export class NodeTools {
       this.cleanupCanvasObserver = null;
     }
 
-    // Blur edit mode if active
-    this.editModeManager.blur();
+    this.editTextManager.blur();
   }
 
   public destroy(): void {

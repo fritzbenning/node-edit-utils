@@ -12,6 +12,7 @@ export const clickHandler = (
 
   if (nodeProvider && !nodeProvider.contains(event.target as Node)) {
     clearHighlightFrame(nodeProvider);
+    onNodeSelected(null);
     return;
   }
 

@@ -6,6 +6,6 @@ export interface EditModeManager {
     onEditBlurred?: () => void
   ) => () => void;
   blur: () => void;
-  getCurrentEditableNode: () => HTMLElement | null;
+  getEditableNode: () => HTMLElement | null;
   isEditing: () => boolean;
 }
