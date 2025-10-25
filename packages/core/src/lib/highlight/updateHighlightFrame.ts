@@ -6,7 +6,7 @@ export const updateHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
 
   if (!frame) return;
 
-  nodeProvider.style.setProperty("--zoom", (zoom ** 0.9).toFixed(3));
+  nodeProvider.style.setProperty("--zoom", zoom.toFixed(5));
   nodeProvider.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
 
   console.log("stroke-width", (2 / zoom).toFixed(2));

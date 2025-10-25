@@ -6,9 +6,13 @@
   z-index: 10000;
   transform: scale(calc(1 / var(--zoom))) translate3d(0, 100%, 0);
   transform-origin: bottom left;
-  transition: opacity 0.1s ease-in-out;
+  transition:
+    transform 0.025s ease,
+    opacity 0.1s ease;
   opacity: var(--tool-opacity);
   padding-top: 0.25rem;
+  display: flex;
+  justify-content: center;
 }
 
 .highlight-frame {
@@ -41,6 +45,8 @@
   background-color: oklch(62.7% 0.265 303.9);
   color: white;
   font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
   height: 1.25rem;
   padding: 0.15rem 0.375rem;
   border-radius: 0.375rem;
