@@ -1,8 +1,8 @@
+import { CanvasObserver } from "./canvas/CanvasObserver";
+import { withRAFThrottle } from "./helpers";
 import { sendPostMessage } from "./node-tools/events/sendPostMessage";
-import { setupCanvasObserver } from "./node-tools/events/setupCanvasObserver";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
 import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
-import { withRAFThrottle } from "./node-tools/highlight/helpers/withRAF";
 import { highlightNode } from "./node-tools/highlight/highlightNode";
 import { updateHighlightFrame } from "./node-tools/highlight/updateHighlightFrame";
 
@@ -22,7 +22,7 @@ export class NodeTools {
 
   private init(): void {
     this.cleanupEventListener = setupEventListener((node: HTMLElement | null) => this.setSelectedNode(node), this.nodeProvider);
-    this.cleanupCanvasObserver = setupCanvasObserver(() => this.handleCanvasMutation());
+    this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
     this.bindToWindow(this);
   }
 
@@ -79,6 +79,7 @@ export class NodeTools {
 
   public bindToWindow(instance: NodeTools, namespace: string = "nodeEditUtils"): void {
     if (typeof window !== "undefined") {
+      // biome-ignore lint/suspicious/noExplicitAny: global window extension requires flexibility
       (window as any)[namespace] = instance;
     }
   }

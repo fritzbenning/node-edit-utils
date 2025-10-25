@@ -88,9 +88,9 @@
   justify-content: center;
   pointer-events: auto;
   transform: scale(calc(1 / var(--zoom)));
-  transform-origin: center left;
+  transform-origin: top left;
   transition:
-    transform 0.1s ease,
+    transform 0.025s ease,
     opacity 0.2s ease-in-out;
 }
 

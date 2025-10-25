@@ -5,8 +5,8 @@ export const createHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
 
   const zoom = window.canvas?.zoom.current ?? 1;
 
-  nodeProvider.style.setProperty("--zoom", zoom.toString());
-  nodeProvider.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
+  document.body.style.setProperty("--zoom", zoom.toString());
+  document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
 
   const frame = document.createElement("div");
   frame.classList.add("highlight-frame");

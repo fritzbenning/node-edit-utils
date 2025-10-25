@@ -1,10 +1,12 @@
-import { withRAFThrottle } from "./node-tools/highlight/helpers/createRafThrottle";
+import { CanvasObserver } from "./canvas/CanvasObserver";
+import { withRAFThrottle } from "./helpers";
 import { updateContainerWidth } from "./responsive-container/container-width/updateContainerWidth";
 import { setupEventListener } from "./responsive-container/events/setupEventListener";
 import { createResizeHandle } from "./responsive-container/resize-handle/createResizeHandle";
 
 export class ResponsiveContainer {
   private cleanupEventListener: (() => void) | null = null;
+  private cleanupCanvasObserver: (() => void) | null = null;
   private container: HTMLElement;
   private resizeHandle: HTMLElement | null = null;
   private throttledHandleResize: ReturnType<typeof withRAFThrottle> | null = null;
@@ -32,6 +34,8 @@ export class ResponsiveContainer {
       this.stopResize,
       this.blurResize
     );
+
+    this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
   }
 
   private startResize = (event: MouseEvent): void => {
@@ -68,9 +72,18 @@ export class ResponsiveContainer {
     this.isDragging = false;
   };
 
+  private handleCanvasMutation(): void {
+    // Handle canvas mutations if ResponsiveContainer needs to react
+    // This could be used for responsive updates based on canvas changes
+  }
+
   cleanup() {
     this.isDragging = false;
     this.throttledHandleResize?.cleanup();
     this.cleanupEventListener?.();
+    if (this.cleanupCanvasObserver) {
+      this.cleanupCanvasObserver();
+      this.cleanupCanvasObserver = null;
+    }
   }
 }
