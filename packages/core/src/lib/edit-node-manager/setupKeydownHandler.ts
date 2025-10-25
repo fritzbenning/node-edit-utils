@@ -1,12 +1,5 @@
-export const setupKeydownHandler = (node: HTMLElement, blur: () => void): (() => void) => {
+export const setupKeydownHandler = (node: HTMLElement): (() => void) => {
   const keydownHandler = (event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      event.stopPropagation();
-
-      blur();
-    }
-
     // Prevent Enter from creating nested block elements (like divs inside headings)
     if (event.key === "Enter") {
       event.preventDefault();

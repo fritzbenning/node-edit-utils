@@ -46,7 +46,7 @@ export const enableEditMode = (
   state.blurHandler = () => blur();
   node.addEventListener("blur", state.blurHandler);
 
-  state.keydownCleanup = setupKeydownHandler(node, blur);
+  state.keydownCleanup = setupKeydownHandler(node);
 
   // Setup mutation observer for highlight frame updates
   if (nodeProvider) {

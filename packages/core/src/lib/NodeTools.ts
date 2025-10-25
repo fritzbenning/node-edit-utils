@@ -11,6 +11,7 @@ export class NodeTools {
   private cleanupEventListener: (() => void) | null = null;
   private cleanupCanvasObserver: (() => void) | null = null;
   private cleanupHighlightNode: (() => void) | null = null;
+  private cleanupKeydownListener: (() => void) | null = null;
   private nodeProvider: HTMLElement | null;
   private selectedNode: HTMLElement | null = null;
 
@@ -30,7 +31,33 @@ export class NodeTools {
       () => this.editTextManager.getEditableNode()
     );
     this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
+    this.cleanupKeydownListener = this.setupGlobalKeydownHandler();
     this.bindToWindow(this);
+  }
+
+  private setupGlobalKeydownHandler(): () => void {
+    const keydownHandler = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // If in edit mode, blur it first
+        if (this.editTextManager.isEditing()) {
+          this.editTextManager.blur();
+        }
+
+        // Clear the selection (works for both edit mode and just selected nodes)
+        if (this.selectedNode) {
+          this.clearHighlightFrame();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", keydownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keydownHandler);
+    };
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
@@ -101,6 +128,10 @@ export class NodeTools {
     if (this.cleanupCanvasObserver) {
       this.cleanupCanvasObserver();
       this.cleanupCanvasObserver = null;
+    }
+    if (this.cleanupKeydownListener) {
+      this.cleanupKeydownListener();
+      this.cleanupKeydownListener = null;
     }
 
     this.editTextManager.blur();
