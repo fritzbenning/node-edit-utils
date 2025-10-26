@@ -1,6 +1,5 @@
 export const setupKeydownHandler = (node: HTMLElement): (() => void) => {
   const keydownHandler = (event: KeyboardEvent) => {
-    // Prevent Enter from creating nested block elements (like divs inside headings)
     if (event.key === "Enter") {
       event.preventDefault();
       event.stopPropagation();
