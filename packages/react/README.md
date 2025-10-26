@@ -186,34 +186,33 @@ function CanvasWrapper() {
 Here's a complete example of building an editable document editor:
 
 ```tsx
-import { CanvasProvider, NodeTools, Viewport, useCanvasObserver } from '@node-edit-utils/react';
+import { CanvasProvider } from '@node-edit-utils/react';
 import '@node-edit-utils/core/styles.css';
-import { useRef } from 'react';
 
 function DocumentEditor() {
-  useCanvasObserver();
-  const nodeToolsRef = useRef(null);
-
   return (
     <CanvasProvider width={20000} height={15000}>
-      <Viewport>
-        <NodeTools ref={nodeToolsRef}>
-          <div className="document">
-            <h1 data-editable="true">Document Title</h1>
-            <p data-editable="true">Click on any element to edit it.</p>
-            <section data-editable="true">
-              <h2>Section Header</h2>
-              <p>Section content goes here.</p>
-            </section>
-          </div>
-        </NodeTools>
-      </Viewport>
+      <div className="document">
+        <h1>Document Title</h1>
+        <p>Click on any element to edit it.</p>
+        <section>
+          <h2>Section Header</h2>
+          <p>Section content goes here.</p>
+        </section>
+      </div>
     </CanvasProvider>
   );
 }
 
 export default DocumentEditor;
 ```
+
+**Note:** The `CanvasProvider` component handles everything:
+- Sets up the canvas with viewport and node tools
+- Calls `useCanvasObserver()` internally
+- Manages the highlight frame and text editing functionality
+
+You just need to wrap your content and it's ready to go!
 
 ## 🎨 Styling
 

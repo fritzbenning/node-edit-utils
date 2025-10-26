@@ -39,8 +39,13 @@ function runCommand(command, cwd) {
 }
 
 function getPackageVersion(pkgDir) {
-  const pkgJson = JSON.parse(fs.readFileSync(path.join(pkgDir, "package.json"), "utf8"));
-  return pkgJson.version;
+  try {
+    const pkgJson = JSON.parse(fs.readFileSync(path.join(pkgDir, "package.json"), "utf8"));
+    return pkgJson.version;
+  } catch (error) {
+    log(`Failed to read package.json from ${pkgDir}: ${error.message}`, "error");
+    return null;
+  }
 }
 
 function checkDistExists(pkgDir) {
@@ -48,9 +53,30 @@ function checkDistExists(pkgDir) {
   return fs.existsSync(distPath);
 }
 
+function validatePackage(pkg) {
+  const pkgPath = path.join(process.cwd(), pkg.dir);
+
+  if (!fs.existsSync(pkgPath)) {
+    log(`Package directory not found: ${pkg.dir}`, "error");
+    return false;
+  }
+
+  const pkgJsonPath = path.join(pkgPath, "package.json");
+  if (!fs.existsSync(pkgJsonPath)) {
+    log(`package.json not found in ${pkg.dir}`, "error");
+    return false;
+  }
+
+  return true;
+}
+
 function publishPackage(pkg) {
   const pkgPath = path.join(process.cwd(), pkg.dir);
   const version = getPackageVersion(pkgPath);
+
+  if (!version) {
+    return false;
+  }
 
   log(`\n📦 Publishing ${pkg.name}@${version}...`, "info");
 
@@ -84,6 +110,16 @@ async function main() {
     process.exit(1);
   }
 
+  // Validate all packages exist
+  log("Validating packages...", "info");
+  for (const pkg of PACKAGES) {
+    if (!validatePackage(pkg)) {
+      log(`Validation failed for ${pkg.name}`, "error");
+      process.exit(1);
+    }
+  }
+  log("✅ All packages validated\n", "success");
+
   // Sort packages by order
   const sortedPackages = PACKAGES.sort((a, b) => a.order - b.order);
 
@@ -95,7 +131,7 @@ async function main() {
       publishedCount++;
     } else {
       failedCount++;
-      log(`⚠️  Publication process stopped due to failure at ${pkg.name}`, "warning");
+      log(`\n⚠️  Publication process stopped due to failure at ${pkg.name}`, "warning");
       break;
     }
   }
@@ -107,7 +143,7 @@ async function main() {
     log(`❌ Failed: ${failedCount}`, "error");
     process.exit(1);
   } else {
-    log(`\n🎉 All packages published successfully!`, "success");
+    log(`\n🎉 All packages published successfully!\n`, "success");
   }
 }
 
