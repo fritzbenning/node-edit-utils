@@ -10,6 +10,13 @@ import { updateWidth } from "./width/updateWidth";
 
 export const createViewport = (container: HTMLElement): Viewport => {
   const canvas: HTMLElement | null = getCanvasContainer();
+
+  // Remove any existing resize handle to prevent duplicates
+  const existingHandle = container.querySelector(".resize-handle");
+  if (existingHandle) {
+    existingHandle.remove();
+  }
+
   const resizeHandle = createResizeHandle(container);
   container.style.setProperty("--container-width", `${DEFAULT_WIDTH}px`);
 
@@ -62,6 +69,7 @@ export const createViewport = (container: HTMLElement): Viewport => {
     isDragging = false;
     throttledHandleResize?.cleanup();
     removeListeners();
+    resizeHandle.remove();
   };
 
   return {

@@ -20,9 +20,7 @@
   z-index: 10000;
   transform: scale(calc(1 / var(--zoom))) translate3d(0, 100%, 0);
   transform-origin: bottom left;
-  transition:
-    transform 0.025s ease,
-    opacity 0.1s ease;
+  transition: opacity 0.1s ease;
   opacity: var(--tool-opacity);
   padding-top: 0.25rem;
   display: flex;
@@ -78,8 +76,8 @@
 .resize-handle {
   position: absolute;
   top: 1.25rem;
-  right: -20px;
-  width: 24px;
+  right: -12px;
+  width: 12px;
   height: 40px;
   cursor: ew-resize;
   z-index: 10000;
@@ -92,9 +90,8 @@
   transform: scale(calc(1 / var(--zoom)));
   transform-origin: top left;
   transition:
-    transform 0.025s ease,
-    opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out;
+    opacity 0.1s ease-in-out,
+    visibility 0.1s ease-in-out;
 }
 
 .viewport:hover .resize-handle {
@@ -121,15 +118,16 @@
 .resize-presets {
   position: absolute;
   top: 0;
-  left: 1.5rem;
+  left: 0;
+  padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   visibility: hidden;
   opacity: 0;
   transition:
-    visibility 0.2s ease-in-out,
-    opacity 0.2s ease-in-out;
+    visibility 0.1s ease-in-out,
+    opacity 0.1s ease-in-out;
 }
 
 .resize-handle:hover .resize-presets {
@@ -147,7 +145,7 @@
   text-wrap: nowrap;
   text-align: left;
   backdrop-filter: blur(8px);
-  transition: background 0.2s ease-in-out;
+  transition: background 0.1s ease-in-out;
   color: white;
   width: fit-content;
 
@@ -156,7 +154,7 @@
   }
 
   &.is-active {
-    background: oklch(62.7% 0.265 303.9);
+    background: oklch(45.7% 0.24 277.023);
   }
 }
 
