@@ -12,10 +12,10 @@ export function useCanvasStartPosition(ref: React.RefObject<NodeToolsRef>) {
         height: ref.current.offsetHeight,
       };
 
-      setStartPosition({
-        x: document.documentElement.clientWidth / 2 - elementDimensions.width / 2,
-        y: document.documentElement.clientHeight / 2 - elementDimensions.height / 2,
-      });
+      const x = document.documentElement.clientWidth / 2 - elementDimensions.width / 2;
+      const y = document.documentElement.clientHeight / 2 - elementDimensions.height / 2;
+
+      setStartPosition({ x, y });
       setIsReady(true);
     }
 

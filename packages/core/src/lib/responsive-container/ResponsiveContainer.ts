@@ -1,8 +1,8 @@
-import { createCanvasObserver } from "./canvas/createCanvasObserver";
-import { withRAFThrottle } from "./helpers";
-import { setupEventListener } from "./responsive-container/events/setupEventListener";
-import { createResizeHandle } from "./responsive-container/resize/createResizeHandle";
-import { updateWidth } from "./responsive-container/width/updateWidth";
+import { createCanvasObserver } from "../canvas/createCanvasObserver";
+import { withRAFThrottle } from "../helpers";
+import { setupEventListener } from "./events/setupEventListener";
+import { createResizeHandle } from "./resize/createResizeHandle";
+import { updateWidth } from "./width/updateWidth";
 
 export class ResponsiveContainer {
   private cleanupEventListener: (() => void) | null = null;

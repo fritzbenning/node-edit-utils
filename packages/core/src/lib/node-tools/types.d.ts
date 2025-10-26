@@ -6,3 +6,7 @@ export interface NodeTools {
   clearSelectedNode(): void;
   cleanup(): void;
 }
+
+export interface NodeToolsRef extends HTMLDivElement {
+  nodeTools?: NodeTools;
+}

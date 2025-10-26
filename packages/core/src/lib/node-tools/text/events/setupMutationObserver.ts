@@ -1,10 +1,10 @@
-import { connectMutationObserver } from "../../highlight/observer/connectMutationObserver";
+import { connectMutationObserver } from "../../../helpers/observer/connectMutationObserver";
 import { refreshHighlightFrame } from "../../highlight/refreshHighlightFrame";
 
 export const setupMutationObserver = (node: HTMLElement, nodeProvider: HTMLElement): (() => void) | undefined => {
-  const cleanup = connectMutationObserver(node, () => {
-    refreshHighlightFrame(node, nodeProvider, window.canvas?.zoom.current ?? 1);
+  const mutationObserver = connectMutationObserver(node, () => {
+    refreshHighlightFrame(node, nodeProvider);
   });
 
-  return cleanup;
+  return mutationObserver.disconnect;
 };

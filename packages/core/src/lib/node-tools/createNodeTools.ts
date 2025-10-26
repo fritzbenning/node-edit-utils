@@ -1,10 +1,10 @@
 import { withRAFThrottle } from "../helpers";
+import { connectResizeObserver } from "../helpers/observer/connectResizeObserver";
 import { sendPostMessage } from "../post-message/sendPostMessage";
 import { bindToWindow } from "../window/bindToWindow";
 import { setupEventListener } from "./events/setupEventListener";
 import { clearHighlightFrame } from "./highlight/clearHighlightFrame";
 import { highlightNode } from "./highlight/highlightNode";
-import { connectResizeObserver } from "./highlight/observer/connectResizeObserver";
 import { refreshHighlightFrame } from "./highlight/refreshHighlightFrame";
 import { nodeText } from "./text/nodeText";
 import type { NodeTools } from "./types";

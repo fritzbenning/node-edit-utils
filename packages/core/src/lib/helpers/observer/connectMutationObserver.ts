@@ -1,4 +1,4 @@
-export const connectMutationObserver = (element: HTMLElement, handler: (mutations: MutationRecord[]) => void): (() => void) => {
+export const connectMutationObserver = (element: HTMLElement, handler: (mutations: MutationRecord[]) => void): MutationObserver => {
   const mutationObserver = new MutationObserver((mutations) => {
     handler(mutations);
   });
@@ -8,8 +8,5 @@ export const connectMutationObserver = (element: HTMLElement, handler: (mutation
     characterData: true,
   });
 
-  return () => {
-    mutationObserver.disconnect();
-  };
+  return mutationObserver;
 };
-
