@@ -1,87 +1,70 @@
-import { createCanvasObserver } from "../canvas/createCanvasObserver";
+import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
 import { withRAFThrottle } from "../helpers";
+import { DEFAULT_WIDTH } from "./constants";
 import { setupEventListener } from "./events/setupEventListener";
 import { createResizeHandle } from "./resize/createResizeHandle";
+import type { ResponsiveContainer } from "./types";
+import { calcWidth } from "./width/calcWidth";
 import { updateWidth } from "./width/updateWidth";
 
-export class ResponsiveContainer {
-  private cleanupEventListener: (() => void) | null = null;
-  private cleanupCanvasObserver: (() => void) | null = null;
-  private container: HTMLElement;
-  private resizeHandle: HTMLElement | null = null;
-  private throttledHandleResize: ReturnType<typeof withRAFThrottle> | null = null;
+export const createResponsiveContainer = (container: HTMLElement): ResponsiveContainer => {
+  const canvas: HTMLElement | null = getCanvasContainer();
+  const resizeHandle = createResizeHandle(container);
+  container.style.setProperty("--container-width", `${DEFAULT_WIDTH}px`);
 
-  private currentWidth: number = 400;
-  private isDragging: boolean = false;
-  private startX: number = 0;
-  private startWidth: number = 0;
+  let isDragging: boolean = false;
+  let startX: number = 0;
+  let startWidth: number = 0;
 
-  constructor(container: HTMLElement) {
-    this.container = container;
-    this.init();
-  }
-
-  private init(): void {
-    this.resizeHandle = createResizeHandle(this.container);
-    this.container.style.setProperty("--container-width", `${this.currentWidth}px`);
-
-    this.throttledHandleResize = withRAFThrottle(this.handleResize);
-
-    this.cleanupEventListener = setupEventListener(
-      this.resizeHandle,
-      this.startResize,
-      this.throttledHandleResize,
-      this.stopResize,
-      this.blurResize
-    );
-
-    const canvasObserver = createCanvasObserver();
-    this.cleanupCanvasObserver = () => {
-      canvasObserver.disconnect();
-    };
-  }
-
-  private startResize = (event: MouseEvent): void => {
+  const startResize = (event: MouseEvent): void => {
     event.preventDefault();
     event.stopPropagation();
 
-    this.isDragging = true;
-    this.startX = event.clientX;
-    this.startWidth = this.container.offsetWidth;
+    isDragging = true;
+    startX = event.clientX;
+    startWidth = container.offsetWidth;
   };
 
-  private handleResize = (event: MouseEvent): void => {
-    if (!this.isDragging) return;
-    const canvas: HTMLElement | null = document.querySelector(".canvas-container");
+  const handleResize = (event: MouseEvent): void => {
+    if (!isDragging) return;
+
     if (canvas) {
       canvas.style.cursor = "ew-resize";
     }
-    updateWidth(this.container, event, this.startX, this.startWidth);
+
+    const width = calcWidth(event, startX, startWidth);
+    updateWidth(container, width);
   };
 
-  private stopResize = (event: MouseEvent): void => {
+  const throttledHandleResize = withRAFThrottle(handleResize);
+
+  const stopResize = (event: MouseEvent): void => {
     event.preventDefault();
     event.stopPropagation();
 
-    const canvas: HTMLElement | null = document.querySelector(".canvas-container");
     if (canvas) {
       canvas.style.cursor = "default";
     }
 
-    this.isDragging = false;
+    isDragging = false;
   };
 
-  private blurResize = (): void => {
-    this.isDragging = false;
+  const blurResize = (): void => {
+    isDragging = false;
   };
 
-  cleanup() {
-    this.isDragging = false;
-    this.throttledHandleResize?.cleanup();
-    this.cleanupEventListener?.();
-    if (this.cleanupCanvasObserver) {
-      this.cleanupCanvasObserver();
-      this.cleanupCanvasObserver = null;
-    }
-  }
-}
+  const removeListeners = setupEventListener(resizeHandle, startResize, throttledHandleResize, stopResize, blurResize);
+
+  const cleanup = (): void => {
+    isDragging = false;
+    throttledHandleResize?.cleanup();
+    removeListeners();
+  };
+
+  return {
+    setWidth: (width: number): void => {
+      updateWidth(container, width);
+    },
+    cleanup,
+  };
+};

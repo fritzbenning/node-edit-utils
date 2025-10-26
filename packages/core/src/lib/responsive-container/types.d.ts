@@ -1,4 +1,7 @@
-import type { ResponsiveContainer } from "@/lib/responsive-container/ResponsiveContainer";
+export interface ResponsiveContainer {
+  setWidth: (width: number) => void;
+  cleanup: () => void;
+}
 
 export interface ResponsiveContainerRef extends HTMLDivElement {
   responsiveContainer?: ResponsiveContainer;
