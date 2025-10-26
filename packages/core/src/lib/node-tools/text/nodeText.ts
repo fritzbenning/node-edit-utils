@@ -1,5 +1,5 @@
-import { disableCanvasKeyboard } from "./canvas/disableCanvasKeyboard";
-import { enableCanvasKeyboard } from "./canvas/enableCanvasKeyboard";
+import { disableCanvasKeyboard } from "../../canvas/disableCanvasKeyboard";
+import { enableCanvasKeyboard } from "../../canvas/enableCanvasKeyboard";
 import { setupNodeListeners } from "./events/setupNodeListeners";
 import { hasTextContent } from "./helpers/hasTextContent";
 import { makeNodeEditable } from "./helpers/makeNodeEditable";

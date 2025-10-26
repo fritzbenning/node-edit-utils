@@ -1,17 +1,16 @@
-import { CanvasObserver } from "./canvas/CanvasObserver";
+import { createCanvasObserver } from "./canvas/createCanvasObserver";
 import { withRAFThrottle } from "./helpers";
-import { nodeText } from "./node-text/nodeText";
 import { sendPostMessage } from "./node-tools/events/sendPostMessage";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
 import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
 import { highlightNode } from "./node-tools/highlight/highlightNode";
 import { refreshHighlightFrame } from "./node-tools/highlight/refreshHighlightFrame";
+import { nodeText } from "./node-tools/text/nodeText";
 
 export class NodeTools {
   private cleanupEventListener: (() => void) | null = null;
   private cleanupCanvasObserver: (() => void) | null = null;
   private cleanupHighlightNode: (() => void) | null = null;
-  private cleanupKeydownListener: (() => void) | null = null;
   private nodeProvider: HTMLElement | null;
   private selectedNode: HTMLElement | null = null;
 
@@ -28,35 +27,25 @@ export class NodeTools {
     this.cleanupEventListener = setupEventListener(
       (node: HTMLElement | null) => this.setSelectedNode(node),
       this.nodeProvider,
-      () => this.text.getEditableNode()
+      () => this.text.getEditableNode(),
+      () => this.handleEscapePressed()
     );
-    this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
-    this.cleanupKeydownListener = this.setupGlobalKeydownHandler();
+    const canvasObserver = createCanvasObserver();
+    this.cleanupCanvasObserver = () => {
+      canvasObserver.disconnect();
+    };
     this.bindToWindow(this);
   }
 
-  private setupGlobalKeydownHandler(): () => void {
-    const keydownHandler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
+  private handleEscapePressed(): void {
+    console.log("isEditing", this.text.isEditing());
+    if (this.text.isEditing()) {
+      this.text.blurEditMode();
+    }
 
-        console.log("isEditing", this.text.isEditing());
-        if (this.text.isEditing()) {
-          this.text.blurEditMode();
-        }
-
-        if (this.selectedNode) {
-          this.clearHighlightFrame();
-        }
-      }
-    };
-
-    document.addEventListener("keydown", keydownHandler);
-
-    return () => {
-      document.removeEventListener("keydown", keydownHandler);
-    };
+    if (this.selectedNode) {
+      this.clearHighlightFrame();
+    }
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
@@ -74,16 +63,6 @@ export class NodeTools {
     this.selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-layer-id") ?? null);
     this.cleanupHighlightNode = highlightNode((node as HTMLElement) ?? null, this.nodeProvider as HTMLElement) ?? null;
-  }
-
-  private handleCanvasMutation(): void {
-    if (this.selectedNode && this.nodeProvider) {
-      this.throttledHighlightFrameRefresh(
-        this.selectedNode as HTMLElement,
-        this.nodeProvider as HTMLElement,
-        window.canvas?.zoom.current ?? 1
-      );
-    }
   }
 
   public getSelectedNode(): HTMLElement | null {
@@ -118,10 +97,6 @@ export class NodeTools {
     if (this.cleanupCanvasObserver) {
       this.cleanupCanvasObserver();
       this.cleanupCanvasObserver = null;
-    }
-    if (this.cleanupKeydownListener) {
-      this.cleanupKeydownListener();
-      this.cleanupKeydownListener = null;
     }
 
     this.text.blurEditMode();

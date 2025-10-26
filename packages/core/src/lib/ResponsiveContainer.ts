@@ -1,8 +1,8 @@
-import { CanvasObserver } from "./canvas/CanvasObserver";
+import { createCanvasObserver } from "./canvas/createCanvasObserver";
 import { withRAFThrottle } from "./helpers";
-import { updateContainerWidth } from "./responsive-container/container-width/updateContainerWidth";
 import { setupEventListener } from "./responsive-container/events/setupEventListener";
-import { createResizeHandle } from "./responsive-container/resize-handle/createResizeHandle";
+import { createResizeHandle } from "./responsive-container/resize/createResizeHandle";
+import { updateWidth } from "./responsive-container/width/updateWidth";
 
 export class ResponsiveContainer {
   private cleanupEventListener: (() => void) | null = null;
@@ -35,7 +35,10 @@ export class ResponsiveContainer {
       this.blurResize
     );
 
-    this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
+    const canvasObserver = createCanvasObserver();
+    this.cleanupCanvasObserver = () => {
+      canvasObserver.disconnect();
+    };
   }
 
   private startResize = (event: MouseEvent): void => {
@@ -53,7 +56,7 @@ export class ResponsiveContainer {
     if (canvas) {
       canvas.style.cursor = "ew-resize";
     }
-    updateContainerWidth(this.container, event, this.startX, this.startWidth);
+    updateWidth(this.container, event, this.startX, this.startWidth);
   };
 
   private stopResize = (event: MouseEvent): void => {
@@ -71,11 +74,6 @@ export class ResponsiveContainer {
   private blurResize = (): void => {
     this.isDragging = false;
   };
-
-  private handleCanvasMutation(): void {
-    // Handle canvas mutations if ResponsiveContainer needs to react
-    // This could be used for responsive updates based on canvas changes
-  }
 
   cleanup() {
     this.isDragging = false;
