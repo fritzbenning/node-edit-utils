@@ -1,11 +1,11 @@
 import { createCanvasObserver } from "./canvas/createCanvasObserver";
 import { withRAFThrottle } from "./helpers";
-import { sendPostMessage } from "./node-tools/events/sendPostMessage";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
 import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
 import { highlightNode } from "./node-tools/highlight/highlightNode";
 import { refreshHighlightFrame } from "./node-tools/highlight/refreshHighlightFrame";
 import { nodeText } from "./node-tools/text/nodeText";
+import { sendPostMessage } from "./post-message/sendPostMessage";
 
 export class NodeTools {
   private cleanupEventListener: (() => void) | null = null;

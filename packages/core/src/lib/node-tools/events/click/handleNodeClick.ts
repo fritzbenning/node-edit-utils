@@ -1,7 +1,7 @@
-import { clearHighlightFrame } from "../highlight/clearHighlightFrame";
-import { selectNode } from "../select/selectNode";
+import { clearHighlightFrame } from "../../highlight/clearHighlightFrame";
+import { selectNode } from "../../select/selectNode";
 
-export const clickHandler = (
+export const handleNodeClick = (
   event: MouseEvent,
   nodeProvider: HTMLElement | null,
   editableNode: HTMLElement | null,

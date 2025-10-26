@@ -1,5 +1,5 @@
-import { clickHandler } from "./clickHandler";
-import { handlePostMessage } from "./handlePostMessage";
+import { handlePostMessage } from "../../post-message/handlePostMessage";
+import { handleNodeClick } from "./click/handleNodeClick";
 
 export const setupEventListener = (
   onNodeSelected: (node: HTMLElement | null) => void,
@@ -12,7 +12,7 @@ export const setupEventListener = (
   };
 
   const documentClickHandler = (event: MouseEvent) => {
-    clickHandler(event, nodeProvider, getEditableNode(), onNodeSelected);
+    handleNodeClick(event, nodeProvider, getEditableNode(), onNodeSelected);
   };
 
   const documentKeydownHandler = (event: KeyboardEvent) => {
