@@ -1,9 +1,10 @@
+import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
 import { getElementBounds } from "./helpers/getElementBounds";
 
 export const createHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement): HTMLElement => {
   const { top, left, width, height } = getElementBounds(node, nodeProvider);
 
-  const zoom = window.canvas?.zoom.current ?? 1;
+  const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
 
   document.body.style.setProperty("--zoom", zoom.toString());
   document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
@@ -19,6 +20,7 @@ export const createHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElemen
   // Create SVG overlay for outline
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("highlight-frame-svg");
+
   const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   rect.setAttribute("x", "0");
   rect.setAttribute("y", "0");
