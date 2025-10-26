@@ -6,5 +6,5 @@ export const setupMutationObserver = (node: HTMLElement, nodeProvider: HTMLEleme
     refreshHighlightFrame(node, nodeProvider);
   });
 
-  return mutationObserver.disconnect;
+  return () => mutationObserver.disconnect();
 };
