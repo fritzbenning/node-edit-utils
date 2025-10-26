@@ -52,7 +52,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     }
 
     selectedNode = node;
-    sendPostMessage("selectedNodeChanged", node?.getAttribute("data-layer-id") ?? null);
+    sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
     highlightNode(node, nodeProvider as HTMLElement) ?? null;
   };
 
