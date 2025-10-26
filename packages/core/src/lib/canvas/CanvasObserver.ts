@@ -1,11 +1,13 @@
+import { withRAFThrottle } from "../helpers/withRAF";
+
 type ObserverCallback = (mutations: MutationRecord[]) => void;
 
 export class CanvasObserver {
   private static instance: CanvasObserver | null = null;
   private observer: MutationObserver | null = null;
   private callbacks: Set<ObserverCallback> = new Set();
-  private rafId: number | null = null;
   private subscriptionCount: number = 0;
+  private throttledUpdate: ReturnType<typeof withRAFThrottle> | null = null;
 
   private constructor() {}
 
@@ -42,26 +44,23 @@ export class CanvasObserver {
       return;
     }
 
-    this.observer = new MutationObserver((mutations: MutationRecord[]) => {
-      if (this.rafId !== null) {
-        cancelAnimationFrame(this.rafId);
-      }
+    this.throttledUpdate = withRAFThrottle((mutations: MutationRecord[]) => {
+      // Update CSS variables based on current zoom
+      // biome-ignore lint/suspicious/noExplicitAny: global window extension
+      const zoom = (window as any).canvas?.zoom.current ?? 1;
+      document.body.style.setProperty("--zoom", zoom.toFixed(5));
+      document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
+      document.body.dataset.zoom = zoom.toFixed(5);
+      document.body.dataset.strokeWidth = (2 / zoom).toFixed(3);
 
-      this.rafId = requestAnimationFrame(() => {
-        // Update CSS variables based on current zoom
-        // biome-ignore lint/suspicious/noExplicitAny: global window extension
-        const zoom = (window as any).canvas?.zoom.current ?? 1;
-        document.body.style.setProperty("--zoom", zoom.toFixed(5));
-        document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
-        document.body.dataset.zoom = zoom.toFixed(5);
-        document.body.dataset.strokeWidth = (2 / zoom).toFixed(3);
-
-        // Call all subscribed callbacks
-        this.callbacks.forEach((callback) => {
-          callback(mutations);
-        });
-        this.rafId = null;
+      // Call all subscribed callbacks
+      this.callbacks.forEach((callback) => {
+        callback(mutations);
       });
+    });
+
+    this.observer = new MutationObserver((mutations: MutationRecord[]) => {
+      this.throttledUpdate?.(mutations);
     });
 
     this.observer.observe(transformLayer, {
@@ -73,9 +72,9 @@ export class CanvasObserver {
   }
 
   private stop(): void {
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
+    if (this.throttledUpdate) {
+      this.throttledUpdate.cleanup();
+      this.throttledUpdate = null;
     }
 
     if (this.observer) {

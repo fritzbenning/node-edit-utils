@@ -1,6 +1,6 @@
 import { CanvasObserver } from "./canvas/CanvasObserver";
-import { createEditTextManager } from "./edit-node-manager/createEditTextManager";
 import { withRAFThrottle } from "./helpers";
+import { nodeText } from "./node-text/nodeText";
 import { sendPostMessage } from "./node-tools/events/sendPostMessage";
 import { setupEventListener } from "./node-tools/events/setupEventListener";
 import { clearHighlightFrame } from "./node-tools/highlight/clearHighlightFrame";
@@ -15,7 +15,7 @@ export class NodeTools {
   private nodeProvider: HTMLElement | null;
   private selectedNode: HTMLElement | null = null;
 
-  private editTextManager = createEditTextManager();
+  private text = nodeText();
 
   private throttledHighlightFrameRefresh = withRAFThrottle(refreshHighlightFrame);
 
@@ -28,7 +28,7 @@ export class NodeTools {
     this.cleanupEventListener = setupEventListener(
       (node: HTMLElement | null) => this.setSelectedNode(node),
       this.nodeProvider,
-      () => this.editTextManager.getEditableNode()
+      () => this.text.getEditableNode()
     );
     this.cleanupCanvasObserver = CanvasObserver.getInstance().subscribe(() => this.handleCanvasMutation());
     this.cleanupKeydownListener = this.setupGlobalKeydownHandler();
@@ -41,12 +41,11 @@ export class NodeTools {
         event.preventDefault();
         event.stopPropagation();
 
-        // If in edit mode, blur it first
-        if (this.editTextManager.isEditing()) {
-          this.editTextManager.blur();
+        console.log("isEditing", this.text.isEditing());
+        if (this.text.isEditing()) {
+          this.text.blurEditMode();
         }
 
-        // Clear the selection (works for both edit mode and just selected nodes)
         if (this.selectedNode) {
           this.clearHighlightFrame();
         }
@@ -61,24 +60,15 @@ export class NodeTools {
   }
 
   private setSelectedNode(node: HTMLElement | null): void {
-    if (this.editTextManager.isEditing()) {
-      const currentEditable = this.editTextManager.getEditableNode();
+    if (this.text.isEditing()) {
+      const currentEditable = this.text.getEditableNode();
       if (currentEditable && currentEditable !== node) {
-        this.editTextManager.blur();
+        this.text.blurEditMode();
       }
     }
 
     if (node) {
-      this.editTextManager.edit(
-        node,
-        this.nodeProvider,
-        (editNode) => {
-          console.log("Edit mode enabled for:", editNode);
-        },
-        () => {
-          console.log("Edit mode blurred");
-        }
-      );
+      this.text.enableEditMode(node, this.nodeProvider);
     }
 
     this.selectedNode = node;
@@ -101,7 +91,7 @@ export class NodeTools {
   }
 
   public getEditableNode(): HTMLElement | null {
-    return this.editTextManager.getEditableNode();
+    return this.text.getEditableNode();
   }
 
   public refreshHighlightFrame(zoom: number): void {
@@ -134,7 +124,7 @@ export class NodeTools {
       this.cleanupKeydownListener = null;
     }
 
-    this.editTextManager.blur();
+    this.text.blurEditMode();
   }
 
   public destroy(): void {

@@ -4,7 +4,6 @@ export const setupKeydownHandler = (node: HTMLElement): (() => void) => {
       event.preventDefault();
       event.stopPropagation();
 
-      // Insert a line break instead of creating a new block element
       const selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
@@ -22,10 +21,8 @@ export const setupKeydownHandler = (node: HTMLElement): (() => void) => {
     }
   };
 
-  // Add the event listener
   node.addEventListener("keydown", keydownHandler);
 
-  // Return cleanup function
   return () => {
     node.removeEventListener("keydown", keydownHandler);
   };
