@@ -4,7 +4,7 @@ import "@node-edit-utils/core/styles.css";
 
 function DefaultExample() {
   return (
-    <CanvasProvider width={20000} height={15000}>
+    <CanvasProvider width={20000} height={15000} themeMode="light">
       <ProductCard name="React T-Shirt" price={29} rating={4} inStock={true} />
     </CanvasProvider>
   );
