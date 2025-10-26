@@ -1,4 +1,4 @@
-import { handlePostMessage } from "../../post-message/handlePostMessage";
+import { processPostMessage } from "@/lib/post-message/processPostMessage";
 import { handleNodeClick } from "./click/handleNodeClick";
 
 export const setupEventListener = (
@@ -8,7 +8,7 @@ export const setupEventListener = (
   getEditableNode: () => HTMLElement | null
 ): (() => void) => {
   const messageHandler = (event: MessageEvent) => {
-    handlePostMessage(event);
+    processPostMessage(event, onNodeSelected);
   };
 
   const documentClickHandler = (event: MouseEvent) => {

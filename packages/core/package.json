@@ -1,6 +1,6 @@
 {
   "name": "@node-edit-utils/core",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Utilities for editing nodes in a dom tree.",
   "type": "module",
   "main": "dist/node-edit-utils.cjs.js",
