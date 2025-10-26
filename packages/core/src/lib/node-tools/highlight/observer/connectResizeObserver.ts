@@ -1,10 +1,8 @@
-export const connectResizeObserver = (element: HTMLElement, handler: (entries: ResizeObserverEntry[]) => void): (() => void) => {
+export const connectResizeObserver = (element: HTMLElement, handler: (entries: ResizeObserverEntry[]) => void) => {
   const resizeObserver = new ResizeObserver((entries) => {
     handler(entries);
   });
   resizeObserver.observe(element);
 
-  return () => {
-    resizeObserver.disconnect();
-  };
+  return resizeObserver;
 };

@@ -2,10 +2,10 @@ import { handlePostMessage } from "../../post-message/handlePostMessage";
 import { handleNodeClick } from "./click/handleNodeClick";
 
 export const setupEventListener = (
-  onNodeSelected: (node: HTMLElement | null) => void,
   nodeProvider: HTMLElement | null,
-  getEditableNode: () => HTMLElement | null,
-  onEscapePressed?: () => void
+  onNodeSelected: (node: HTMLElement | null) => void,
+  onEscapePressed: () => void,
+  getEditableNode: () => HTMLElement | null
 ): (() => void) => {
   const messageHandler = (event: MessageEvent) => {
     handlePostMessage(event);

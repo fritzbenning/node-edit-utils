@@ -1,8 +1,10 @@
+import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
 import { getElementBounds } from "./helpers/getElementBounds";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 
-export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement, zoom: number) => {
+export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement) => {
   const frame = getHighlightFrameElement(nodeProvider);
+  const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
 
   if (!frame) return;
 

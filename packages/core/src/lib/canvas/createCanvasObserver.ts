@@ -1,14 +1,9 @@
 import { withRAFThrottle } from "../helpers/withRAF";
 import { applyCanvasState } from "./helpers/applyCanvasState";
+import type { CanvasObserver } from "./types";
 
-interface CanvasObserverInstance {
-  disconnect: () => void;
-}
-
-export function createCanvasObserver(): CanvasObserverInstance {
+export function createCanvasObserver(): CanvasObserver {
   const transformLayer = document.querySelector(".transform-layer");
-
-  console.log("transformLayer", transformLayer);
 
   if (!transformLayer) {
     return {
@@ -18,7 +13,6 @@ export function createCanvasObserver(): CanvasObserverInstance {
 
   const throttledUpdate = withRAFThrottle(() => {
     applyCanvasState();
-    console.log("applyCanvasState");
   });
 
   const observer = new MutationObserver(() => {

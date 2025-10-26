@@ -1,7 +1,7 @@
-import { NodeTools, type NodeToolsRef } from "@node-edit-utils/core";
+import { createNodeTools, type NodeTools } from "@node-edit-utils/core";
 import { type RefObject, useEffect, useState } from "react";
 
-export const useNodeTools = (ref: RefObject<NodeToolsRef | null>): NodeTools | null => {
+export const useNodeTools = (ref: RefObject<HTMLElement | null>): NodeTools | null => {
   const [nodeTools, setNodeTools] = useState<NodeTools | null>(null);
 
   useEffect(() => {
@@ -9,11 +9,11 @@ export const useNodeTools = (ref: RefObject<NodeToolsRef | null>): NodeTools | n
       return;
     }
 
-    const newNodeTools = new NodeTools(ref.current);
-    setNodeTools(newNodeTools);
+    const tools = createNodeTools(ref.current);
+    setNodeTools(tools);
 
     return () => {
-      newNodeTools?.cleanup();
+      tools?.cleanup();
     };
   }, [ref]);
 

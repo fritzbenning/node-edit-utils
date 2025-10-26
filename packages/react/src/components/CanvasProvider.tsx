@@ -4,7 +4,7 @@ import type { NodeToolsRef } from "@node-edit-utils/core";
 import { useRef } from "react";
 import { useCanvasObserver } from "@/hooks/useCanvasObserver";
 import { useCanvasStartPosition } from "../hooks/useCanvasStartPosition";
-import { NodeToolsProvider } from "./NodeToolsProvider";
+import { NodeTools } from "./NodeTools";
 import { ResponsiveContainer } from "./ResponsiveContainer";
 
 export function CanvasProvider({ children, width, height }: { children: React.ReactNode; width: number; height: number }) {
@@ -17,9 +17,9 @@ export function CanvasProvider({ children, width, height }: { children: React.Re
   return (
     <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} name="canvas" initialPan={{ x, y }}>
       <ResponsiveContainer>
-        <NodeToolsProvider ref={nodeToolsRef} isVisible={isReady}>
+        <NodeTools ref={nodeToolsRef} isVisible={isReady}>
           {children}
-        </NodeToolsProvider>
+        </NodeTools>
       </ResponsiveContainer>
     </MarkupCanvas>
   );

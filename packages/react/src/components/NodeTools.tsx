@@ -7,7 +7,7 @@ interface NodeEditProviderProps extends React.HTMLAttributes<HTMLDivElement> {
   isVisible?: boolean;
 }
 
-export const NodeToolsProvider = forwardRef<NodeToolsRef, NodeEditProviderProps>(({ children, isVisible = false, ...props }, ref) => {
+export const NodeTools = forwardRef<NodeToolsRef, NodeEditProviderProps>(({ children, isVisible = false, ...props }, ref) => {
   useNodeTools(ref as React.RefObject<NodeToolsRef>);
 
   return (
