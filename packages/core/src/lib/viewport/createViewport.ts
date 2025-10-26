@@ -3,11 +3,11 @@ import { withRAFThrottle } from "../helpers";
 import { DEFAULT_WIDTH } from "./constants";
 import { setupEventListener } from "./events/setupEventListener";
 import { createResizeHandle } from "./resize/createResizeHandle";
-import type { ResponsiveContainer } from "./types";
+import type { Viewport } from "./types";
 import { calcWidth } from "./width/calcWidth";
 import { updateWidth } from "./width/updateWidth";
 
-export const createResponsiveContainer = (container: HTMLElement): ResponsiveContainer => {
+export const createViewport = (container: HTMLElement): Viewport => {
   const canvas: HTMLElement | null = getCanvasContainer();
   const resizeHandle = createResizeHandle(container);
   container.style.setProperty("--container-width", `${DEFAULT_WIDTH}px`);

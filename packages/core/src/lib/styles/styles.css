@@ -70,7 +70,7 @@
   justify-content: center;
 }
 
-.responsive-container {
+.viewport {
   position: relative;
   width: var(--container-width);
 }
@@ -95,7 +95,7 @@
     opacity 0.2s ease-in-out;
 }
 
-.responsive-container:hover .resize-handle {
+.viewport:hover .resize-handle {
   opacity: 1;
 }
 
