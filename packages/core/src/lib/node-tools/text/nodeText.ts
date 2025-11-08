@@ -1,3 +1,5 @@
+import { disableCanvasKeyboard } from "../../canvas/disableCanvasKeyboard";
+import { enableCanvasKeyboard } from "../../canvas/enableCanvasKeyboard";
 import { setupNodeListeners } from "./events/setupNodeListeners";
 import { hasTextContent } from "./helpers/hasTextContent";
 import { makeNodeEditable } from "./helpers/makeNodeEditable";
@@ -24,7 +26,7 @@ export const nodeText = (): NodeText => {
       editableNode = node;
 
       makeNodeEditable(node);
-      //enableCanvasTextMode();
+      disableCanvasKeyboard();
 
       cleanup = setupNodeListeners(node, nodeProvider, blurEditMode);
     }
@@ -48,7 +50,7 @@ export const nodeText = (): NodeText => {
     const nodeToCleanup = editableNode;
 
     makeNodeNonEditable(nodeToCleanup);
-    //disableCanvasTextMode();
+    enableCanvasKeyboard();
     cleanup?.();
 
     editableNode = null;
