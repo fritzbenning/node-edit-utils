@@ -1,5 +1,6 @@
 import { IGNORED_DOM_ELEMENTS } from "./constants";
 import { getElementsFromPoint } from "./helpers/getElementsFromPoint";
+import { isLocked } from "./helpers/isLocked";
 import { targetSameCandidates } from "./helpers/targetSameCandidates";
 
 let candidateCache: Element[] = [];
@@ -14,10 +15,13 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
   const clickThrough = event.metaKey || event.ctrlKey;
 
   const candidates = getElementsFromPoint(clickX, clickY).filter(
-    (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase()) && !element.classList.contains("select-none")
+    (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase())
   );
 
   if (editableNode && candidates.includes(editableNode)) {
+    if (isLocked(editableNode)) {
+      return null;
+    }
     return editableNode;
   }
 
@@ -25,6 +29,9 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
     candidateCache = [];
 
     selectedNode = candidates[0] as HTMLElement;
+    if (isLocked(selectedNode)) {
+      return null;
+    }
     return selectedNode;
   }
 
@@ -39,6 +46,10 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
   selectedNode = candidates[nodeIndex] as HTMLElement;
 
   candidateCache = candidates;
+
+  if (isLocked(selectedNode)) {
+    return null;
+  }
 
   return selectedNode;
 };
