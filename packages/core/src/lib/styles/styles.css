@@ -16,6 +16,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
+  top: 0;
   gap: 0.25rem;
   z-index: 10000;
   transform: scale(calc(1 / var(--zoom))) translate3d(0, 100%, 0);

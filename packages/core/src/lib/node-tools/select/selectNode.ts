@@ -14,7 +14,7 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
   const clickThrough = event.metaKey || event.ctrlKey;
 
   const candidates = getElementsFromPoint(clickX, clickY).filter(
-    (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase())
+    (element) => !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase()) && !element.classList.contains("select-none")
   );
 
   if (editableNode && candidates.includes(editableNode)) {

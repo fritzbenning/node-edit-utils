@@ -34,6 +34,10 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   };
 
   const selectNode = (node: HTMLElement | null): void => {
+    if (selectedNode === node) {
+      return;
+    }
+
     if (text.isEditing()) {
       const currentEditable = text.getEditableNode();
       if (currentEditable && currentEditable !== node) {
