@@ -41,6 +41,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       return;
     }
 
+    selectedNode = node;
+
     if (text.isEditing()) {
       const currentEditable = text.getEditableNode();
       if (currentEditable && currentEditable !== node) {
@@ -69,7 +71,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       });
     }
 
-    selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
     highlightNode(node, nodeProvider as HTMLElement) ?? null;
 

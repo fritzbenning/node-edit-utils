@@ -19,6 +19,9 @@ export const setupEventListener = (
     console.log("Esacpe Handler", event);
 
     if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+
       onEscapePressed?.();
     }
   };
