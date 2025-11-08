@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@markup-canvas/core": "1.3.0",
-    "@markup-canvas/react": "1.3.0",
+    "@markup-canvas/core": "1.3.5",
+    "@markup-canvas/react": "1.3.5",
     "@node-edit-utils/core": "workspace:*",
     "@node-edit-utils/react": "workspace:*",
     "lucide-react": "^0.546.0",
