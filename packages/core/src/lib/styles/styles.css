@@ -36,6 +36,8 @@
   height: var(--frame-height);
   z-index: 1000;
   pointer-events: none;
+  font-family: "Manrope", sans-serif;
+  letter-spacing: 0.02em;
   /* outline: calc(0.125em / var(--zoom)) solid oklch(62.7% 0.265 303.9); */
 }
 
@@ -50,12 +52,12 @@
 
 .highlight-frame-rect {
   fill: none;
-  stroke: oklch(62.7% 0.265 303.9);
+  stroke: oklch(45.7% 0.24 277.023);
   stroke-width: var(--stroke-width);
 }
 
 .tag-label {
-  background-color: oklch(62.7% 0.265 303.9);
+  background-color: oklch(45.7% 0.24 277.023);
   color: white;
   font-size: 0.575rem;
   font-weight: 500;
@@ -126,6 +128,8 @@
   gap: 0.25rem;
   visibility: hidden;
   opacity: 0;
+  font-family: "Manrope", sans-serif;
+  letter-spacing: 0.02em;
   transition:
     visibility 0.1s ease-in-out,
     opacity 0.1s ease-in-out;

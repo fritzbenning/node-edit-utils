@@ -6,6 +6,7 @@ import { setupEventListener } from "./events/setupEventListener";
 import { clearHighlightFrame } from "./highlight/clearHighlightFrame";
 import { highlightNode } from "./highlight/highlightNode";
 import { refreshHighlightFrame } from "./highlight/refreshHighlightFrame";
+import { updateHighlightFrameVisibility } from "./highlight/updateHighlightFrameVisibility";
 import { nodeText } from "./text/nodeText";
 import type { NodeTools } from "./types";
 
@@ -13,6 +14,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const nodeProvider = element;
 
   let resizeObserver: ResizeObserver | null = null;
+  let mutationObserver: MutationObserver | null = null;
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
@@ -29,6 +31,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         selectedNode = null;
 
         resizeObserver?.disconnect();
+        mutationObserver?.disconnect();
       }
     }
   };
@@ -46,6 +49,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     }
 
     resizeObserver?.disconnect();
+    mutationObserver?.disconnect();
 
     if (node && nodeProvider) {
       text.enableEditMode(node, nodeProvider);
@@ -53,11 +57,25 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       resizeObserver = connectResizeObserver(nodeProvider, () => {
         throttledFrameRefresh(node, nodeProvider);
       });
+
+      mutationObserver = new MutationObserver(() => {
+        throttledFrameRefresh(node, nodeProvider);
+        updateHighlightFrameVisibility(node, nodeProvider);
+      });
+
+      mutationObserver.observe(node, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
     }
 
     selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
     highlightNode(node, nodeProvider as HTMLElement) ?? null;
+
+    if (node && nodeProvider) {
+      updateHighlightFrameVisibility(node, nodeProvider);
+    }
   };
 
   // Setup event listener
@@ -66,6 +84,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const cleanup = (): void => {
     removeListeners();
     resizeObserver?.disconnect();
+    mutationObserver?.disconnect();
 
     text.blurEditMode();
     throttledFrameRefresh.cleanup();
@@ -81,6 +100,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       clearHighlightFrame(nodeProvider);
       selectedNode = null;
       resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
     },
     getEditableNode: () => text.getEditableNode(),
     cleanup,
