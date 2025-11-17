@@ -5,5 +5,12 @@ export const updateHighlightFrameVisibility = (node: HTMLElement, nodeProvider: 
   if (!frame) return;
 
   const hasHiddenClass = node.classList.contains("hidden") || node.classList.contains("select-none");
-  frame.style.display = hasHiddenClass ? "none" : "";
+  const displayValue = hasHiddenClass ? "none" : "";
+
+  frame.style.display = displayValue;
+
+  const tagLabel = frame.querySelector(".tag-label") as HTMLElement | null;
+  if (tagLabel) {
+    tagLabel.style.display = displayValue;
+  }
 };
