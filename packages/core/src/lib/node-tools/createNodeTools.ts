@@ -15,6 +15,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
 
   let resizeObserver: ResizeObserver | null = null;
   let mutationObserver: MutationObserver | null = null;
+  let parentMutationObserver: MutationObserver | null = null;
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
@@ -32,6 +33,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
 
         resizeObserver?.disconnect();
         mutationObserver?.disconnect();
+        parentMutationObserver?.disconnect();
       }
     }
   };
@@ -50,6 +52,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
 
     resizeObserver?.disconnect();
     mutationObserver?.disconnect();
+    parentMutationObserver?.disconnect();
 
     if (node && nodeProvider) {
       text.enableEditMode(node, nodeProvider);
@@ -69,6 +72,20 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         childList: true,
         characterData: true,
       });
+
+      const parent = node.parentElement;
+
+      if (parent) {
+        parentMutationObserver = new MutationObserver(() => {
+          throttledFrameRefresh(node, nodeProvider);
+          updateHighlightFrameVisibility(node, nodeProvider);
+        });
+
+        parentMutationObserver.observe(parent, {
+          childList: true,
+          subtree: true,
+        });
+      }
     }
 
     selectedNode = node;
@@ -87,6 +104,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     removeListeners();
     resizeObserver?.disconnect();
     mutationObserver?.disconnect();
+    parentMutationObserver?.disconnect();
 
     text.blurEditMode();
     throttledFrameRefresh.cleanup();
@@ -103,6 +121,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       selectedNode = null;
       resizeObserver?.disconnect();
       mutationObserver?.disconnect();
+      parentMutationObserver?.disconnect();
     },
     getEditableNode: () => text.getEditableNode(),
     cleanup,
