@@ -14,8 +14,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const nodeProvider = element;
 
   let resizeObserver: ResizeObserver | null = null;
+  let nodeResizeObserver: ResizeObserver | null = null;
   let mutationObserver: MutationObserver | null = null;
-  let parentMutationObserver: MutationObserver | null = null;
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
@@ -32,8 +32,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         selectedNode = null;
 
         resizeObserver?.disconnect();
+        nodeResizeObserver?.disconnect();
         mutationObserver?.disconnect();
-        parentMutationObserver?.disconnect();
       }
     }
   };
@@ -51,8 +51,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     }
 
     resizeObserver?.disconnect();
+    nodeResizeObserver?.disconnect();
     mutationObserver?.disconnect();
-    parentMutationObserver?.disconnect();
 
     if (node && nodeProvider) {
       text.enableEditMode(node, nodeProvider);
@@ -73,19 +73,10 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         characterData: true,
       });
 
-      const parent = node.parentElement;
-
-      if (parent) {
-        parentMutationObserver = new MutationObserver(() => {
-          throttledFrameRefresh(node, nodeProvider);
-          updateHighlightFrameVisibility(node, nodeProvider);
-        });
-
-        parentMutationObserver.observe(parent, {
-          childList: true,
-          subtree: true,
-        });
-      }
+      nodeResizeObserver = connectResizeObserver(node, () => {
+        throttledFrameRefresh(node, nodeProvider);
+        updateHighlightFrameVisibility(node, nodeProvider);
+      });
     }
 
     selectedNode = node;
@@ -103,8 +94,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const cleanup = (): void => {
     removeListeners();
     resizeObserver?.disconnect();
+    nodeResizeObserver?.disconnect();
     mutationObserver?.disconnect();
-    parentMutationObserver?.disconnect();
 
     text.blurEditMode();
     throttledFrameRefresh.cleanup();
@@ -120,8 +111,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       clearHighlightFrame(nodeProvider);
       selectedNode = null;
       resizeObserver?.disconnect();
+      nodeResizeObserver?.disconnect();
       mutationObserver?.disconnect();
-      parentMutationObserver?.disconnect();
     },
     getEditableNode: () => text.getEditableNode(),
     cleanup,
