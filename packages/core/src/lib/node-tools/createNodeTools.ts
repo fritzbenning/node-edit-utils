@@ -1,4 +1,4 @@
-import { withRAFThrottle } from "../helpers";
+import { withDoubleRAF } from "../helpers";
 import { connectResizeObserver } from "../helpers/observer/connectResizeObserver";
 import { sendPostMessage } from "../post-message/sendPostMessage";
 import { bindToWindow } from "../window/bindToWindow";
@@ -19,7 +19,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
-  const throttledFrameRefresh = withRAFThrottle(refreshHighlightFrame);
+  const throttledFrameRefresh = withDoubleRAF(refreshHighlightFrame);
 
   const handleEscape = (): void => {
     if (text.isEditing()) {

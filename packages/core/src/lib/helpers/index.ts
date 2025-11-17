@@ -1,1 +1,1 @@
-export { withRAF, withRAFThrottle } from "./withRAF";
+export { withRAF, withRAFThrottle, withDoubleRAF } from "./withRAF";
