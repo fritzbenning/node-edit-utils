@@ -1,4 +1,3 @@
-import { withRAFThrottle } from "../helpers/withRAF";
 import { applyCanvasState } from "./helpers/applyCanvasState";
 import type { CanvasObserver } from "./types";
 
@@ -11,7 +10,7 @@ export function createCanvasObserver(): CanvasObserver {
     };
   }
 
-  const throttledUpdate = withRAFThrottle(() => {
+  const observer = new MutationObserver(() => {
     applyCanvasState();
 
     // Refresh highlight frame (throttled via withRAFThrottle)
@@ -20,10 +19,6 @@ export function createCanvasObserver(): CanvasObserver {
     if (nodeTools?.refreshHighlightFrame) {
       nodeTools.refreshHighlightFrame();
     }
-  });
-
-  const observer = new MutationObserver(() => {
-    throttledUpdate();
   });
 
   observer.observe(transformLayer, {

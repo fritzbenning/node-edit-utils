@@ -7,6 +7,13 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const frame = getHighlightFrameElement();
   if (!frame) return;
 
+  // Update SVG dimensions to match current viewport (handles window resize and ensures coordinate system is correct)
+  // Use clientWidth/Height to match getBoundingClientRect() coordinate system (excludes scrollbars)
+  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+  const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+  frame.setAttribute("width", viewportWidth.toString());
+  frame.setAttribute("height", viewportHeight.toString());
+
   const group = frame.querySelector(".highlight-frame-group") as SVGGElement | null;
   if (!group) return;
 

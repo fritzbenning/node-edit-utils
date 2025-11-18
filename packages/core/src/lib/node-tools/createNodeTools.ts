@@ -60,7 +60,10 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       text.enableEditMode(node, nodeProvider);
 
       mutationObserver = new MutationObserver(() => {
-        throttledRefreshAndVisibility(node, nodeProvider);
+        // throttledRefreshAndVisibility(node, nodeProvider);
+        console.log("mutationObserver", node);
+        refreshHighlightFrame(node, nodeProvider);
+        updateHighlightFrameVisibility(node);
       });
 
       mutationObserver.observe(node, {
@@ -69,7 +72,10 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       });
 
       resizeObserver = connectResizeObserver(node, () => {
-        throttledRefreshAndVisibility(node, nodeProvider);
+        // throttledRefreshAndVisibility(node, nodeProvider);
+        console.log("resizeObserver", node);
+        refreshHighlightFrame(node, nodeProvider);
+        updateHighlightFrameVisibility(node);
       });
     }
 
