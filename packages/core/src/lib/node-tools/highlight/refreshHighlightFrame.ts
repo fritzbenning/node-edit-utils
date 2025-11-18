@@ -6,6 +6,8 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const frame = getHighlightFrameElement(nodeProvider);
   const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
 
+  console.log("1. refreshHighlightFrame", node);
+
   if (!frame) return;
 
   if (zoom >= 0.3) {
@@ -20,4 +22,6 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   frame.style.setProperty("--frame-left", `${left}px`);
   frame.style.setProperty("--frame-width", `${width}px`);
   frame.style.setProperty("--frame-height", `${height}px`);
+
+  console.log("2. refreshHighlightFrame", top, left, width, height);
 };

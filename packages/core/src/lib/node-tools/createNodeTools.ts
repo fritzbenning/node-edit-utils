@@ -68,8 +68,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
 
       mutationObserver.observe(node, {
         attributes: true,
-        subtree: true,
-        childList: true,
         characterData: true,
       });
 
