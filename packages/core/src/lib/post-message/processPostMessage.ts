@@ -6,8 +6,6 @@ export const processPostMessage = (event: MessageEvent, onNodeSelected?: (node: 
       const nodeId = event.data.data;
       const selectedNode = document.querySelector(`[data-node-id="${nodeId}"]`) as HTMLElement | null;
 
-      console.log("selectedNode", selectedNode);
-
       if (isLocked(selectedNode)) {
         onNodeSelected?.(null);
         return;

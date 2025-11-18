@@ -1,6 +1,6 @@
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 
-export const updateHighlightFrameVisibility = (node: HTMLElement, nodeProvider: HTMLElement): void => {
+export const updateHighlightFrameVisibility = (node: HTMLElement): void => {
   const frame = getHighlightFrameElement();
   if (!frame) return;
 

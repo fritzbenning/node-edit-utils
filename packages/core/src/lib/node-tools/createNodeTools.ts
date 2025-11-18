@@ -18,7 +18,12 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
-  const throttledFrameRefresh = withRAFThrottle(refreshHighlightFrame);
+
+  // Combined throttled function for refresh + visibility update
+  const throttledRefreshAndVisibility = withRAFThrottle((node: HTMLElement, nodeProvider: HTMLElement) => {
+    refreshHighlightFrame(node, nodeProvider);
+    updateHighlightFrameVisibility(node);
+  });
 
   const handleEscape = (): void => {
     if (text.isEditing()) {
@@ -55,9 +60,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       text.enableEditMode(node, nodeProvider);
 
       mutationObserver = new MutationObserver(() => {
-        console.log("mutationObserver", node);
-        throttledFrameRefresh(node, nodeProvider);
-        updateHighlightFrameVisibility(node, nodeProvider);
+        throttledRefreshAndVisibility(node, nodeProvider);
       });
 
       mutationObserver.observe(node, {
@@ -66,18 +69,16 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       });
 
       resizeObserver = connectResizeObserver(node, () => {
-        console.log("nodeResizeObserver", node);
-        throttledFrameRefresh(node, nodeProvider);
-        updateHighlightFrameVisibility(node, nodeProvider);
+        throttledRefreshAndVisibility(node, nodeProvider);
       });
     }
 
     selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
-    highlightNode(node, nodeProvider as HTMLElement) ?? null;
+    highlightNode(node) ?? null;
 
     if (node && nodeProvider) {
-      updateHighlightFrameVisibility(node, nodeProvider);
+      updateHighlightFrameVisibility(node);
     }
   };
 
@@ -90,14 +91,19 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     mutationObserver?.disconnect();
 
     text.blurEditMode();
-    throttledFrameRefresh.cleanup();
+    throttledRefreshAndVisibility.cleanup();
   };
 
   const nodeTools: NodeTools = {
     selectNode,
     getSelectedNode: () => selectedNode,
     refreshHighlightFrame: () => {
-      throttledFrameRefresh(selectedNode as HTMLElement, nodeProvider as HTMLElement);
+      if (selectedNode && nodeProvider) {
+        // Call directly (not throttled) since this is typically called from already-throttled contexts
+        // to avoid double RAF
+        refreshHighlightFrame(selectedNode, nodeProvider);
+        updateHighlightFrameVisibility(selectedNode);
+      }
     },
     clearSelectedNode: () => {
       clearHighlightFrame();
