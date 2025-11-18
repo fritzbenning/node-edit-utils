@@ -1,6 +1,6 @@
 {
   "name": "node-edit-utils",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "private": true,
   "description": "Utilities for editing nodes in a dom tree.",
   "scripts": {
