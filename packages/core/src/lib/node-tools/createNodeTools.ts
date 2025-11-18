@@ -14,7 +14,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const nodeProvider = element;
 
   let resizeObserver: ResizeObserver | null = null;
-  let nodeResizeObserver: ResizeObserver | null = null;
   let mutationObserver: MutationObserver | null = null;
   let selectedNode: HTMLElement | null = null;
 
@@ -32,7 +31,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         selectedNode = null;
 
         resizeObserver?.disconnect();
-        nodeResizeObserver?.disconnect();
         mutationObserver?.disconnect();
       }
     }
@@ -51,17 +49,13 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     }
 
     resizeObserver?.disconnect();
-    nodeResizeObserver?.disconnect();
     mutationObserver?.disconnect();
 
     if (node && nodeProvider) {
       text.enableEditMode(node, nodeProvider);
 
-      resizeObserver = connectResizeObserver(nodeProvider, () => {
-        throttledFrameRefresh(node, nodeProvider);
-      });
-
       mutationObserver = new MutationObserver(() => {
+        console.log("mutationObserver", node);
         throttledFrameRefresh(node, nodeProvider);
         updateHighlightFrameVisibility(node, nodeProvider);
       });
@@ -71,7 +65,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
         characterData: true,
       });
 
-      nodeResizeObserver = connectResizeObserver(node, () => {
+      resizeObserver = connectResizeObserver(node, () => {
+        console.log("nodeResizeObserver", node);
         throttledFrameRefresh(node, nodeProvider);
         updateHighlightFrameVisibility(node, nodeProvider);
       });
@@ -92,7 +87,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   const cleanup = (): void => {
     removeListeners();
     resizeObserver?.disconnect();
-    nodeResizeObserver?.disconnect();
     mutationObserver?.disconnect();
 
     text.blurEditMode();
@@ -109,7 +103,6 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       clearHighlightFrame(nodeProvider);
       selectedNode = null;
       resizeObserver?.disconnect();
-      nodeResizeObserver?.disconnect();
       mutationObserver?.disconnect();
     },
     getEditableNode: () => text.getEditableNode(),
