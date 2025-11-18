@@ -1,5 +1,3 @@
-export function getHighlightFrameElement(
-  nodeProvider: HTMLElement
-): HTMLElement | null {
-  return nodeProvider.querySelector(".highlight-frame");
+export function getHighlightFrameElement(): SVGSVGElement | null {
+  return document.body.querySelector(".highlight-frame-overlay") as SVGSVGElement | null;
 }

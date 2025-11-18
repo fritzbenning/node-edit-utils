@@ -13,6 +13,13 @@ export function createCanvasObserver(): CanvasObserver {
 
   const throttledUpdate = withRAFThrottle(() => {
     applyCanvasState();
+
+    // Refresh highlight frame (throttled via withRAFThrottle)
+    // biome-ignore lint/suspicious/noExplicitAny: global window extension
+    const nodeTools = (window as any).nodeTools;
+    if (nodeTools?.refreshHighlightFrame) {
+      nodeTools.refreshHighlightFrame();
+    }
   });
 
   const observer = new MutationObserver(() => {

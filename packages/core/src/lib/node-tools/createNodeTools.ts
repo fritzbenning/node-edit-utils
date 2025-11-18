@@ -1,5 +1,5 @@
-import { withDoubleRAF } from "../helpers";
 import { connectResizeObserver } from "../helpers/observer/connectResizeObserver";
+import { withRAFThrottle } from "../helpers/withRAF";
 import { sendPostMessage } from "../post-message/sendPostMessage";
 import { bindToWindow } from "../window/bindToWindow";
 import { setupEventListener } from "./events/setupEventListener";
@@ -18,7 +18,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText();
-  const throttledFrameRefresh = withDoubleRAF(refreshHighlightFrame);
+  const throttledFrameRefresh = withRAFThrottle(refreshHighlightFrame);
 
   const handleEscape = (): void => {
     if (text.isEditing()) {
@@ -27,7 +27,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
 
     if (selectedNode) {
       if (nodeProvider) {
-        clearHighlightFrame(nodeProvider);
+        clearHighlightFrame();
         selectedNode = null;
 
         resizeObserver?.disconnect();
@@ -100,7 +100,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       throttledFrameRefresh(selectedNode as HTMLElement, nodeProvider as HTMLElement);
     },
     clearSelectedNode: () => {
-      clearHighlightFrame(nodeProvider);
+      clearHighlightFrame();
       selectedNode = null;
       resizeObserver?.disconnect();
       mutationObserver?.disconnect();

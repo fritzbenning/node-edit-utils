@@ -11,7 +11,7 @@ export const handleNodeClick = (
   event.stopPropagation();
 
   if (nodeProvider && !nodeProvider.contains(event.target as Node)) {
-    clearHighlightFrame(nodeProvider);
+    clearHighlightFrame();
     onNodeSelected(null);
     return;
   }

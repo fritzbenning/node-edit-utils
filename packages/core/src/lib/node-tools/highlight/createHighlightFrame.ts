@@ -1,37 +1,36 @@
-import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
-import { getElementBounds } from "./helpers/getElementBounds";
+import { createCornerHandles } from "./createCornerHandles";
+import { getScreenBounds } from "./helpers/getScreenBounds";
 
-export const createHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement): HTMLElement => {
-  const { top, left, width, height } = getElementBounds(node, nodeProvider);
+export const createHighlightFrame = (node: HTMLElement): SVGSVGElement => {
+  const { top, left, width, height } = getScreenBounds(node);
 
-  const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
-
-  document.body.style.setProperty("--zoom", zoom.toString());
-  document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));
-
-  const frame = document.createElement("div");
-  frame.classList.add("highlight-frame");
-
-  frame.style.setProperty("--frame-top", `${top}px`);
-  frame.style.setProperty("--frame-left", `${left}px`);
-  frame.style.setProperty("--frame-width", `${width}px`);
-  frame.style.setProperty("--frame-height", `${height}px`);
-
-  // Create SVG overlay for outline
+  // Create fixed SVG overlay
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("highlight-frame-svg");
+  svg.classList.add("highlight-frame-overlay");
+  svg.setAttribute("data-node-id", node.getAttribute("data-node-id") || "");
+
+  // Set fixed positioning
+  svg.style.position = "fixed";
+  svg.style.top = "0";
+  svg.style.left = "0";
+  svg.style.width = "100vw";
+  svg.style.height = "100vh";
+  svg.style.pointerEvents = "none";
+  svg.style.zIndex = "10000"; // Match your --z-index-high
 
   const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect.setAttribute("x", "0");
-  rect.setAttribute("y", "0");
-  rect.setAttribute("width", "100%");
-  rect.setAttribute("height", "100%");
+  rect.setAttribute("x", left.toString());
+  rect.setAttribute("y", top.toString());
+  rect.setAttribute("width", width.toString());
+  rect.setAttribute("height", height.toString());
+  rect.setAttribute("vector-effect", "non-scaling-stroke");
   rect.classList.add("highlight-frame-rect");
 
   svg.appendChild(rect);
-  frame.appendChild(svg);
 
-  const highlightFrame = frame;
+  createCornerHandles(svg, top, left, width, height);
 
-  return highlightFrame;
+  document.body.appendChild(svg);
+
+  return svg as SVGSVGElement;
 };

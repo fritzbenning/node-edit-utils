@@ -1,12 +1,11 @@
-import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
-
-export const clearHighlightFrame = (nodeProvider: HTMLElement | null): void => {
-  if (!nodeProvider) {
-    return;
+export const clearHighlightFrame = (): void => {
+  const frame = document.body.querySelector(".highlight-frame-overlay");
+  if (frame) {
+    frame.remove();
   }
 
-  const highlightFrame = getHighlightFrameElement(nodeProvider);
-  if (highlightFrame) {
-    highlightFrame.remove();
+  const toolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper");
+  if (toolsWrapper) {
+    toolsWrapper.remove();
   }
 };
