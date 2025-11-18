@@ -3,20 +3,16 @@ import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { getScreenBounds } from "./helpers/getScreenBounds";
 
 export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement) => {
-  const HANDLE_SIZE = 6;
-
   // Batch all DOM reads first (single layout pass)
   const frame = getHighlightFrameElement();
   if (!frame) return;
 
-  const rect = frame.querySelector("rect");
+  const group = frame.querySelector(".highlight-frame-group") as SVGGElement | null;
+  if (!group) return;
+
+  const rect = group.querySelector("rect");
   if (!rect) return;
 
-  // Batch all queries together
-  const topLeft = frame.querySelector(".handle-top-left");
-  const topRight = frame.querySelector(".handle-top-right");
-  const bottomRight = frame.querySelector(".handle-bottom-right");
-  const bottomLeft = frame.querySelector(".handle-bottom-left");
   const toolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
 
   const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
@@ -27,28 +23,35 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const bottomY = top + height;
 
   // Batch all DOM writes (single paint pass)
-  // Update rect
-  rect.setAttribute("x", left.toString());
-  rect.setAttribute("y", top.toString());
+  // Update group transform to move entire group (rect + handles) at once
+  group.setAttribute("transform", `translate(${left}, ${top})`);
+
+  // Update rect dimensions (position is handled by group transform)
   rect.setAttribute("width", width.toString());
   rect.setAttribute("height", height.toString());
 
-  // Update corner handles positions
+  // Update corner handles positions (relative to group, so only width/height matter)
+  const topLeft = group.querySelector(".handle-top-left");
+  const topRight = group.querySelector(".handle-top-right");
+  const bottomRight = group.querySelector(".handle-bottom-right");
+  const bottomLeft = group.querySelector(".handle-bottom-left");
+
+  const HANDLE_SIZE = 6;
   if (topLeft) {
-    topLeft.setAttribute("x", (left - HANDLE_SIZE / 2).toString());
-    topLeft.setAttribute("y", (top - HANDLE_SIZE / 2).toString());
+    topLeft.setAttribute("x", (-HANDLE_SIZE / 2).toString());
+    topLeft.setAttribute("y", (-HANDLE_SIZE / 2).toString());
   }
   if (topRight) {
-    topRight.setAttribute("x", (left + width - HANDLE_SIZE / 2).toString());
-    topRight.setAttribute("y", (top - HANDLE_SIZE / 2).toString());
+    topRight.setAttribute("x", (width - HANDLE_SIZE / 2).toString());
+    topRight.setAttribute("y", (-HANDLE_SIZE / 2).toString());
   }
   if (bottomRight) {
-    bottomRight.setAttribute("x", (left + width - HANDLE_SIZE / 2).toString());
-    bottomRight.setAttribute("y", (top + height - HANDLE_SIZE / 2).toString());
+    bottomRight.setAttribute("x", (width - HANDLE_SIZE / 2).toString());
+    bottomRight.setAttribute("y", (height - HANDLE_SIZE / 2).toString());
   }
   if (bottomLeft) {
-    bottomLeft.setAttribute("x", (left - HANDLE_SIZE / 2).toString());
-    bottomLeft.setAttribute("y", (top + height - HANDLE_SIZE / 2).toString());
+    bottomLeft.setAttribute("x", (-HANDLE_SIZE / 2).toString());
+    bottomLeft.setAttribute("y", (height - HANDLE_SIZE / 2).toString());
   }
 
   // Update tools wrapper position (use calculated bounds, not rect attributes)
