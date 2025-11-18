@@ -29,7 +29,6 @@ export function createCanvasObserver(): CanvasObserver {
   });
 
   function disconnect(): void {
-    throttledUpdate.cleanup();
     observer.disconnect();
   }
 
