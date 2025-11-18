@@ -55,9 +55,8 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       text.enableEditMode(node, nodeProvider);
 
       mutationObserver = new MutationObserver(() => {
-        console.log("mutationObserver", node);
         throttledFrameRefresh(node, nodeProvider);
-        updateHighlightFrameVisibility(node, nodeProvider);
+        updateHighlightFrameVisibility(node);
       });
 
       mutationObserver.observe(node, {
@@ -66,18 +65,17 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       });
 
       resizeObserver = connectResizeObserver(node, () => {
-        console.log("nodeResizeObserver", node);
         throttledFrameRefresh(node, nodeProvider);
-        updateHighlightFrameVisibility(node, nodeProvider);
+        updateHighlightFrameVisibility(node);
       });
     }
 
     selectedNode = node;
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
-    highlightNode(node, nodeProvider as HTMLElement) ?? null;
+    highlightNode(node);
 
     if (node && nodeProvider) {
-      updateHighlightFrameVisibility(node, nodeProvider);
+      updateHighlightFrameVisibility(node);
     }
   };
 
@@ -97,7 +95,9 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
     selectNode,
     getSelectedNode: () => selectedNode,
     refreshHighlightFrame: () => {
-      throttledFrameRefresh(selectedNode as HTMLElement, nodeProvider as HTMLElement);
+      if (selectedNode && nodeProvider) {
+        throttledFrameRefresh(selectedNode, nodeProvider);
+      }
     },
     clearSelectedNode: () => {
       clearHighlightFrame();
