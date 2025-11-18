@@ -62,6 +62,9 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       mutationObserver.observe(node, {
         attributes: true,
         characterData: true,
+        subtree: false,
+        childList: false,
+        attributeFilter: ["style"],
       });
 
       resizeObserver = connectResizeObserver(node, () => {
