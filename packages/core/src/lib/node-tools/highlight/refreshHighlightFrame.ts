@@ -57,12 +57,19 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     bottomLeft.setAttribute("y", bottomLeftY.toString());
   }
 
-  // Update tools wrapper using CSS transform (GPU-accelerated)
+  // Update tools wrapper position
   const toolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
-  if (toolsWrapper) {
-    const centerX = left + width / 2;
-    const bottomY = top + height;
-    toolsWrapper.style.transform = `translate(${centerX}px, ${bottomY}px) translateX(-50%)`;
+  if (toolsWrapper && rect) {
+    const rectX = parseFloat(rect.getAttribute("x") || "0");
+    const rectWidth = parseFloat(rect.getAttribute("width") || "0");
+    const rectY = parseFloat(rect.getAttribute("y") || "0");
+    const rectHeight = parseFloat(rect.getAttribute("height") || "0");
+
+    const centerX = rectX + rectWidth / 2;
+    const bottomY = rectY + rectHeight;
+
+    toolsWrapper.style.left = `${centerX}px`;
+    toolsWrapper.style.top = `${bottomY}px`;
   }
 
   // Update tool opacity
