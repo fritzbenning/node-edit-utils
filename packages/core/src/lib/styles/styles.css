@@ -1,6 +1,7 @@
 :root {
   --primary-color: oklch(0.6235 0.22 294);
   --uncode-color: oklch(45.7% 0.24 277.023);
+  --component-color: oklch(65.6% 0.241 354.308);
 
   --handle-color: oklch(55.2% 0.016 285.938);
   --handle-color-transparent: oklch(55.2% 0.016 285.938 / 0.7);
@@ -71,12 +72,20 @@
   stroke-width: 2px; /* Fixed width - vector-effect keeps it crisp */
 }
 
+.highlight-frame-overlay.is-instance .highlight-frame-rect {
+  stroke: var(--component-color);
+}
+
 .highlight-frame-handle {
   fill: white;
   stroke: var(--primary-color);
   stroke-width: 1px;
   pointer-events: auto;
   cursor: nwse-resize;
+}
+
+.highlight-frame-overlay.is-instance .highlight-frame-handle {
+  stroke: var(--component-color);
 }
 
 .highlight-frame-handle.handle-top-left {
@@ -115,6 +124,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.highlight-frame-tools-wrapper.is-instance .tag-label,
+.node-tools.is-instance .tag-label {
+  background-color: var(--component-color);
 }
 
 .viewport {

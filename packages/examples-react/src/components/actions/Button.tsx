@@ -1,7 +1,7 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { type ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-interface ButtonProps {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "onClick" | "className"> {
   children: ReactNode;
   variant?: "primary" | "secondary" | "disabled";
   size?: "sm" | "md" | "lg";
@@ -11,7 +11,15 @@ interface ButtonProps {
   icon?: ReactNode;
 }
 
-export function Button({ children, variant = "primary", size = "md", disabled = false, onClick, className = "" }: ButtonProps) {
+export function Button({
+  children,
+  variant = "primary",
+  size = "md",
+  disabled = false,
+  onClick,
+  className = "",
+  ...restProps
+}: ButtonProps) {
   const baseClasses = "flex items-center justify-center gap-2 rounded-lg font-semibold transition-all shadow-lg whitespace-nowrap";
 
   const variantClasses = {
@@ -30,7 +38,7 @@ export function Button({ children, variant = "primary", size = "md", disabled = 
   const classes = `${baseClasses} ${variantClasses[finalVariant]} ${sizeClasses[size]} ${className}`;
 
   return (
-    <button className={classes} disabled={disabled} onClick={disabled ? undefined : onClick}>
+    <button className={classes} disabled={disabled} onClick={disabled ? undefined : onClick} {...restProps}>
       <ShoppingBagIcon className="size-4" />
       {children}
     </button>

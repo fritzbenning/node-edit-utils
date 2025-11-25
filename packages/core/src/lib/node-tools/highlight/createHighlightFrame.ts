@@ -1,12 +1,19 @@
 import { createCornerHandles } from "./createCornerHandles";
 import { getScreenBounds } from "./helpers/getScreenBounds";
 
-export const createHighlightFrame = (node: HTMLElement): SVGSVGElement => {
+const getComponentColor = (): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue("--component-color").trim() || "oklch(65.6% 0.241 354.308)";
+};
+
+export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = false): SVGSVGElement => {
   const { top, left, width, height } = getScreenBounds(node);
 
   // Create fixed SVG overlay
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("highlight-frame-overlay");
+  if (isInstance) {
+    svg.classList.add("is-instance");
+  }
   svg.setAttribute("data-node-id", node.getAttribute("data-node-id") || "");
 
   // Set fixed positioning
@@ -35,9 +42,14 @@ export const createHighlightFrame = (node: HTMLElement): SVGSVGElement => {
   rect.setAttribute("vector-effect", "non-scaling-stroke");
   rect.classList.add("highlight-frame-rect");
 
+  // Apply instance color if it's an instance
+  if (isInstance) {
+    rect.setAttribute("stroke", getComponentColor());
+  }
+
   group.appendChild(rect);
 
-  createCornerHandles(group, width, height);
+  createCornerHandles(group, width, height, isInstance);
 
   svg.appendChild(group);
   document.body.appendChild(svg);

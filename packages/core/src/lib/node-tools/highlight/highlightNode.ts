@@ -1,3 +1,4 @@
+import { isComponentInstance } from "../select/helpers/isComponentInstance";
 import { createHighlightFrame } from "./createHighlightFrame";
 import { createToolsContainer } from "./createToolsContainer";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
@@ -16,7 +17,8 @@ export const highlightNode = (node: HTMLElement | null): void => {
     existingToolsWrapper.remove();
   }
 
-  const highlightFrame = createHighlightFrame(node);
+  const isInstance = isComponentInstance(node);
+  const highlightFrame = createHighlightFrame(node, isInstance);
 
   if (node.contentEditable === "true") {
     highlightFrame.classList.add("is-editable");
@@ -28,6 +30,9 @@ export const highlightNode = (node: HTMLElement | null): void => {
 
   const toolsWrapper = document.createElement("div");
   toolsWrapper.classList.add("highlight-frame-tools-wrapper");
+  if (isInstance) {
+    toolsWrapper.classList.add("is-instance");
+  }
   toolsWrapper.style.position = "fixed";
   toolsWrapper.style.left = `${left}px`;
   toolsWrapper.style.top = `${bottomY}px`;
@@ -36,6 +41,6 @@ export const highlightNode = (node: HTMLElement | null): void => {
   toolsWrapper.style.pointerEvents = "none";
   toolsWrapper.style.zIndex = "5000"; // Match --z-index-highlight (below canvas rulers)
 
-  createToolsContainer(node, toolsWrapper);
+  createToolsContainer(node, toolsWrapper, isInstance);
   document.body.appendChild(toolsWrapper);
 };

@@ -15,10 +15,14 @@ export function ProductCard({
   rating,
   inStock,
   image = "https://images.unsplash.com/photo-1622351772377-c3dda74beb03",
+  ...restProps
 }: ProductCardProps) {
   const newLocal = "font-light text-3xl";
   return (
-    <div className="overflow-hidden rounded-xl bg-white font-display shadow-lg transition-shadow duration-300 hover:shadow-xl">
+    <div
+      className="overflow-hidden rounded-xl bg-white font-display shadow-lg transition-shadow duration-300 hover:shadow-xl"
+      {...restProps}
+    >
       <div className="aspect-4/3 max-h-100 w-full object-cover">
         <img src={image} alt="product shot" className="h-full w-full object-cover" />
       </div>
@@ -32,9 +36,18 @@ export function ProductCard({
             <StarIcon key={`star-${i}`} className={`h-5 w-5 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
           ))}
         </div>
-        <Button className="w-full" disabled={!inStock}>
-          {inStock ? "Add to Cart" : "Out of Stock"}
-        </Button>
+        <div>
+          <div data-instance="test">Test</div>
+          <Button className="w-full" disabled={!inStock} data-instance="true">
+            <span className="text-xs">Test</span>
+          </Button>
+          <Button className="w-full" disabled={!inStock} data-instance="true">
+            <span className="text-xs">{inStock ? "Add to Cart" : "Out of Stock"}</span>
+          </Button>
+          <Button className="w-full" disabled={!inStock} data-instance="true">
+            <span className="text-xs">{inStock ? "Add to Cart" : "Out of Stock"}</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

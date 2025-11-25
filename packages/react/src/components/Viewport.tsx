@@ -5,10 +5,10 @@ import { useViewport } from "@/hooks/useViewport";
 export const Viewport = ({ children }: { children: React.ReactNode }) => {
   const viewportRef = useRef<ViewportRef>(null);
 
-  const viewport = useViewport(viewportRef);
+  useViewport(viewportRef);
 
   return (
-    <div ref={viewportRef} className="viewport">
+    <div ref={viewportRef} className="viewport @container/viewport">
       {children}
     </div>
   );
