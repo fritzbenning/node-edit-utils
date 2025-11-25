@@ -16,22 +16,17 @@ export const createHighlightFrame = (node: HTMLElement): SVGSVGElement => {
   svg.style.width = "100vw";
   svg.style.height = "100vh";
   svg.style.pointerEvents = "none";
-  svg.style.zIndex = "10000"; // Match your --z-index-high
+  svg.style.zIndex = "5000";
 
-  // Set explicit width/height attributes to ensure coordinate system matches viewport
-  // Use clientWidth/Height to match getBoundingClientRect() coordinate system (excludes scrollbars)
-  // This is critical for proper positioning, especially on page reload
   const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
   const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
   svg.setAttribute("width", viewportWidth.toString());
   svg.setAttribute("height", viewportHeight.toString());
 
-  // Create group to contain rect and handles - positioned via transform
   const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
   group.classList.add("highlight-frame-group");
   group.setAttribute("transform", `translate(${left}, ${top})`);
 
-  // Create rect at origin (0,0) relative to group
   const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   rect.setAttribute("x", "0");
   rect.setAttribute("y", "0");
@@ -42,7 +37,6 @@ export const createHighlightFrame = (node: HTMLElement): SVGSVGElement => {
 
   group.appendChild(rect);
 
-  // Create corner handles relative to group (using relative coordinates)
   createCornerHandles(group, width, height);
 
   svg.appendChild(group);

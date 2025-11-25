@@ -34,7 +34,7 @@ export const highlightNode = (node: HTMLElement | null): void => {
   toolsWrapper.style.transform = "translateX(-50%)";
   toolsWrapper.style.transformOrigin = "center";
   toolsWrapper.style.pointerEvents = "none";
-  toolsWrapper.style.zIndex = "10000";
+  toolsWrapper.style.zIndex = "5000"; // Match --z-index-highlight (below canvas rulers)
 
   createToolsContainer(node, toolsWrapper);
   document.body.appendChild(toolsWrapper);

@@ -16,6 +16,7 @@ export function createCanvasObserver(): CanvasObserver {
     // Refresh highlight frame (throttled via withRAFThrottle)
     // biome-ignore lint/suspicious/noExplicitAny: global window extension
     const nodeTools = (window as any).nodeTools;
+
     if (nodeTools?.refreshHighlightFrame) {
       nodeTools.refreshHighlightFrame();
     }
