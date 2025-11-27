@@ -12,11 +12,13 @@ export function CanvasProvider({
   width,
   height,
   themeMode,
+  canvasName,
 }: {
   children: React.ReactNode;
   width: number;
   height: number;
   themeMode: "light" | "dark";
+  canvasName?: string;
 }) {
   useCanvasObserver();
 
@@ -24,7 +26,14 @@ export function CanvasProvider({
   const { x, y, isReady } = useCanvasStartPosition(nodeToolsRef);
 
   return (
-    <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode}>
+    <MarkupCanvas
+      {...EDITOR_PRESET}
+      width={width}
+      height={height}
+      initialPan={{ x, y }}
+      themeMode={themeMode}
+      name={canvasName ?? "canvas"}
+    >
       <Viewport>
         <NodeTools ref={nodeToolsRef} isVisible={isReady}>
           {children}
