@@ -20,22 +20,16 @@ export function CanvasProvider({
   themeMode: "light" | "dark";
   canvasName?: string;
 }) {
-  useCanvasObserver();
+  const effectiveCanvasName = canvasName ?? "canvas";
+  useCanvasObserver(effectiveCanvasName);
 
   const nodeToolsRef = useRef<NodeToolsRef>(null);
   const { x, y, isReady } = useCanvasStartPosition(nodeToolsRef);
 
   return (
-    <MarkupCanvas
-      {...EDITOR_PRESET}
-      width={width}
-      height={height}
-      initialPan={{ x, y }}
-      themeMode={themeMode}
-      name={canvasName ?? "canvas"}
-    >
+    <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode} name={effectiveCanvasName}>
       <Viewport>
-        <NodeTools ref={nodeToolsRef} isVisible={isReady}>
+        <NodeTools ref={nodeToolsRef} isVisible={isReady} canvasName={effectiveCanvasName}>
           {children}
         </NodeTools>
       </Viewport>

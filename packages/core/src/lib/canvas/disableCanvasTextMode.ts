@@ -1,7 +1,7 @@
 import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
 
-export const disableCanvasTextMode = () => {
-  const disableTextEditMode = getCanvasWindowValue(["keyboard", "disableTextEditMode"]);
+export const disableCanvasTextMode = (canvasName: string = "canvas") => {
+  const disableTextEditMode = getCanvasWindowValue(["keyboard", "disableTextEditMode"], canvasName);
 
   disableTextEditMode?.();
 };

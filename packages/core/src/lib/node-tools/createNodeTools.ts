@@ -10,18 +10,18 @@ import { updateHighlightFrameVisibility } from "./highlight/updateHighlightFrame
 import { nodeText } from "./text/nodeText";
 import type { NodeTools } from "./types";
 
-export const createNodeTools = (element: HTMLElement | null): NodeTools => {
+export const createNodeTools = (element: HTMLElement | null, canvasName: string = "canvas"): NodeTools => {
   const nodeProvider = element;
 
   let resizeObserver: ResizeObserver | null = null;
   let mutationObserver: MutationObserver | null = null;
   let selectedNode: HTMLElement | null = null;
 
-  const text = nodeText();
+  const text = nodeText(canvasName);
 
   // Combined throttled function for refresh + visibility update
   const throttledRefreshAndVisibility = withRAFThrottle((node: HTMLElement, nodeProvider: HTMLElement) => {
-    refreshHighlightFrame(node, nodeProvider);
+    refreshHighlightFrame(node, nodeProvider, canvasName);
     updateHighlightFrameVisibility(node);
   });
 
@@ -62,7 +62,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       mutationObserver = new MutationObserver(() => {
         // throttledRefreshAndVisibility(node, nodeProvider);
         console.log("mutationObserver", node);
-        refreshHighlightFrame(node, nodeProvider);
+        refreshHighlightFrame(node, nodeProvider, canvasName);
         updateHighlightFrameVisibility(node);
       });
 
@@ -74,7 +74,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       resizeObserver = connectResizeObserver(node, () => {
         // throttledRefreshAndVisibility(node, nodeProvider);
         console.log("resizeObserver", node);
-        refreshHighlightFrame(node, nodeProvider);
+        refreshHighlightFrame(node, nodeProvider, canvasName);
         updateHighlightFrameVisibility(node);
       });
     }
@@ -107,7 +107,7 @@ export const createNodeTools = (element: HTMLElement | null): NodeTools => {
       if (selectedNode && nodeProvider) {
         // Call directly (not throttled) since this is typically called from already-throttled contexts
         // to avoid double RAF
-        refreshHighlightFrame(selectedNode, nodeProvider);
+        refreshHighlightFrame(selectedNode, nodeProvider, canvasName);
         updateHighlightFrameVisibility(selectedNode);
       }
     },

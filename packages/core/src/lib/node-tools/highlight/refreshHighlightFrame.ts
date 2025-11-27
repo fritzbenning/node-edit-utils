@@ -7,7 +7,7 @@ const getComponentColor = (): string => {
   return getComputedStyle(document.documentElement).getPropertyValue("--component-color").trim() || "oklch(65.6% 0.241 354.308)";
 };
 
-export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement) => {
+export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement, canvasName: string = "canvas") => {
   // Batch all DOM reads first (single layout pass)
   const frame = getHighlightFrameElement();
   if (!frame) return;
@@ -44,7 +44,7 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const toolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
   const nodeTools = toolsWrapper?.querySelector(".node-tools") as HTMLElement | null;
 
-  const zoom = getCanvasWindowValue(["zoom", "current"]) ?? 1;
+  const zoom = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;
   const bounds = getScreenBounds(node);
 
   // Calculate all values before any DOM writes

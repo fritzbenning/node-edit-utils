@@ -1,7 +1,7 @@
 import { applyCanvasState } from "./helpers/applyCanvasState";
 import type { CanvasObserver } from "./types";
 
-export function createCanvasObserver(): CanvasObserver {
+export function createCanvasObserver(canvasName: string = "canvas"): CanvasObserver {
   const transformLayer = document.querySelector(".transform-layer");
 
   if (!transformLayer) {
@@ -11,7 +11,7 @@ export function createCanvasObserver(): CanvasObserver {
   }
 
   const observer = new MutationObserver(() => {
-    applyCanvasState();
+    applyCanvasState(canvasName);
 
     // Refresh highlight frame (throttled via withRAFThrottle)
     // biome-ignore lint/suspicious/noExplicitAny: global window extension

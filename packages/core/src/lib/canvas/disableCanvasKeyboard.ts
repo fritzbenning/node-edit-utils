@@ -1,7 +1,7 @@
 import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
 
-export const disableCanvasKeyboard = () => {
-  const disable = getCanvasWindowValue(["keyboard", "disable"]);
+export const disableCanvasKeyboard = (canvasName: string = "canvas") => {
+  const disable = getCanvasWindowValue(["keyboard", "disable"], canvasName);
 
   disable?.();
 };

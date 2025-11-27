@@ -6,7 +6,7 @@ import { makeNodeEditable } from "./helpers/makeNodeEditable";
 import { makeNodeNonEditable } from "./helpers/makeNodeNonEditable";
 import type { NodeText } from "./types";
 
-export const nodeText = (): NodeText => {
+export const nodeText = (canvasName: string = "canvas"): NodeText => {
   let editableNode: HTMLElement | null = null;
   let blurInProgress: boolean = false;
   let cleanup: (() => void) | null = null;
@@ -26,9 +26,9 @@ export const nodeText = (): NodeText => {
       editableNode = node;
 
       makeNodeEditable(node);
-      enableCanvasTextMode();
+      enableCanvasTextMode(canvasName);
 
-      cleanup = setupNodeListeners(node, nodeProvider, blurEditMode);
+      cleanup = setupNodeListeners(node, nodeProvider, blurEditMode, canvasName);
     }
   };
 
@@ -50,7 +50,7 @@ export const nodeText = (): NodeText => {
     const nodeToCleanup = editableNode;
 
     makeNodeNonEditable(nodeToCleanup);
-    disableCanvasTextMode();
+    disableCanvasTextMode(canvasName);
     cleanup?.();
 
     editableNode = null;

@@ -5,10 +5,11 @@ import { useNodeTools } from "@/hooks/useNodeTools";
 interface NodeEditProviderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   isVisible?: boolean;
+  canvasName?: string;
 }
 
-export const NodeTools = forwardRef<NodeToolsRef, NodeEditProviderProps>(({ children, isVisible = false, ...props }, ref) => {
-  useNodeTools(ref as React.RefObject<NodeToolsRef>);
+export const NodeTools = forwardRef<NodeToolsRef, NodeEditProviderProps>(({ children, isVisible = false, canvasName, ...props }, ref) => {
+  useNodeTools(ref as React.RefObject<NodeToolsRef>, canvasName);
 
   return (
     <div
