@@ -8,7 +8,7 @@ export const Viewport = ({ children }: { children: React.ReactNode }) => {
   useViewport(viewportRef);
 
   return (
-    <div ref={viewportRef} className="viewport @container/viewport">
+    <div ref={viewportRef} className="viewport @container/viewport" style={{ colorScheme: "light" }}>
       {children}
     </div>
   );

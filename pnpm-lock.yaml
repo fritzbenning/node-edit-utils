@@ -1181,7 +1181,7 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  json5@2.2.3:
+  json5@2.2.4:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
@@ -1921,7 +1921,7 @@ snapshots:
       convert-source-map: 2.0.0
       debug: 4.4.3
       gensync: 1.0.0-beta.2
-      json5: 2.2.3
+      json5: 2.2.4
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -2772,7 +2772,7 @@ snapshots:
 
   jsesc@3.1.0: {}
 
-  json5@2.2.3: {}
+  json5@2.2.4: {}
 
   lightningcss-android-arm64@1.30.2:
     optional: true
