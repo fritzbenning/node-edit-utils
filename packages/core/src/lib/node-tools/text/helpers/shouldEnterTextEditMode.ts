@@ -7,4 +7,3 @@ export const shouldEnterTextEditMode = (node: HTMLElement | null): boolean => {
 
   return hasTextContent(node);
 };
-
