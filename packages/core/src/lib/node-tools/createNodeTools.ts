@@ -60,8 +60,6 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
     parentMutationObserver?.disconnect();
 
     if (node && nodeProvider) {
-      text.enableEditMode(node, nodeProvider);
-
       // Check if node is still in DOM and handle cleanup if removed
       const checkNodeExists = (): void => {
         if (!document.contains(node)) {
@@ -139,7 +137,7 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
   };
 
   // Setup event listener
-  const removeListeners = setupEventListener(nodeProvider, selectNode, handleEscape, text.getEditableNode);
+  const removeListeners = setupEventListener(nodeProvider, selectNode, handleEscape, text.getEditableNode, () => selectedNode, text);
 
   const cleanup = (): void => {
     removeListeners();
