@@ -38,9 +38,6 @@ export const selectNode = (
     candidateCache = [];
     selectedNode = candidates[0] as HTMLElement;
 
-    console.log("selectedNode", selectedNode);
-    console.log("lastSelectedNode", lastSelectedNode);
-
     if (lastSelectedNode && lastSelectedNode === selectedNode) {
       enterTextEditMode(selectedNode, nodeProvider, text);
     }

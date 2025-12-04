@@ -1,5 +1,4 @@
 import { connectResizeObserver } from "../helpers/observer/connectResizeObserver";
-import { withRAFThrottle } from "../helpers/withRAF";
 import { sendPostMessage } from "../post-message/sendPostMessage";
 import { bindToWindow } from "../window/bindToWindow";
 import { setupEventListener } from "./events/setupEventListener";
@@ -19,12 +18,6 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
   let selectedNode: HTMLElement | null = null;
 
   const text = nodeText(canvasName);
-
-  // Combined throttled function for refresh + visibility update
-  const throttledRefreshAndVisibility = withRAFThrottle((node: HTMLElement, nodeProvider: HTMLElement) => {
-    refreshHighlightFrame(node, nodeProvider, canvasName);
-    updateHighlightFrameVisibility(node);
-  });
 
   const handleEscape = (): void => {
     if (text.isEditing()) {
@@ -76,10 +69,8 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
 
       mutationObserver = new MutationObserver(() => {
         checkNodeExists();
-        if (!document.contains(node)) return; // Exit early if node was removed
+        if (!document.contains(node)) return;
 
-        // throttledRefreshAndVisibility(node, nodeProvider);
-        console.log("mutationObserver", node);
         refreshHighlightFrame(node, nodeProvider, canvasName);
         updateHighlightFrameVisibility(node);
       });
@@ -119,8 +110,6 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
         checkNodeExists();
         if (!document.contains(node)) return; // Exit early if node was removed
 
-        // throttledRefreshAndVisibility(node, nodeProvider);
-        console.log("resizeObserver", node);
         refreshHighlightFrame(node, nodeProvider, canvasName);
         updateHighlightFrameVisibility(node);
       });
@@ -146,7 +135,6 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
     parentMutationObserver?.disconnect();
 
     text.blurEditMode();
-    throttledRefreshAndVisibility.cleanup();
 
     // Clear highlight frame and reset selected node
     clearHighlightFrame();

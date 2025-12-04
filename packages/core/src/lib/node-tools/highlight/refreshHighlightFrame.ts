@@ -1,3 +1,4 @@
+import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
 import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
 import { isComponentInstance } from "../select/helpers/isComponentInstance";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
@@ -41,7 +42,9 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     rect.removeAttribute("stroke"); // Use CSS default
   }
 
-  const toolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
+  const canvasContainer = getCanvasContainer();
+  const container = canvasContainer || document.body;
+  const toolsWrapper = container.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
   const nodeTools = toolsWrapper?.querySelector(".node-tools") as HTMLElement | null;
 
   const zoom = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;

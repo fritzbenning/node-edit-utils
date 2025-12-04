@@ -1,3 +1,4 @@
+import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
 import { isComponentInstance } from "../select/helpers/isComponentInstance";
 import { createHighlightFrame } from "./createHighlightFrame";
 import { createToolsContainer } from "./createToolsContainer";
@@ -8,7 +9,9 @@ export const highlightNode = (node: HTMLElement | null): void => {
   if (!node) return;
 
   const existingHighlightFrame = getHighlightFrameElement();
-  const existingToolsWrapper = document.body.querySelector(".highlight-frame-tools-wrapper");
+  const canvasContainer = getCanvasContainer();
+  const existingToolsWrapper =
+    canvasContainer?.querySelector(".highlight-frame-tools-wrapper") || document.body.querySelector(".highlight-frame-tools-wrapper");
 
   if (existingHighlightFrame) {
     existingHighlightFrame.remove();
@@ -34,12 +37,16 @@ export const highlightNode = (node: HTMLElement | null): void => {
   if (isInstance) {
     toolsWrapper.classList.add("is-instance");
   }
-  toolsWrapper.style.position = "fixed";
+  toolsWrapper.style.position = "absolute";
   toolsWrapper.style.transform = `translate(${left}px, ${bottomY}px)`;
   toolsWrapper.style.transformOrigin = "left center";
   toolsWrapper.style.pointerEvents = "none";
-  toolsWrapper.style.zIndex = "5000"; // Match --z-index-highlight (below canvas rulers)
+  toolsWrapper.style.zIndex = "500";
 
   createToolsContainer(node, toolsWrapper, isInstance);
-  document.body.appendChild(toolsWrapper);
+  if (canvasContainer) {
+    canvasContainer.appendChild(toolsWrapper);
+  } else {
+    document.body.appendChild(toolsWrapper);
+  }
 };

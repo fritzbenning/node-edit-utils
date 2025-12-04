@@ -19,7 +19,7 @@
   --transition-medium: 0.2s ease-in-out;
 
   --z-index-high: 10000;
-  --z-index-highlight: 5000;
+  --z-index-highlight: 500;
   --z-index-medium: 1000;
 
   --letter-spacing: 0.02em;
@@ -58,7 +58,7 @@
 }
 
 .highlight-frame-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   width: 100vw;
   height: 100vh;
@@ -108,7 +108,7 @@
 }
 
 .highlight-frame-tools-wrapper {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   pointer-events: none;
