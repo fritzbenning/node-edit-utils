@@ -25,6 +25,14 @@ export const selectNode = (event: MouseEvent, nodeProvider: HTMLElement | null, 
       !isInsideComponent(element)
   );
 
+  const editableNode = text.getEditableNode();
+  if (editableNode && candidates.includes(editableNode)) {
+    selectedNode = editableNode;
+    lastSelectedNode = selectedNode;
+
+    return selectedNode;
+  }
+
   if (clickThrough) {
     candidateCache = [];
     selectedNode = candidates[0] as HTMLElement;
