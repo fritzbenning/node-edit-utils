@@ -5,7 +5,6 @@ import type { NodeText } from "../../text/types";
 export const handleNodeClick = (
   event: MouseEvent,
   nodeProvider: HTMLElement | null,
-  editableNode: HTMLElement | null,
   text: NodeText,
   onNodeSelected: (node: HTMLElement | null) => void
 ): void => {
@@ -18,6 +17,6 @@ export const handleNodeClick = (
     return;
   }
 
-  const selectedNode = selectNode(event, nodeProvider, editableNode, text);
+  const selectedNode = selectNode(event, nodeProvider, text);
   onNodeSelected(selectedNode);
 };

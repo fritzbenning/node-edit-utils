@@ -8,12 +8,17 @@ const getComponentColor = (): string => {
   return getComputedStyle(document.documentElement).getPropertyValue("--component-color").trim() || "oklch(65.6% 0.241 354.308)";
 };
 
+const getTextEditColor = (): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue("--text-edit-color").trim() || "oklch(62.3% 0.214 259.815)";
+};
+
 export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLElement, canvasName: string = "canvas") => {
   // Batch all DOM reads first (single layout pass)
   const frame = getHighlightFrameElement();
   if (!frame) return;
 
   const isInstance = isComponentInstance(node);
+  const isTextEdit = node.contentEditable === "true";
 
   // Update SVG dimensions to match current viewport (handles window resize and ensures coordinate system is correct)
   // Use clientWidth/Height to match getBoundingClientRect() coordinate system (excludes scrollbars)
@@ -29,6 +34,13 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     frame.classList.remove("is-instance");
   }
 
+  // Update text edit class
+  if (isTextEdit) {
+    frame.classList.add("is-text-edit");
+  } else {
+    frame.classList.remove("is-text-edit");
+  }
+
   const group = frame.querySelector(".highlight-frame-group") as SVGGElement | null;
   if (!group) return;
 
@@ -38,6 +50,8 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   // Update instance color
   if (isInstance) {
     rect.setAttribute("stroke", getComponentColor());
+  } else if (isTextEdit) {
+    rect.setAttribute("stroke", getTextEditColor());
   } else {
     rect.removeAttribute("stroke"); // Use CSS default
   }
@@ -61,12 +75,24 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     } else {
       toolsWrapper.classList.remove("is-instance");
     }
+    // Update text edit class
+    if (isTextEdit) {
+      toolsWrapper.classList.add("is-text-edit");
+    } else {
+      toolsWrapper.classList.remove("is-text-edit");
+    }
   }
   if (nodeTools) {
     if (isInstance) {
       nodeTools.classList.add("is-instance");
     } else {
       nodeTools.classList.remove("is-instance");
+    }
+    // Update text edit class
+    if (isTextEdit) {
+      nodeTools.classList.add("is-text-edit");
+    } else {
+      nodeTools.classList.remove("is-text-edit");
     }
   }
 
@@ -92,6 +118,8 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     if (handle) {
       if (isInstance) {
         handle.setAttribute("stroke", getComponentColor());
+      } else if (isTextEdit) {
+        handle.setAttribute("stroke", getTextEditColor());
       } else {
         handle.removeAttribute("stroke"); // Use CSS default
       }

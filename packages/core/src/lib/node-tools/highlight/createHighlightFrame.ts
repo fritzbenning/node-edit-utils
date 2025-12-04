@@ -6,7 +6,11 @@ const getComponentColor = (): string => {
   return getComputedStyle(document.documentElement).getPropertyValue("--component-color").trim() || "oklch(65.6% 0.241 354.308)";
 };
 
-export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = false): SVGSVGElement => {
+const getTextEditColor = (): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue("--text-edit-color").trim() || "oklch(62.3% 0.214 259.815)";
+};
+
+export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = false, isTextEdit: boolean = false): SVGSVGElement => {
   const { top, left, width, height } = getScreenBounds(node);
 
   // Create fixed SVG overlay
@@ -14,6 +18,9 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
   svg.classList.add("highlight-frame-overlay");
   if (isInstance) {
     svg.classList.add("is-instance");
+  }
+  if (isTextEdit) {
+    svg.classList.add("is-text-edit");
   }
   svg.setAttribute("data-node-id", node.getAttribute("data-node-id") || "");
 
@@ -43,14 +50,16 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
   rect.setAttribute("vector-effect", "non-scaling-stroke");
   rect.classList.add("highlight-frame-rect");
 
-  // Apply instance color if it's an instance
+  // Apply instance color if it's an instance, otherwise text edit color if in text edit mode
   if (isInstance) {
     rect.setAttribute("stroke", getComponentColor());
+  } else if (isTextEdit) {
+    rect.setAttribute("stroke", getTextEditColor());
   }
 
   group.appendChild(rect);
 
-  createCornerHandles(group, width, height, isInstance);
+  createCornerHandles(group, width, height, isInstance, isTextEdit);
 
   svg.appendChild(group);
   const canvasContainer = getCanvasContainer();

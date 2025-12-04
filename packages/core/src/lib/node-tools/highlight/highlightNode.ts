@@ -21,7 +21,8 @@ export const highlightNode = (node: HTMLElement | null): void => {
   }
 
   const isInstance = isComponentInstance(node);
-  const highlightFrame = createHighlightFrame(node, isInstance);
+  const isTextEdit = node.contentEditable === "true";
+  const highlightFrame = createHighlightFrame(node, isInstance, isTextEdit);
 
   if (node.contentEditable === "true") {
     highlightFrame.classList.add("is-editable");
@@ -37,13 +38,16 @@ export const highlightNode = (node: HTMLElement | null): void => {
   if (isInstance) {
     toolsWrapper.classList.add("is-instance");
   }
+  if (isTextEdit) {
+    toolsWrapper.classList.add("is-text-edit");
+  }
   toolsWrapper.style.position = "absolute";
   toolsWrapper.style.transform = `translate(${left}px, ${bottomY}px)`;
   toolsWrapper.style.transformOrigin = "left center";
   toolsWrapper.style.pointerEvents = "none";
   toolsWrapper.style.zIndex = "500";
 
-  createToolsContainer(node, toolsWrapper, isInstance);
+  createToolsContainer(node, toolsWrapper, isInstance, isTextEdit);
   if (canvasContainer) {
     canvasContainer.appendChild(toolsWrapper);
   } else {

@@ -2,6 +2,8 @@
   --primary-color: oklch(0.6235 0.22 294);
   --uncode-color: oklch(45.7% 0.24 277.023);
   --component-color: oklch(65.6% 0.241 354.308);
+  --text-edit-color: oklch(62.3% 0.214 259.815);
+  --text-edit-selection-color: oklch(62.3% 0.214 259.815 / 0.2);
 
   --handle-color: oklch(55.2% 0.016 285.938);
   --handle-color-transparent: oklch(55.2% 0.016 285.938 / 0.7);
@@ -79,6 +81,10 @@
   stroke: var(--component-color);
 }
 
+.highlight-frame-overlay.is-text-edit .highlight-frame-rect {
+  stroke: var(--text-edit-color);
+}
+
 .highlight-frame-handle {
   fill: white;
   stroke: var(--primary-color);
@@ -89,6 +95,10 @@
 
 .highlight-frame-overlay.is-instance .highlight-frame-handle {
   stroke: var(--component-color);
+}
+
+.highlight-frame-overlay.is-text-edit .highlight-frame-handle {
+  stroke: var(--text-edit-color);
 }
 
 .highlight-frame-handle.handle-top-left {
@@ -134,6 +144,11 @@
 .highlight-frame-tools-wrapper.is-instance .tag-label,
 .node-tools.is-instance .tag-label {
   background-color: var(--component-color);
+}
+
+.highlight-frame-tools-wrapper.is-text-edit .tag-label,
+.node-tools.is-text-edit .tag-label {
+  background-color: var(--text-edit-color);
 }
 
 .viewport {
@@ -233,14 +248,14 @@
   user-select: text;
 
   &::selection {
-    background: var(--primary-color-selection);
+    background: var(--text-edit-selection-color);
   }
 
   &::-moz-selection {
-    background: var(--primary-color-selection);
+    background: var(--text-edit-selection-color);
   }
 
   &::-webkit-selection {
-    background: var(--primary-color-selection);
+    background: var(--text-edit-selection-color);
   }
 }

@@ -10,12 +10,7 @@ let attempt = 0;
 
 let lastSelectedNode: HTMLElement | null = null;
 
-export const selectNode = (
-  event: MouseEvent,
-  nodeProvider: HTMLElement | null,
-  editableNode: HTMLElement | null,
-  text: NodeText
-): HTMLElement | null => {
+export const selectNode = (event: MouseEvent, nodeProvider: HTMLElement | null, text: NodeText): HTMLElement | null => {
   let selectedNode: HTMLElement | null = null;
 
   const clickX = event.clientX;
@@ -29,10 +24,6 @@ export const selectNode = (
       !element.classList.contains("select-none") &&
       !isInsideComponent(element)
   );
-
-  if (editableNode && candidates.includes(editableNode)) {
-    return editableNode;
-  }
 
   if (clickThrough) {
     candidateCache = [];

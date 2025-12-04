@@ -6,7 +6,6 @@ export const setupEventListener = (
   nodeProvider: HTMLElement | null,
   onNodeSelected: (node: HTMLElement | null) => void,
   onEscapePressed: () => void,
-  getEditableNode: () => HTMLElement | null,
   text: NodeText
 ): (() => void) => {
   const messageHandler = (event: MessageEvent) => {
@@ -14,7 +13,7 @@ export const setupEventListener = (
   };
 
   const documentClickHandler = (event: MouseEvent) => {
-    handleNodeClick(event, nodeProvider, getEditableNode(), text, onNodeSelected);
+    handleNodeClick(event, nodeProvider, text, onNodeSelected);
   };
 
   const documentKeydownHandler = (event: KeyboardEvent) => {
