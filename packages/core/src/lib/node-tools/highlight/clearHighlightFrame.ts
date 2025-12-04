@@ -1,5 +1,3 @@
-import { clearHighlightFrameCache } from "./helpers/getHighlightFrameCache";
-
 export const clearHighlightFrame = (): void => {
   const frame = document.body.querySelector(".highlight-frame-overlay");
   if (frame) {
@@ -10,7 +8,4 @@ export const clearHighlightFrame = (): void => {
   if (toolsWrapper) {
     toolsWrapper.remove();
   }
-
-  // Clear cache when removing elements
-  clearHighlightFrameCache();
 };

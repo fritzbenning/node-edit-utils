@@ -112,10 +112,9 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     bottomLeft.setAttribute("y", (height - HANDLE_SIZE / 2).toString());
   }
 
-  // Update tools wrapper position (use calculated bounds, not rect attributes)
+  // Update tools wrapper position using CSS transform (GPU-accelerated)
   if (toolsWrapper) {
-    toolsWrapper.style.left = `${left}px`;
-    toolsWrapper.style.top = `${bottomY}px`;
+    toolsWrapper.style.transform = `translate(${left}px, ${bottomY}px)`;
   }
 
   // Update tool opacity

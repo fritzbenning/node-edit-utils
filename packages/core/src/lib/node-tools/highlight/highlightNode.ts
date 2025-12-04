@@ -1,7 +1,6 @@
 import { isComponentInstance } from "../select/helpers/isComponentInstance";
 import { createHighlightFrame } from "./createHighlightFrame";
 import { createToolsContainer } from "./createToolsContainer";
-import { clearHighlightFrameCache } from "./helpers/getHighlightFrameCache";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { getScreenBounds } from "./helpers/getScreenBounds";
 
@@ -18,9 +17,6 @@ export const highlightNode = (node: HTMLElement | null): void => {
     existingToolsWrapper.remove();
   }
 
-  // Clear cache when removing elements
-  clearHighlightFrameCache();
-
   const isInstance = isComponentInstance(node);
   const highlightFrame = createHighlightFrame(node, isInstance);
 
@@ -29,8 +25,7 @@ export const highlightNode = (node: HTMLElement | null): void => {
   }
 
   // Batch DOM reads
-  const { left, top, width, height } = getScreenBounds(node);
-  const centerX = left + width / 2;
+  const { left, top, height } = getScreenBounds(node);
   const bottomY = top + height;
 
   // Create tools wrapper using CSS transform (GPU-accelerated)
@@ -40,8 +35,8 @@ export const highlightNode = (node: HTMLElement | null): void => {
     toolsWrapper.classList.add("is-instance");
   }
   toolsWrapper.style.position = "fixed";
-  toolsWrapper.style.transform = `translate(${centerX}px, ${bottomY}px) translateX(-50%)`;
-  toolsWrapper.style.transformOrigin = "center";
+  toolsWrapper.style.transform = `translate(${left}px, ${bottomY}px)`;
+  toolsWrapper.style.transformOrigin = "left center";
   toolsWrapper.style.pointerEvents = "none";
   toolsWrapper.style.zIndex = "5000"; // Match --z-index-highlight (below canvas rulers)
 
