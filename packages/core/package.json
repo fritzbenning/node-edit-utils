@@ -18,7 +18,9 @@
       "import": "./dist/node-edit-utils.esm.js",
       "require": "./dist/node-edit-utils.cjs.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": {
+      "default": "./dist/styles.css"
+    }
   },
   "scripts": {
     "build": "rollup -c",

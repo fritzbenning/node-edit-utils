@@ -28,7 +28,7 @@ export default [
       nodeResolve(),
       commonjs(),
       postcss({
-        extract: "styles.css",
+        extract: path.resolve("dist/styles.css"),
         minimize: true,
       }),
       typescript({
