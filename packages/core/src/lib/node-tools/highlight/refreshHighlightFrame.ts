@@ -118,6 +118,7 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     toolsWrapper.style.top = `${bottomY}px`;
   }
 
+  // Update tool opacity
   if (zoom <= 10) {
     nodeProvider.style.setProperty("--tool-opacity", `1`);
   } else {

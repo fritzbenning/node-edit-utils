@@ -54,6 +54,7 @@
   padding-top: var(--spacing-2xs);
   display: flex;
   justify-content: center;
+  contain: layout style;
 }
 
 .highlight-frame-overlay {
@@ -64,6 +65,8 @@
   pointer-events: none;
   z-index: var(--z-index-highlight);
   overflow: visible;
+  contain: layout style paint;
+  will-change: transform;
 }
 
 .highlight-frame-rect {
