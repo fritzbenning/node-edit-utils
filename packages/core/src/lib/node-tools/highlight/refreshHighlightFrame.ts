@@ -66,6 +66,8 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
 
   // Calculate all values before any DOM writes
   const { top, left, width, height } = bounds;
+  // Ensure minimum width of 2px
+  const minWidth = Math.max(width, 3);
   const bottomY = top + height;
 
   // Update instance classes on tools wrapper and node tools
@@ -101,7 +103,7 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   group.setAttribute("transform", `translate(${left}, ${top})`);
 
   // Update rect dimensions (position is handled by group transform)
-  rect.setAttribute("width", width.toString());
+  rect.setAttribute("width", minWidth.toString());
   rect.setAttribute("height", height.toString());
 
   // Update corner handles positions (relative to group, so only width/height matter)
@@ -131,11 +133,11 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     topLeft.setAttribute("y", (-HANDLE_SIZE / 2).toString());
   }
   if (topRight) {
-    topRight.setAttribute("x", (width - HANDLE_SIZE / 2).toString());
+    topRight.setAttribute("x", (minWidth - HANDLE_SIZE / 2).toString());
     topRight.setAttribute("y", (-HANDLE_SIZE / 2).toString());
   }
   if (bottomRight) {
-    bottomRight.setAttribute("x", (width - HANDLE_SIZE / 2).toString());
+    bottomRight.setAttribute("x", (minWidth - HANDLE_SIZE / 2).toString());
     bottomRight.setAttribute("y", (height - HANDLE_SIZE / 2).toString());
   }
   if (bottomLeft) {

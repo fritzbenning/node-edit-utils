@@ -13,6 +13,9 @@ const getTextEditColor = (): string => {
 export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = false, isTextEdit: boolean = false): SVGSVGElement => {
   const { top, left, width, height } = getScreenBounds(node);
 
+  // Ensure minimum width of 2px
+  const minWidth = Math.max(width, 3);
+
   // Create fixed SVG overlay
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("highlight-frame-overlay");
@@ -45,7 +48,7 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
   const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   rect.setAttribute("x", "0");
   rect.setAttribute("y", "0");
-  rect.setAttribute("width", width.toString());
+  rect.setAttribute("width", minWidth.toString());
   rect.setAttribute("height", height.toString());
   rect.setAttribute("vector-effect", "non-scaling-stroke");
   rect.classList.add("highlight-frame-rect");
@@ -59,7 +62,7 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
 
   group.appendChild(rect);
 
-  createCornerHandles(group, width, height, isInstance, isTextEdit);
+  createCornerHandles(group, minWidth, height, isInstance, isTextEdit);
 
   svg.appendChild(group);
   const canvasContainer = getCanvasContainer();
