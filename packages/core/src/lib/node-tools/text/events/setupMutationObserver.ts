@@ -16,7 +16,7 @@ export const setupMutationObserver = (
     if (pendingMutations.length > 0) {
       const mutationsToProcess = [...pendingMutations];
       pendingMutations = [];
-      handleTextChange(node, mutationsToProcess);
+      handleTextChange(node, mutationsToProcess, false);
     }
   };
 

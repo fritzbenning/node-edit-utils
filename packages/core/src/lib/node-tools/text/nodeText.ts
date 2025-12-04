@@ -1,6 +1,7 @@
 import { disableCanvasTextMode } from "@/lib/canvas/disableCanvasTextMode";
 import { enableCanvasTextMode } from "@/lib/canvas/enableCanvasTextMode";
 import { setupNodeListeners } from "./events/setupNodeListeners";
+import { handleTextChange } from "./helpers/handleTextChange";
 import { hasTextContent } from "./helpers/hasTextContent";
 import { makeNodeEditable } from "./helpers/makeNodeEditable";
 import { makeNodeNonEditable } from "./helpers/makeNodeNonEditable";
@@ -48,6 +49,9 @@ export const nodeText = (canvasName: string = "canvas"): NodeText => {
     blurInProgress = true;
 
     const nodeToCleanup = editableNode;
+
+    // Send final textContentChanged message before cleanup
+    handleTextChange(nodeToCleanup, [], true);
 
     makeNodeNonEditable(nodeToCleanup);
     disableCanvasTextMode(canvasName);

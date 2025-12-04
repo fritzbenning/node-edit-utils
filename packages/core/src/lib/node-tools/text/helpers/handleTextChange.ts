@@ -1,6 +1,6 @@
 import { sendPostMessage } from "@/lib/post-message/sendPostMessage";
 
-export const handleTextChange = (node: HTMLElement, mutations: MutationRecord[]): void => {
+export const handleTextChange = (node: HTMLElement, mutations: MutationRecord[], final: boolean = false): void => {
   // Check if any mutation is a text content change
   const hasTextChange = mutations.some((mutation) => {
     return (
@@ -9,7 +9,7 @@ export const handleTextChange = (node: HTMLElement, mutations: MutationRecord[])
     );
   });
 
-  if (!hasTextChange) {
+  if (!hasTextChange && !final) {
     return;
   }
 
@@ -19,11 +19,12 @@ export const handleTextChange = (node: HTMLElement, mutations: MutationRecord[])
   // Get the node ID
   const nodeId = node.getAttribute("data-node-id");
 
-  console.log("textContentChanged", nodeId, textContent);
+  console.log("textContentChanged", textContent, final);
 
   // Send postMessage with the text change
   sendPostMessage("textContentChanged", {
     nodeId,
     textContent,
+    final,
   });
 };
