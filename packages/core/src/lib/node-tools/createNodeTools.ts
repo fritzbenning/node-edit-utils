@@ -148,6 +148,11 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
 
     text.blurEditMode();
     throttledRefreshAndVisibility.cleanup();
+
+    // Clear highlight frame and reset selected node
+    clearHighlightFrame();
+    selectedNode = null;
+    sendPostMessage("selectedNodeChanged", null);
   };
 
   const nodeTools: NodeTools = {
