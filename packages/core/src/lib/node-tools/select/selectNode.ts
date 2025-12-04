@@ -1,3 +1,5 @@
+import { enterTextEditMode } from "../text/helpers/enterTextEditMode";
+import type { NodeText } from "../text/types";
 import { IGNORED_DOM_ELEMENTS } from "./constants";
 import { getElementsFromPoint } from "./helpers/getElementsFromPoint";
 import { isInsideComponent } from "./helpers/isInsideComponent";
@@ -6,7 +8,14 @@ import { targetSameCandidates } from "./helpers/targetSameCandidates";
 let candidateCache: Element[] = [];
 let attempt = 0;
 
-export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null): HTMLElement | null => {
+let lastSelectedNode: HTMLElement | null = null;
+
+export const selectNode = (
+  event: MouseEvent,
+  nodeProvider: HTMLElement | null,
+  editableNode: HTMLElement | null,
+  text: NodeText
+): HTMLElement | null => {
   let selectedNode: HTMLElement | null = null;
 
   const clickX = event.clientX;
@@ -27,13 +36,22 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
 
   if (clickThrough) {
     candidateCache = [];
-
     selectedNode = candidates[0] as HTMLElement;
+
+    console.log("selectedNode", selectedNode);
+    console.log("lastSelectedNode", lastSelectedNode);
+
+    if (lastSelectedNode && lastSelectedNode === selectedNode) {
+      enterTextEditMode(selectedNode, nodeProvider, text);
+    }
+
+    lastSelectedNode = selectedNode;
+
     return selectedNode;
   }
 
   if (targetSameCandidates(candidateCache, candidates)) {
-    attempt <= candidates.length && attempt++;
+    attempt <= candidates.length - 2 && attempt++;
   } else {
     attempt = 0;
   }
@@ -41,8 +59,13 @@ export const selectNode = (event: MouseEvent, editableNode: HTMLElement | null):
   const nodeIndex = candidates.length - 1 - attempt;
 
   selectedNode = candidates[nodeIndex] as HTMLElement;
-
   candidateCache = candidates;
+
+  if (lastSelectedNode && lastSelectedNode === selectedNode) {
+    enterTextEditMode(selectedNode, nodeProvider, text);
+  }
+
+  lastSelectedNode = selectedNode;
 
   return selectedNode;
 };

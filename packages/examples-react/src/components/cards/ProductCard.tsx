@@ -32,8 +32,11 @@ export function ProductCard({
           <p className={`text-3xl text-gray-700 ${price < 3 && "text-red-500"}`}>{price} €</p>
         </div>
         <div className="mb-2 flex items-center">
-          {[...Array(5)].map((_, i) => (
-            <StarIcon key={`star-${i}`} className={`h-5 w-5 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
+          {[1, 2, 3, 4, 5].map((starPosition) => (
+            <StarIcon
+              key={`${name}-star-${starPosition}`}
+              className={`h-5 w-5 ${starPosition <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+            />
           ))}
         </div>
         <div>

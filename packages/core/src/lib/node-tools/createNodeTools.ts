@@ -137,7 +137,7 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
   };
 
   // Setup event listener
-  const removeListeners = setupEventListener(nodeProvider, selectNode, handleEscape, text.getEditableNode, () => selectedNode, text);
+  const removeListeners = setupEventListener(nodeProvider, selectNode, handleEscape, text.getEditableNode, text);
 
   const cleanup = (): void => {
     removeListeners();

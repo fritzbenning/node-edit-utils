@@ -1,10 +1,12 @@
 import { clearHighlightFrame } from "../../highlight/clearHighlightFrame";
 import { selectNode } from "../../select/selectNode";
+import type { NodeText } from "../../text/types";
 
 export const handleNodeClick = (
   event: MouseEvent,
   nodeProvider: HTMLElement | null,
   editableNode: HTMLElement | null,
+  text: NodeText,
   onNodeSelected: (node: HTMLElement | null) => void
 ): void => {
   event.preventDefault();
@@ -16,6 +18,6 @@ export const handleNodeClick = (
     return;
   }
 
-  const selectedNode = selectNode(event, editableNode);
+  const selectedNode = selectNode(event, nodeProvider, editableNode, text);
   onNodeSelected(selectedNode);
 };
