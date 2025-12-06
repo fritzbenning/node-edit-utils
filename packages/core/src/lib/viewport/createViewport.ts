@@ -1,5 +1,4 @@
 import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
-import { withRAFThrottle } from "../helpers";
 import { DEFAULT_WIDTH } from "./constants";
 import { setupEventListener } from "./events/setupEventListener";
 import { createResizeHandle } from "./resize/createResizeHandle";
@@ -46,8 +45,6 @@ export const createViewport = (container: HTMLElement): Viewport => {
     updateWidth(container, width);
   };
 
-  const throttledHandleResize = withRAFThrottle(handleResize);
-
   const stopResize = (event: MouseEvent): void => {
     event.preventDefault();
     event.stopPropagation();
@@ -60,14 +57,17 @@ export const createViewport = (container: HTMLElement): Viewport => {
   };
 
   const blurResize = (): void => {
+    if (canvas) {
+      canvas.style.cursor = "default";
+    }
+
     isDragging = false;
   };
 
-  const removeListeners = setupEventListener(resizeHandle, startResize, throttledHandleResize, stopResize, blurResize);
+  const removeListeners = setupEventListener(resizeHandle, startResize, handleResize, stopResize, blurResize);
 
   const cleanup = (): void => {
     isDragging = false;
-    throttledHandleResize?.cleanup();
     removeListeners();
     resizeHandle.remove();
   };
