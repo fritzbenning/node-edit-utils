@@ -7,7 +7,7 @@ import type { Viewport } from "./types";
 import { calcWidth } from "./width/calcWidth";
 import { updateWidth } from "./width/updateWidth";
 
-export const createViewport = (container: HTMLElement): Viewport => {
+export const createViewport = (container: HTMLElement, initialWidth?: number): Viewport => {
   const canvas: HTMLElement | null = getCanvasContainer();
 
   // Remove any existing resize handle to prevent duplicates
@@ -17,7 +17,8 @@ export const createViewport = (container: HTMLElement): Viewport => {
   }
 
   const resizeHandle = createResizeHandle(container);
-  container.style.setProperty("--container-width", `${DEFAULT_WIDTH}px`);
+  const width = initialWidth ?? DEFAULT_WIDTH;
+  container.style.setProperty("--container-width", `${width}px`);
 
   createResizePresets(resizeHandle, container, updateWidth);
 
