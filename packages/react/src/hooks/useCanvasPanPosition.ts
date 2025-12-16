@@ -1,28 +1,29 @@
-import type { NodeToolsRef } from "@node-edit-utils/core";
 import { useEffect, useState } from "react";
 
-export function useCanvasPanPosition(ref: React.RefObject<NodeToolsRef>) {
+export function useCanvasPanPosition() {
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (ref.current) {
-      const elementDimensions = {
-        width: ref.current.offsetWidth,
-        height: ref.current.offsetHeight,
-      };
+    const nodeProvider = document.querySelector('[data-role="node-provider"]');
+    if (nodeProvider) {
+      const exportedViewport = nodeProvider.querySelector('[data-exported="true"]') as HTMLElement;
 
-      const x = document.documentElement.clientWidth / 2 - elementDimensions.width / 2;
-      const y = document.documentElement.clientHeight / 2 - elementDimensions.height / 2;
+      if (exportedViewport) {
+        const rect = exportedViewport.getBoundingClientRect();
 
-      setStartPosition({ x, y });
-      setIsReady(true);
+        const x = document.documentElement.clientWidth / 2 - rect.width / 2 - rect.left;
+        const y = document.documentElement.clientHeight / 2 - rect.height / 2 - rect.top;
+
+        setStartPosition({ x, y });
+        setIsReady(true);
+      }
     }
 
     return () => {
       setIsReady(false);
     };
-  }, [ref.current]);
+  }, []);
 
   return { ...startPosition, isReady };
 }

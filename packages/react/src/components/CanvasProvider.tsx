@@ -1,7 +1,5 @@
 import { EDITOR_PRESET } from "@markup-canvas/core";
 import { MarkupCanvas } from "@markup-canvas/react";
-import type { ViewportRef } from "@node-edit-utils/core";
-import { useRef } from "react";
 import { useCanvasObserver } from "@/hooks/useCanvasObserver";
 import { useCanvasPanPosition } from "../hooks/useCanvasPanPosition";
 import { NodeTools } from "./NodeTools";
@@ -22,18 +20,16 @@ export function CanvasProvider({
   canvasName?: string;
   viewportWidth?: number;
 }) {
-  const viewportRef = useRef<ViewportRef>(null);
-
   useCanvasObserver(canvasName);
-  const { x, y, isReady } = useCanvasPanPosition(viewportRef);
+  const { x, y, isReady } = useCanvasPanPosition();
 
   return (
     <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode} name={canvasName}>
       <NodeTools isVisible={isReady} canvasName={canvasName}>
-        <Viewport width={viewportWidth} ref={viewportRef} name="ProductCard" exported>
+        <Viewport width={viewportWidth} name="ProductCard">
           {children}
         </Viewport>
-        <Viewport width={viewportWidth} x={1200} y={0} name="TestContent">
+        <Viewport width={viewportWidth} x={1200} y={0} name="TestContent" exported>
           Viewport 2
         </Viewport>
       </NodeTools>
