@@ -70,7 +70,7 @@ function validatePackage(pkg) {
   return true;
 }
 
-function publishPackage(pkg) {
+function publishPackage(pkg, otp) {
   const pkgPath = path.join(process.cwd(), pkg.dir);
   const version = getPackageVersion(pkgPath);
 
@@ -89,8 +89,9 @@ function publishPackage(pkg) {
     }
   }
 
-  // Publish to npm
-  if (!runCommand("npm publish --access public", pkgPath)) {
+  // Publish to npm with optional OTP
+  const otpFlag = otp ? ` --otp=${otp}` : "";
+  if (!runCommand(`npm publish --access public${otpFlag}`, pkgPath)) {
     log(`Failed to publish ${pkg.name}`, "error");
     return false;
   }
@@ -101,6 +102,16 @@ function publishPackage(pkg) {
 
 async function main() {
   log("\n🚀 Starting publication process...\n", "info");
+
+  // Parse OTP from command line arguments (--otp=123456)
+  const otpArg = process.argv.find((arg) => arg.startsWith("--otp="));
+  const otp = otpArg ? otpArg.split("=")[1] : null;
+
+  if (otp) {
+    log(`Using OTP for 2FA authentication`, "info");
+  } else {
+    log(`ℹ️  No OTP provided. If 2FA is enabled, pass --otp=123456`, "info");
+  }
 
   // Check if logged in to npm
   try {
@@ -127,7 +138,7 @@ async function main() {
   let failedCount = 0;
 
   for (const pkg of sortedPackages) {
-    if (publishPackage(pkg)) {
+    if (publishPackage(pkg, otp)) {
       publishedCount++;
     } else {
       failedCount++;
