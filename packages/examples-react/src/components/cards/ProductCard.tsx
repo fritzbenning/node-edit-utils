@@ -40,15 +40,8 @@ export function ProductCard({
           ))}
         </div>
         <div>
-          <div data-instance="test">Test</div>
           <Button className="w-full" disabled={!inStock} data-instance="true">
             <span className="text-xs">Test</span>
-          </Button>
-          <Button className="w-full" disabled={!inStock} data-instance="true">
-            <span className="text-xs">{inStock ? "Add to Cart" : "Out of Stock"}</span>
-          </Button>
-          <Button className="w-full" disabled={!inStock} data-instance="true">
-            <span className="text-xs">{inStock ? "Add to Cart" : "Out of Stock"}</span>
           </Button>
         </div>
       </div>

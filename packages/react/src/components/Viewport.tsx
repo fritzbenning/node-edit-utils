@@ -1,5 +1,5 @@
 import type { ViewportRef } from "@node-edit-utils/core";
-import { forwardRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { useViewport } from "@/hooks/useViewport";
 
 interface ViewportProps {
@@ -11,8 +11,11 @@ interface ViewportProps {
   exported?: boolean;
 }
 
-export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, width, x = 0, y = 0, name, exported }, ref) => {
-  useViewport(ref as React.RefObject<ViewportRef>, width);
+export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, width, x = 0, y = 0, name, exported }, forwardedRef) => {
+  const ref = useRef<ViewportRef>(null);
+  useViewport(ref, width);
+
+  useImperativeHandle(forwardedRef, () => ref.current as ViewportRef, []);
 
   return (
     <div
