@@ -1,7 +1,17 @@
 import { getScreenBounds } from "../../node-tools/highlight/helpers/getScreenBounds";
 import { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
+import { isViewportLabelDragging } from "./isViewportLabelDragging";
+import { setupViewportLabelDrag } from "./setupViewportLabelDrag";
+
+// Store cleanup functions for drag listeners
+const dragCleanupFunctions = new Map<string, () => void>();
 
 export const refreshViewportLabels = (): void => {
+  // Skip refresh if a viewport label is being dragged
+  if (isViewportLabelDragging()) {
+    return;
+  }
+
   const overlay = getViewportLabelsOverlay();
 
   // Update SVG dimensions to match current viewport
@@ -12,6 +22,12 @@ export const refreshViewportLabels = (): void => {
 
   // Find all viewports with names
   const viewports = document.querySelectorAll(".viewport[data-viewport-name]");
+
+  // Clean up existing drag listeners
+  dragCleanupFunctions.forEach((cleanup) => {
+    cleanup();
+  });
+  dragCleanupFunctions.clear();
 
   // Remove existing label groups
   const existingGroups = overlay.querySelectorAll(".viewport-label-group");
@@ -45,5 +61,9 @@ export const refreshViewportLabels = (): void => {
 
     group.appendChild(text);
     overlay.appendChild(group);
+
+    // Setup drag functionality for this label
+    const cleanup = setupViewportLabelDrag(text, viewportElement, viewportName);
+    dragCleanupFunctions.set(viewportName, cleanup);
   });
 };
