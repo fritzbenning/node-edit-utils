@@ -1,3 +1,4 @@
+import { refreshViewportLabels } from "../viewport/label/refreshViewportLabels";
 import { applyCanvasState } from "./helpers/applyCanvasState";
 import type { CanvasObserver } from "./types";
 
@@ -21,6 +22,9 @@ export function createCanvasObserver(canvasName: string = "canvas"): CanvasObser
       console.log("refreshHighlightFrame in mutationObserver 3");
       nodeTools.refreshHighlightFrame();
     }
+
+    // Refresh viewport labels
+    refreshViewportLabels();
   });
 
   observer.observe(transformLayer, {
@@ -30,8 +34,18 @@ export function createCanvasObserver(canvasName: string = "canvas"): CanvasObser
     childList: true,
   });
 
+  // Handle window resize for viewport labels
+  const handleResize = (): void => {
+    refreshViewportLabels();
+  };
+  window.addEventListener("resize", handleResize);
+
+  // Initial refresh of viewport labels
+  refreshViewportLabels();
+
   function disconnect(): void {
     observer.disconnect();
+    window.removeEventListener("resize", handleResize);
   }
 
   return {

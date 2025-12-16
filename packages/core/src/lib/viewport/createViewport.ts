@@ -1,4 +1,5 @@
 import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
+import { refreshViewportLabels } from "./label/refreshViewportLabels";
 import { DEFAULT_WIDTH } from "./constants";
 import { setupEventListener } from "./events/setupEventListener";
 import { createResizeHandle } from "./resize/createResizeHandle";
@@ -67,15 +68,21 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
 
   const removeListeners = setupEventListener(resizeHandle, startResize, handleResize, stopResize, blurResize);
 
+  // Refresh viewport labels when viewport is created
+  refreshViewportLabels();
+
   const cleanup = (): void => {
     isDragging = false;
     removeListeners();
     resizeHandle.remove();
+    // Refresh labels after cleanup to remove this viewport's label if needed
+    refreshViewportLabels();
   };
 
   return {
     setWidth: (width: number): void => {
       updateWidth(container, width);
+      refreshViewportLabels();
     },
     cleanup,
   };

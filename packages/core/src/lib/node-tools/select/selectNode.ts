@@ -24,6 +24,8 @@ export const selectNode = (event: MouseEvent, nodeProvider: HTMLElement | null, 
       !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase()) &&
       !element.classList.contains("select-none") &&
       !element.classList.contains("content-layer") &&
+      !element.classList.contains("resize-handle") &&
+      !element.classList.contains("resize-presets") &&
       !isInsideComponent(element) &&
       isInsideViewport(element)
   );
