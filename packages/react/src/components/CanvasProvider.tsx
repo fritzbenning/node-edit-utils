@@ -30,7 +30,7 @@ export function CanvasProvider({
   return (
     <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode} name={canvasName}>
       <NodeTools isVisible={isReady} canvasName={canvasName}>
-        <Viewport width={viewportWidth} ref={viewportRef} name="ProductCard">
+        <Viewport width={viewportWidth} ref={viewportRef} name="ProductCard" exported>
           {children}
         </Viewport>
         <Viewport width={viewportWidth} x={1200} y={0} name="TestContent">

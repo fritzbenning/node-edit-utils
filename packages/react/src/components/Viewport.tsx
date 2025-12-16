@@ -8,9 +8,10 @@ interface ViewportProps {
   x?: number;
   y?: number;
   name?: string;
+  exported?: boolean;
 }
 
-export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, width, x = 0, y = 0, name }, ref) => {
+export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, width, x = 0, y = 0, name, exported }, ref) => {
   useViewport(ref as React.RefObject<ViewportRef>, width);
 
   return (
@@ -19,6 +20,7 @@ export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, widt
       className="viewport @container/viewport"
       style={{ colorScheme: "light", transform: `translate3d(${x}px, ${y}px, 0)` }}
       data-viewport-name={name || undefined}
+      data-exported={exported || undefined}
     >
       {children}
     </div>

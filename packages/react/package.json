@@ -1,6 +1,6 @@
 {
   "name": "@node-edit-utils/react",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "React wrappers for node-edit-utils",
   "type": "module",
   "main": "dist/index.cjs.js",
@@ -22,7 +22,7 @@
   "peerDependencies": {
     "@markup-canvas/core": "1.3.5",
     "@markup-canvas/react": "1.3.5",
-    "@node-edit-utils/core": "2.3.1",
+    "@node-edit-utils/core": "2.3.2",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
