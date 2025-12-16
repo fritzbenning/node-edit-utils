@@ -1,8 +1,8 @@
 export const DEFAULT_WIDTH = 400;
 
 export const RESIZE_CONFIG = {
-  minWidth: 320,
-  maxWidth: 1680,
+  minWidth: 4,
+  maxWidth: 2560,
 } as const;
 
 export const RESIZE_PRESETS = [
