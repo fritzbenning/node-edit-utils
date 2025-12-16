@@ -32,6 +32,11 @@ export const selectNode = (event: MouseEvent, nodeProvider: HTMLElement | null, 
 
   console.log("candidates", candidates);
 
+  if (candidates.length === 0) {
+    lastSelectedNode = null;
+    return null;
+  }
+
   const editableNode = text.getEditableNode();
   if (editableNode && candidates.includes(editableNode)) {
     selectedNode = editableNode;

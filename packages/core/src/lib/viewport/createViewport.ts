@@ -1,7 +1,8 @@
 import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
-import { refreshViewportLabels } from "./label/refreshViewportLabels";
+import { refreshHighlightFrame } from "../node-tools/highlight/refreshHighlightFrame";
 import { DEFAULT_WIDTH } from "./constants";
 import { setupEventListener } from "./events/setupEventListener";
+import { refreshViewportLabels } from "./label/refreshViewportLabels";
 import { createResizeHandle } from "./resize/createResizeHandle";
 import { createResizePresets } from "./resize/createResizePresets";
 import type { Viewport } from "./types";
@@ -83,6 +84,16 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
     setWidth: (width: number): void => {
       updateWidth(container, width);
       refreshViewportLabels();
+
+      // Refresh highlight frame when viewport width changes to update node positions
+      // biome-ignore lint/suspicious/noExplicitAny: global window extension
+      const nodeTools = (window as any).nodeTools;
+      const selectedNode = nodeTools?.getSelectedNode?.();
+      const nodeProvider = document.querySelector('[data-role="node-provider"]') as HTMLElement | null;
+
+      if (selectedNode && nodeProvider) {
+        refreshHighlightFrame(selectedNode, nodeProvider);
+      }
     },
     cleanup,
   };

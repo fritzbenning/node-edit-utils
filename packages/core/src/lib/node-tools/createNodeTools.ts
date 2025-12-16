@@ -121,9 +121,14 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
     sendPostMessage("selectedNodeChanged", node?.getAttribute("data-node-id") ?? null);
     highlightNode(node) ?? null;
 
-    if (node && nodeProvider) {
-      updateHighlightFrameVisibility(node);
-      updateHighlightFrameVisibility(node);
+    if (node) {
+      highlightNode(node);
+      if (nodeProvider) {
+        updateHighlightFrameVisibility(node);
+        updateHighlightFrameVisibility(node);
+      }
+    } else {
+      clearHighlightFrame();
     }
   };
 
