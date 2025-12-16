@@ -71,6 +71,7 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
         checkNodeExists();
         if (!document.contains(node)) return;
 
+        console.log("refreshHighlightFrame in mutationObserver 2");
         refreshHighlightFrame(node, nodeProvider, canvasName);
         updateHighlightFrameVisibility(node);
       });
@@ -78,8 +79,8 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
       mutationObserver.observe(node, {
         attributes: true,
         characterData: true,
-        childList: true,
-        subtree: true,
+        //childList: true,
+        //subtree: true,
       });
 
       // Also observe parent node to catch when this node is removed
@@ -111,6 +112,7 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
         if (!document.contains(node)) return; // Exit early if node was removed
 
         refreshHighlightFrame(node, nodeProvider, canvasName);
+        console.log("refreshHighlightFrame in resizeObserver");
         updateHighlightFrameVisibility(node);
       });
     }

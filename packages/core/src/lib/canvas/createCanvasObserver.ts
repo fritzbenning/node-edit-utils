@@ -18,6 +18,7 @@ export function createCanvasObserver(canvasName: string = "canvas"): CanvasObser
     const nodeTools = (window as any).nodeTools;
 
     if (nodeTools?.refreshHighlightFrame) {
+      console.log("refreshHighlightFrame in mutationObserver 3");
       nodeTools.refreshHighlightFrame();
     }
   });

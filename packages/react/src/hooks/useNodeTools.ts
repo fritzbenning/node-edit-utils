@@ -5,7 +5,12 @@ export const useNodeTools = (ref: RefObject<HTMLElement | null>, canvasName: str
   const [nodeTools, setNodeTools] = useState<NodeTools | null>(null);
 
   useEffect(() => {
-    if (!ref.current) {
+    console.log("ref.current", ref.current);
+  }, [ref]);
+
+  useEffect(() => {
+    console.log("ref.current", ref.current);
+    if (ref?.current === null) {
       return;
     }
 
@@ -15,7 +20,7 @@ export const useNodeTools = (ref: RefObject<HTMLElement | null>, canvasName: str
     return () => {
       tools?.cleanup();
     };
-  }, [ref, canvasName]);
+  }, [ref.current, canvasName]);
 
   return nodeTools;
 };

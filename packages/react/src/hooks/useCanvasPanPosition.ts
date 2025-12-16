@@ -1,7 +1,7 @@
 import type { NodeToolsRef } from "@node-edit-utils/core";
 import { useEffect, useState } from "react";
 
-export function useCanvasStartPosition(ref: React.RefObject<NodeToolsRef>) {
+export function useCanvasPanPosition(ref: React.RefObject<NodeToolsRef>) {
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
 

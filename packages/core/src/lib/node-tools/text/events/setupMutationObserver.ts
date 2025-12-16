@@ -50,6 +50,7 @@ export const setupMutationObserver = (
     // Accumulate mutations instead of replacing
     pendingMutations.push(...mutations);
     scheduleProcess();
+    console.log("refreshHighlightFrame in mutationObserver");
     refreshHighlightFrame(node, nodeProvider, canvasName);
   });
 

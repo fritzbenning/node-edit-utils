@@ -1,9 +1,9 @@
 import { EDITOR_PRESET } from "@markup-canvas/core";
 import { MarkupCanvas } from "@markup-canvas/react";
-import type { NodeToolsRef } from "@node-edit-utils/core";
+import type { ViewportRef } from "@node-edit-utils/core";
 import { useRef } from "react";
 import { useCanvasObserver } from "@/hooks/useCanvasObserver";
-import { useCanvasStartPosition } from "../hooks/useCanvasStartPosition";
+import { useCanvasPanPosition } from "../hooks/useCanvasPanPosition";
 import { NodeTools } from "./NodeTools";
 import { Viewport } from "./Viewport";
 
@@ -12,7 +12,7 @@ export function CanvasProvider({
   width,
   height,
   themeMode,
-  canvasName,
+  canvasName = "canvas",
   viewportWidth,
 }: {
   children: React.ReactNode;
@@ -22,19 +22,21 @@ export function CanvasProvider({
   canvasName?: string;
   viewportWidth?: number;
 }) {
-  const effectiveCanvasName = canvasName ?? "canvas";
-  useCanvasObserver(effectiveCanvasName);
+  const viewportRef = useRef<ViewportRef>(null);
 
-  const nodeToolsRef = useRef<NodeToolsRef>(null);
-  const { x, y, isReady } = useCanvasStartPosition(nodeToolsRef);
+  useCanvasObserver(canvasName);
+  const { x, y, isReady } = useCanvasPanPosition(viewportRef);
 
   return (
-    <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode} name={effectiveCanvasName}>
-      <Viewport viewportWidth={viewportWidth}>
-        <NodeTools ref={nodeToolsRef} isVisible={isReady} canvasName={effectiveCanvasName}>
+    <MarkupCanvas {...EDITOR_PRESET} width={width} height={height} initialPan={{ x, y }} themeMode={themeMode} name={canvasName}>
+      <NodeTools isVisible={isReady} canvasName={canvasName}>
+        <Viewport width={viewportWidth} ref={viewportRef}>
           {children}
-        </NodeTools>
-      </Viewport>
+        </Viewport>
+        <Viewport width={viewportWidth} x={1200} y={0}>
+          Viewport 2
+        </Viewport>
+      </NodeTools>
     </MarkupCanvas>
   );
 }

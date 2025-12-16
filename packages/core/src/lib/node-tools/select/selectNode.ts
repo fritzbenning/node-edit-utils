@@ -3,6 +3,7 @@ import type { NodeText } from "../text/types";
 import { IGNORED_DOM_ELEMENTS } from "./constants";
 import { getElementsFromPoint } from "./helpers/getElementsFromPoint";
 import { isInsideComponent } from "./helpers/isInsideComponent";
+import { isInsideViewport } from "./helpers/isInsideViewport";
 import { targetSameCandidates } from "./helpers/targetSameCandidates";
 
 let candidateCache: Element[] = [];
@@ -22,8 +23,12 @@ export const selectNode = (event: MouseEvent, nodeProvider: HTMLElement | null, 
     (element) =>
       !IGNORED_DOM_ELEMENTS.includes(element.tagName.toLowerCase()) &&
       !element.classList.contains("select-none") &&
-      !isInsideComponent(element)
+      !element.classList.contains("content-layer") &&
+      !isInsideComponent(element) &&
+      isInsideViewport(element)
   );
+
+  console.log("candidates", candidates);
 
   const editableNode = text.getEditableNode();
   if (editableNode && candidates.includes(editableNode)) {

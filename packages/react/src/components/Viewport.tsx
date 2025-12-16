@@ -1,15 +1,20 @@
 import type { ViewportRef } from "@node-edit-utils/core";
-import { useRef } from "react";
+import { forwardRef } from "react";
 import { useViewport } from "@/hooks/useViewport";
 
-export const Viewport = ({ children, viewportWidth }: { children: React.ReactNode; viewportWidth?: number }) => {
-  const viewportRef = useRef<ViewportRef>(null);
+interface ViewportProps {
+  children: React.ReactNode;
+  width?: number;
+  x?: number;
+  y?: number;
+}
 
-  useViewport(viewportRef, viewportWidth);
+export const Viewport = forwardRef<ViewportRef, ViewportProps>(({ children, width, x = 0, y = 0 }, ref) => {
+  useViewport(ref as React.RefObject<ViewportRef>, width);
 
   return (
-    <div ref={viewportRef} className="viewport @container/viewport" style={{ colorScheme: "light" }}>
+    <div ref={ref} className="viewport @container/viewport" style={{ colorScheme: "light", transform: `translate3d(${x}px, ${y}px, 0)` }}>
       {children}
     </div>
   );
-};
+});

@@ -1,5 +1,5 @@
 import type { NodeToolsRef } from "@node-edit-utils/core";
-import { forwardRef } from "react";
+import { useRef } from "react";
 import { useNodeTools } from "@/hooks/useNodeTools";
 
 interface NodeEditProviderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -8,18 +8,14 @@ interface NodeEditProviderProps extends React.HTMLAttributes<HTMLDivElement> {
   canvasName?: string;
 }
 
-export const NodeTools = forwardRef<NodeToolsRef, NodeEditProviderProps>(({ children, isVisible = false, canvasName, ...props }, ref) => {
-  useNodeTools(ref as React.RefObject<NodeToolsRef>, canvasName);
+export const NodeTools = ({ children, isVisible = false, canvasName, ...props }: NodeEditProviderProps) => {
+  const ref = useRef<NodeToolsRef>(null);
+
+  useNodeTools(ref, canvasName);
 
   return (
-    <div
-      ref={ref}
-      data-role="node-provider"
-      className="node-provider"
-      style={{ opacity: isVisible ? "1" : "0", transition: "opacity 0.3s ease-in-out" }}
-      {...props}
-    >
+    <div ref={ref} data-role="node-provider" className="node-provider" style={{ opacity: isVisible ? 1 : 0 }} {...props}>
       {children}
     </div>
   );
-});
+};

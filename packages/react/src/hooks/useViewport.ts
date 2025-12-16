@@ -5,7 +5,7 @@ export const useViewport = (ref: RefObject<ViewportRef | null>, initialWidth?: n
   const [viewport, setViewport] = useState<Viewport | null>(null);
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref?.current) {
       return;
     }
 
