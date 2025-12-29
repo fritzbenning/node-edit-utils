@@ -10,7 +10,6 @@ export function CanvasProvider({
   height,
   themeMode,
   canvasName = "canvas",
-  viewportWidth,
 }: {
   children: React.ReactNode;
   width: number;

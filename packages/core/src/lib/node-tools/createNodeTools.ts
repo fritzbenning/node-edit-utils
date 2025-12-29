@@ -125,7 +125,6 @@ export const createNodeTools = (element: HTMLElement | null, canvasName: string 
       highlightNode(node);
       if (nodeProvider) {
         updateHighlightFrameVisibility(node);
-        updateHighlightFrameVisibility(node);
       }
     } else {
       clearHighlightFrame();

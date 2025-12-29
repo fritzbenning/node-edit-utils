@@ -1,11 +1,14 @@
+import type { NodeTools } from "../../node-tools/types";
 import { sendPostMessage } from "../../post-message/sendPostMessage";
 import { getLabelPosition } from "./helpers/getLabelPosition";
 import { getTransformValues } from "./helpers/getTransformValues";
 import { getZoomValue } from "./helpers/getZoomValue";
+import { selectFirstViewportNode } from "./helpers/selectFirstViewportNode";
 import { setViewportLabelDragging } from "./isViewportLabelDragging";
 
 export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportElement: HTMLElement, viewportName: string): (() => void) => {
   let isDragging = false;
+  let hasDragged = false;
   let startX = 0;
   let startY = 0;
   let initialTransform = { x: 0, y: 0 };
@@ -19,11 +22,17 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
     event.stopPropagation();
 
     isDragging = true;
+    hasDragged = false;
+
     setViewportLabelDragging(true);
+
     startX = event.clientX;
     startY = event.clientY;
+
     initialTransform = getTransformValues(viewportElement);
     initialLabelPosition = getLabelPosition(labelGroup);
+
+    selectFirstViewportNode(viewportElement);
   };
 
   const handleDrag = (event: MouseEvent): void => {
@@ -34,6 +43,8 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
     // Calculate mouse delta
     const rawDeltaX = event.clientX - startX;
     const rawDeltaY = event.clientY - startY;
+
+    hasDragged = true;
 
     // Adjust delta for zoom level
     const deltaX = rawDeltaX / zoom;
@@ -60,21 +71,23 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
     isDragging = false;
     setViewportLabelDragging(false);
 
-    const finalTransform = getTransformValues(viewportElement);
+    // If it was a drag, handle drag completion
+    if (hasDragged) {
+      const finalTransform = getTransformValues(viewportElement);
 
-    // Trigger refresh after drag completes to update highlight frame and labels
-    // biome-ignore lint/suspicious/noExplicitAny: global window extension
-    const nodeTools = (window as any).nodeTools;
-    if (nodeTools?.refreshHighlightFrame) {
-      nodeTools.refreshHighlightFrame();
+      // Trigger refresh after drag completes to update highlight frame and labels
+      const nodeTools = (window as Window & { nodeTools?: NodeTools }).nodeTools;
+      if (nodeTools?.refreshHighlightFrame) {
+        nodeTools.refreshHighlightFrame();
+      }
+
+      // Notify parent about the new position
+      sendPostMessage("viewport-position-changed", {
+        viewportName,
+        x: finalTransform.x,
+        y: finalTransform.y,
+      });
     }
-
-    // Notify parent about the new position
-    sendPostMessage("viewport-position-changed", {
-      viewportName,
-      x: finalTransform.x,
-      y: finalTransform.y,
-    });
   };
 
   const cancelDrag = (): void => {
@@ -82,8 +95,21 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
     setViewportLabelDragging(false);
   };
 
+  const preventClick = (event: MouseEvent): void => {
+    // Always prevent clicks on the label element to avoid the document click handler
+    // clearing the selection. We handle selection ourselves in startDrag.
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Reset hasDragged flag after handling the click
+    if (hasDragged) {
+      hasDragged = false;
+    }
+  };
+
   // Attach event listeners
   labelElement.addEventListener("mousedown", startDrag);
+  labelElement.addEventListener("click", preventClick);
   document.addEventListener("mousemove", handleDrag);
   document.addEventListener("mouseup", stopDrag);
   window.addEventListener("blur", cancelDrag);
@@ -91,6 +117,7 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
   // Return cleanup function
   return () => {
     labelElement.removeEventListener("mousedown", startDrag);
+    labelElement.removeEventListener("click", preventClick);
     document.removeEventListener("mousemove", handleDrag);
     document.removeEventListener("mouseup", stopDrag);
     window.removeEventListener("blur", cancelDrag);

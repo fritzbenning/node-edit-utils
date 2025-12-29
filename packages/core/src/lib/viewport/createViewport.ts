@@ -14,6 +14,7 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
 
   // Remove any existing resize handle to prevent duplicates
   const existingHandle = container.querySelector(".resize-handle");
+
   if (existingHandle) {
     existingHandle.remove();
   }
@@ -25,6 +26,7 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
   createResizePresets(resizeHandle, container, updateWidth);
 
   let isDragging: boolean = false;
+  let hasDragged: boolean = false;
   let startX: number = 0;
   let startWidth: number = 0;
 
@@ -33,12 +35,15 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
     event.stopPropagation();
 
     isDragging = true;
+    hasDragged = false;
     startX = event.clientX;
     startWidth = container.offsetWidth;
   };
 
   const handleResize = (event: MouseEvent): void => {
     if (!isDragging) return;
+
+    hasDragged = true;
 
     if (canvas) {
       canvas.style.cursor = "ew-resize";
@@ -59,21 +64,39 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
     isDragging = false;
   };
 
+  const preventClick = (event: MouseEvent): void => {
+    // Always prevent clicks on the resize handle to avoid the document click handler
+    // clearing the selection. The resize handle is not part of the nodeProvider.
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Reset hasDragged flag after handling the click
+    if (hasDragged) {
+      hasDragged = false;
+    }
+  };
+
   const blurResize = (): void => {
     if (canvas) {
       canvas.style.cursor = "default";
     }
 
     isDragging = false;
+    hasDragged = false;
   };
 
   const removeListeners = setupEventListener(resizeHandle, startResize, handleResize, stopResize, blurResize);
+
+  // Prevent click events on resize handle to avoid clearing selection
+  resizeHandle.addEventListener("click", preventClick);
 
   // Refresh viewport labels when viewport is created
   refreshViewportLabels();
 
   const cleanup = (): void => {
     isDragging = false;
+    hasDragged = false;
+    resizeHandle.removeEventListener("click", preventClick);
     removeListeners();
     resizeHandle.remove();
     // Refresh labels after cleanup to remove this viewport's label if needed
