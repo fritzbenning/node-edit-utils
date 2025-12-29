@@ -1,5 +1,4 @@
 export const getCanvasWindowValue = (path: string[], canvasName: string = "canvas") => {
-  // biome-ignore lint/suspicious/noExplicitAny: global window extension
-  const canvas = (window as any)[canvasName];
-  return path.reduce((obj, prop) => obj?.[prop], canvas);
+  const canvas = (window as unknown as Record<string, unknown>)[canvasName];
+  return path.reduce((obj: unknown, prop: string) => (obj as Record<string, unknown>)?.[prop], canvas);
 };
