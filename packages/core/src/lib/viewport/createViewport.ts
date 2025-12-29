@@ -1,7 +1,8 @@
 import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
+import { createDragHandler } from "../helpers/createDragHandler";
 import { refreshHighlightFrame } from "../node-tools/highlight/refreshHighlightFrame";
+import type { NodeTools } from "../node-tools/types";
 import { DEFAULT_WIDTH } from "./constants";
-import { setupEventListener } from "./events/setupEventListener";
 import { refreshViewportLabels } from "./label/refreshViewportLabels";
 import { createResizeHandle } from "./resize/createResizeHandle";
 import { createResizePresets } from "./resize/createResizePresets";
@@ -25,81 +26,55 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
 
   createResizePresets(resizeHandle, container, updateWidth);
 
-  let isDragging: boolean = false;
-  let hasDragged: boolean = false;
-  let startX: number = 0;
-  let startWidth: number = 0;
+  // Track initial values for resize calculation
+  let startX = 0;
+  let startWidth = 0;
 
-  const startResize = (event: MouseEvent): void => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    isDragging = true;
-    hasDragged = false;
-    startX = event.clientX;
-    startWidth = container.offsetWidth;
-  };
-
-  const handleResize = (event: MouseEvent): void => {
-    if (!isDragging) return;
-
-    hasDragged = true;
-
-    if (canvas) {
-      canvas.style.cursor = "ew-resize";
-    }
-
-    const width = calcWidth(event, startX, startWidth);
-    updateWidth(container, width);
-  };
-
-  const stopResize = (event: MouseEvent): void => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (canvas) {
-      canvas.style.cursor = "default";
-    }
-
-    isDragging = false;
-  };
-
-  const preventClick = (event: MouseEvent): void => {
-    // Always prevent clicks on the resize handle to avoid the document click handler
-    // clearing the selection. The resize handle is not part of the nodeProvider.
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Reset hasDragged flag after handling the click
-    if (hasDragged) {
-      hasDragged = false;
+  // Handle mouse leave for resize (specific to resize use case)
+  const handleMouseLeave = (event: MouseEvent): void => {
+    // Check if mouse is leaving the window/document
+    if (!event.relatedTarget && (event.target === document || event.target === document.documentElement)) {
+      if (canvas) {
+        canvas.style.cursor = "default";
+      }
     }
   };
 
-  const blurResize = (): void => {
-    if (canvas) {
-      canvas.style.cursor = "default";
-    }
+  const removeDragListeners = createDragHandler(resizeHandle, {
+    onStart: (_event, { startX: dragStartX }) => {
+      startX = dragStartX;
+      startWidth = container.offsetWidth;
+    },
+    onDrag: (event) => {
+      if (canvas) {
+        canvas.style.cursor = "ew-resize";
+      }
 
-    isDragging = false;
-    hasDragged = false;
-  };
+      const width = calcWidth(event, startX, startWidth);
+      updateWidth(container, width);
+    },
+    onStop: () => {
+      if (canvas) {
+        canvas.style.cursor = "default";
+      }
+    },
+    onCancel: () => {
+      if (canvas) {
+        canvas.style.cursor = "default";
+      }
+    },
+    onPreventClick: () => {},
+  });
 
-  const removeListeners = setupEventListener(resizeHandle, startResize, handleResize, stopResize, blurResize);
+  document.addEventListener("mouseleave", handleMouseLeave);
 
-  // Prevent click events on resize handle to avoid clearing selection
-  resizeHandle.addEventListener("click", preventClick);
-
-  // Refresh viewport labels when viewport is created
   refreshViewportLabels();
 
   const cleanup = (): void => {
-    isDragging = false;
-    hasDragged = false;
-    resizeHandle.removeEventListener("click", preventClick);
-    removeListeners();
+    removeDragListeners();
+    document.removeEventListener("mouseleave", handleMouseLeave);
     resizeHandle.remove();
-    // Refresh labels after cleanup to remove this viewport's label if needed
+
     refreshViewportLabels();
   };
 
@@ -108,9 +83,7 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
       updateWidth(container, width);
       refreshViewportLabels();
 
-      // Refresh highlight frame when viewport width changes to update node positions
-      // biome-ignore lint/suspicious/noExplicitAny: global window extension
-      const nodeTools = (window as any).nodeTools;
+      const nodeTools = (window as unknown as { nodeTools?: NodeTools }).nodeTools;
       const selectedNode = nodeTools?.getSelectedNode?.();
       const nodeProvider = document.querySelector('[data-role="node-provider"]') as HTMLElement | null;
 
