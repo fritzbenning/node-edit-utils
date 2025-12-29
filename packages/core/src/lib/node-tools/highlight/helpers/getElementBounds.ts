@@ -1,4 +1,5 @@
 import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
+import { adjustForZoom } from "@/lib/helpers/adjustForZoom";
 
 export function getElementBounds(
   element: Element,
@@ -18,10 +19,10 @@ export function getElementBounds(
 
   const zoom = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;
 
-  const top = parseFloat((relativeTop / zoom).toFixed(5));
-  const left = parseFloat((relativeLeft / zoom).toFixed(5));
-  const width = Math.max(4, parseFloat((elementRect.width / zoom).toFixed(5)));
-  const height = parseFloat((elementRect.height / zoom).toFixed(5));
+  const top = adjustForZoom(relativeTop, zoom);
+  const left = adjustForZoom(relativeLeft, zoom);
+  const width = Math.max(4, adjustForZoom(elementRect.width, zoom));
+  const height = adjustForZoom(elementRect.height, zoom);
 
   return {
     top,

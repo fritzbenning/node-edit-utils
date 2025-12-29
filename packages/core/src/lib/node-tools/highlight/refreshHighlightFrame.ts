@@ -1,5 +1,7 @@
-import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
+import { getCanvasContainerOrBody } from "@/lib/canvas/helpers/getCanvasContainerOrBody";
 import { getCanvasWindowValue } from "@/lib/canvas/helpers/getCanvasWindowValue";
+import { getViewportDimensions } from "@/lib/helpers/getViewportDimensions";
+import { toggleClass } from "@/lib/helpers/toggleClass";
 import { isComponentInstance } from "../select/helpers/isComponentInstance";
 import { getHighlightFrameElement } from "./helpers/getHighlightFrameElement";
 import { getScreenBounds } from "./helpers/getScreenBounds";
@@ -22,24 +24,15 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
 
   // Update SVG dimensions to match current viewport (handles window resize and ensures coordinate system is correct)
   // Use clientWidth/Height to match getBoundingClientRect() coordinate system (excludes scrollbars)
-  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-  const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+  const { width: viewportWidth, height: viewportHeight } = getViewportDimensions();
   frame.setAttribute("width", viewportWidth.toString());
   frame.setAttribute("height", viewportHeight.toString());
 
   // Update instance class
-  if (isInstance) {
-    frame.classList.add("is-instance");
-  } else {
-    frame.classList.remove("is-instance");
-  }
+  toggleClass(frame, "is-instance", isInstance);
 
   // Update text edit class
-  if (isTextEdit) {
-    frame.classList.add("is-text-edit");
-  } else {
-    frame.classList.remove("is-text-edit");
-  }
+  toggleClass(frame, "is-text-edit", isTextEdit);
 
   const group = frame.querySelector(".highlight-frame-group") as SVGGElement | null;
   if (!group) return;
@@ -56,8 +49,7 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
     rect.removeAttribute("stroke"); // Use CSS default
   }
 
-  const canvasContainer = getCanvasContainer();
-  const container = canvasContainer || document.body;
+  const container = getCanvasContainerOrBody();
   const toolsWrapper = container.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
   const nodeTools = toolsWrapper?.querySelector(".node-tools") as HTMLElement | null;
 
@@ -71,32 +63,10 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const bottomY = top + height;
 
   // Update instance classes on tools wrapper and node tools
-  if (toolsWrapper) {
-    if (isInstance) {
-      toolsWrapper.classList.add("is-instance");
-    } else {
-      toolsWrapper.classList.remove("is-instance");
-    }
-    // Update text edit class
-    if (isTextEdit) {
-      toolsWrapper.classList.add("is-text-edit");
-    } else {
-      toolsWrapper.classList.remove("is-text-edit");
-    }
-  }
-  if (nodeTools) {
-    if (isInstance) {
-      nodeTools.classList.add("is-instance");
-    } else {
-      nodeTools.classList.remove("is-instance");
-    }
-    // Update text edit class
-    if (isTextEdit) {
-      nodeTools.classList.add("is-text-edit");
-    } else {
-      nodeTools.classList.remove("is-text-edit");
-    }
-  }
+  toggleClass(toolsWrapper, "is-instance", isInstance);
+  toggleClass(toolsWrapper, "is-text-edit", isTextEdit);
+  toggleClass(nodeTools, "is-instance", isInstance);
+  toggleClass(nodeTools, "is-text-edit", isTextEdit);
 
   // Batch all DOM writes (single paint pass)
   // Update group transform to move entire group (rect + handles) at once

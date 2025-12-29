@@ -1,5 +1,5 @@
 import { createDragHandler } from "../../helpers/createDragHandler";
-import type { NodeTools } from "../../node-tools/types";
+import { getNodeTools } from "../../helpers/getNodeTools";
 import { sendPostMessage } from "../../post-message/sendPostMessage";
 import { getLabelPosition } from "./helpers/getLabelPosition";
 import { getTransformValues } from "./helpers/getTransformValues";
@@ -49,7 +49,7 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
         const finalTransform = getTransformValues(viewportElement);
 
         // Trigger refresh after drag completes to update highlight frame and labels
-        const nodeTools = (window as Window & { nodeTools?: NodeTools }).nodeTools;
+        const nodeTools = getNodeTools();
         if (nodeTools?.refreshHighlightFrame) {
           nodeTools.refreshHighlightFrame();
         }

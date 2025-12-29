@@ -1,3 +1,9 @@
+export { adjustForZoom } from "./adjustForZoom";
+export type { DragCallbacks, DragHandlerOptions, DragState } from "./createDragHandler";
 export { createDragHandler } from "./createDragHandler";
-export type { DragState, DragCallbacks, DragHandlerOptions } from "./createDragHandler";
-export { withRAF, withRAFThrottle, withDoubleRAF } from "./withRAF";
+export { getNodeProvider } from "./getNodeProvider";
+export { getNodeTools } from "./getNodeTools";
+export { getViewportDimensions } from "./getViewportDimensions";
+export { parseTransform2d, parseTransform3d } from "./parseTransform";
+export { toggleClass } from "./toggleClass";
+export { withDoubleRAF, withRAF, withRAFThrottle } from "./withRAF";

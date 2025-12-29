@@ -1,3 +1,4 @@
+import { getViewportDimensions } from "../../helpers/getViewportDimensions";
 import { getScreenBounds } from "../../node-tools/highlight/helpers/getScreenBounds";
 import { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
 import { isViewportLabelDragging } from "./isViewportLabelDragging";
@@ -15,8 +16,7 @@ export const refreshViewportLabels = (): void => {
   const overlay = getViewportLabelsOverlay();
 
   // Update SVG dimensions to match current viewport
-  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-  const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+  const { width: viewportWidth, height: viewportHeight } = getViewportDimensions();
   overlay.setAttribute("width", viewportWidth.toString());
   overlay.setAttribute("height", viewportHeight.toString());
 

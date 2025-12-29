@@ -1,8 +1,7 @@
-import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
+import { getCanvasContainerOrBody } from "@/lib/canvas/helpers/getCanvasContainerOrBody";
 
 export const clearHighlightFrame = (): void => {
-  const canvasContainer = getCanvasContainer();
-  const container = canvasContainer || document.body;
+  const container = getCanvasContainerOrBody();
   
   const frame = container.querySelector(".highlight-frame-overlay");
   if (frame) {

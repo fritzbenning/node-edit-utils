@@ -1,8 +1,8 @@
-import { getCanvasContainer } from "../../canvas/helpers/getCanvasContainer";
+import { getCanvasContainerOrBody } from "../../canvas/helpers/getCanvasContainerOrBody";
+import { getViewportDimensions } from "../../helpers/getViewportDimensions";
 
 export const getViewportLabelsOverlay = (): SVGSVGElement => {
-  const canvasContainer = getCanvasContainer();
-  const container = canvasContainer || document.body;
+  const container = getCanvasContainerOrBody();
 
   // Check if overlay already exists
   let overlay = container.querySelector(".viewport-labels-overlay") as SVGSVGElement | null;
@@ -21,8 +21,7 @@ export const getViewportLabelsOverlay = (): SVGSVGElement => {
     overlay.style.pointerEvents = "none";
     overlay.style.zIndex = "500";
 
-    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-    const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+    const { width: viewportWidth, height: viewportHeight } = getViewportDimensions();
     overlay.setAttribute("width", viewportWidth.toString());
     overlay.setAttribute("height", viewportHeight.toString());
 

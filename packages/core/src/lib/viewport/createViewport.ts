@@ -1,7 +1,8 @@
 import { getCanvasContainer } from "../canvas/helpers/getCanvasContainer";
 import { createDragHandler } from "../helpers/createDragHandler";
+import { getNodeProvider } from "../helpers/getNodeProvider";
+import { getNodeTools } from "../helpers/getNodeTools";
 import { refreshHighlightFrame } from "../node-tools/highlight/refreshHighlightFrame";
-import type { NodeTools } from "../node-tools/types";
 import { DEFAULT_WIDTH } from "./constants";
 import { refreshViewportLabels } from "./label/refreshViewportLabels";
 import { createResizeHandle } from "./resize/createResizeHandle";
@@ -83,9 +84,9 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
       updateWidth(container, width);
       refreshViewportLabels();
 
-      const nodeTools = (window as unknown as { nodeTools?: NodeTools }).nodeTools;
+      const nodeTools = getNodeTools();
       const selectedNode = nodeTools?.getSelectedNode?.();
-      const nodeProvider = document.querySelector('[data-role="node-provider"]') as HTMLElement | null;
+      const nodeProvider = getNodeProvider();
 
       if (selectedNode && nodeProvider) {
         refreshHighlightFrame(selectedNode, nodeProvider);

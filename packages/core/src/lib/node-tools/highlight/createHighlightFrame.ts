@@ -1,4 +1,5 @@
-import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
+import { getCanvasContainerOrBody } from "@/lib/canvas/helpers/getCanvasContainerOrBody";
+import { getViewportDimensions } from "@/lib/helpers/getViewportDimensions";
 import { createCornerHandles } from "./createCornerHandles";
 import { getScreenBounds } from "./helpers/getScreenBounds";
 
@@ -36,8 +37,7 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
   svg.style.pointerEvents = "none";
   svg.style.zIndex = "500";
 
-  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-  const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+  const { width: viewportWidth, height: viewportHeight } = getViewportDimensions();
   svg.setAttribute("width", viewportWidth.toString());
   svg.setAttribute("height", viewportHeight.toString());
 
@@ -65,12 +65,8 @@ export const createHighlightFrame = (node: HTMLElement, isInstance: boolean = fa
   createCornerHandles(group, minWidth, height, isInstance, isTextEdit);
 
   svg.appendChild(group);
-  const canvasContainer = getCanvasContainer();
-  if (canvasContainer) {
-    canvasContainer.appendChild(svg);
-  } else {
-    document.body.appendChild(svg);
-  }
+  const container = getCanvasContainerOrBody();
+  container.appendChild(svg);
 
   return svg as SVGSVGElement;
 };

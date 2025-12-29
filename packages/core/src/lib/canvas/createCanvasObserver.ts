@@ -1,3 +1,4 @@
+import { getNodeTools } from "../helpers/getNodeTools";
 import { refreshViewportLabels } from "../viewport/label/refreshViewportLabels";
 import { applyCanvasState } from "./helpers/applyCanvasState";
 import type { CanvasObserver } from "./types";
@@ -15,8 +16,7 @@ export function createCanvasObserver(canvasName: string = "canvas"): CanvasObser
     applyCanvasState(canvasName);
 
     // Refresh highlight frame (throttled via withRAFThrottle)
-    // biome-ignore lint/suspicious/noExplicitAny: global window extension
-    const nodeTools = (window as any).nodeTools;
+    const nodeTools = getNodeTools();
 
     if (nodeTools?.refreshHighlightFrame) {
       nodeTools.refreshHighlightFrame();

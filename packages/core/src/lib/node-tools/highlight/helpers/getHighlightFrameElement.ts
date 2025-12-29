@@ -1,7 +1,6 @@
-import { getCanvasContainer } from "@/lib/canvas/helpers/getCanvasContainer";
+import { getCanvasContainerOrBody } from "@/lib/canvas/helpers/getCanvasContainerOrBody";
 
 export function getHighlightFrameElement(): SVGSVGElement | null {
-  const canvasContainer = getCanvasContainer();
-  const container = canvasContainer || document.body;
+  const container = getCanvasContainerOrBody();
   return container.querySelector(".highlight-frame-overlay") as SVGSVGElement | null;
 }
