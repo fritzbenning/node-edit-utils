@@ -1,6 +1,6 @@
 import { getScreenBounds } from "../../node-tools/highlight/helpers/getScreenBounds";
-import { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
-import { setupViewportLabelDrag } from "./setupViewportLabelDrag";
+import { getViewportLabelOverlay } from "./getViewportLabelOverlay";
+import { setupViewportDrag } from "./setupViewportDrag";
 
 /**
  * Refreshes (updates) a viewport label for a single viewport element.
@@ -16,7 +16,7 @@ export const refreshViewportLabel = (viewportElement: HTMLElement): void => {
     return;
   }
 
-  const overlay = getViewportLabelsOverlay();
+  const overlay = getViewportLabelOverlay();
   const bounds = getScreenBounds(viewportElement);
 
   // Get existing label group or create if it doesn't exist
@@ -41,7 +41,7 @@ export const refreshViewportLabel = (viewportElement: HTMLElement): void => {
     overlay.appendChild(group);
 
     // Setup drag functionality only when creating new label
-    setupViewportLabelDrag(text, viewportElement, viewportName);
+    setupViewportDrag(text, viewportElement, viewportName);
   }
 
   // Update label position (this is the refresh part - updates existing label)

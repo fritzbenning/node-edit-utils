@@ -5,9 +5,9 @@ import { getLabelPosition } from "./helpers/getLabelPosition";
 import { getTransformValues } from "./helpers/getTransformValues";
 import { getZoomValue } from "./helpers/getZoomValue";
 import { selectFirstViewportNode } from "./helpers/selectFirstViewportNode";
-import { setViewportLabelDragging } from "./isViewportLabelDragging";
+import { setViewportDragging } from "./isViewportDragging";
 
-export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportElement: HTMLElement, viewportName: string): (() => void) => {
+export const setupViewportDrag = (labelElement: SVGTextElement, viewportElement: HTMLElement, viewportName: string): (() => void) => {
   // Get the parent group element that contains the label
   const labelGroup = labelElement.parentElement as unknown as SVGGElement;
 
@@ -17,7 +17,7 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
 
   return createDragHandler(labelElement, {
     onStart: () => {
-      setViewportLabelDragging(true);
+      setViewportDragging(true);
       initialTransform = getTransformValues(viewportElement);
       initialLabelPosition = getLabelPosition(labelGroup);
       selectFirstViewportNode(viewportElement);
@@ -42,7 +42,7 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
       viewportElement.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
     },
     onStop: (_event, { hasDragged }) => {
-      setViewportLabelDragging(false);
+      setViewportDragging(false);
 
       // If it was a drag, handle drag completion
       if (hasDragged) {
@@ -63,7 +63,7 @@ export const setupViewportLabelDrag = (labelElement: SVGTextElement, viewportEle
       }
     },
     onCancel: () => {
-      setViewportLabelDragging(false);
+      setViewportDragging(false);
     },
     onPreventClick: () => {},
   });

@@ -1,15 +1,15 @@
 import { getViewportDimensions } from "../../helpers/getViewportDimensions";
-import { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
-import { isViewportLabelDragging } from "./isViewportLabelDragging";
+import { getViewportLabelOverlay } from "./getViewportLabelOverlay";
+import { isViewportDragging } from "./isViewportDragging";
 import { refreshViewportLabel } from "./refreshViewportLabel";
 
 export const refreshViewportLabels = (): void => {
   // Skip refresh if a viewport label is being dragged
-  if (isViewportLabelDragging()) {
+  if (isViewportDragging()) {
     return;
   }
 
-  const overlay = getViewportLabelsOverlay();
+  const overlay = getViewportLabelOverlay();
 
   // Update SVG dimensions to match current viewport (handles window resize and ensures coordinate system is correct)
   const { width: viewportWidth, height: viewportHeight } = getViewportDimensions();

@@ -1,4 +1,4 @@
-import { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
+import { getViewportLabelOverlay } from "./getViewportLabelOverlay";
 
 /**
  * Removes a viewport label for a single viewport element.
@@ -11,11 +11,10 @@ export const removeViewportLabel = (viewportElement: HTMLElement): void => {
     return;
   }
 
-  const overlay = getViewportLabelsOverlay();
+  const overlay = getViewportLabelOverlay();
   const labelGroup = overlay.querySelector(`[data-viewport-name="${viewportName}"]`);
 
   if (labelGroup) {
     labelGroup.remove();
   }
 };
-

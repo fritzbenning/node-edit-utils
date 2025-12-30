@@ -1,7 +1,7 @@
 import { getCanvasContainerOrBody } from "../../canvas/helpers/getCanvasContainerOrBody";
 import { getViewportDimensions } from "../../helpers/getViewportDimensions";
 
-export const getViewportLabelsOverlay = (): SVGSVGElement => {
+export const getViewportLabelOverlay = (): SVGSVGElement => {
   const container = getCanvasContainerOrBody();
 
   // Check if overlay already exists
@@ -30,3 +30,4 @@ export const getViewportLabelsOverlay = (): SVGSVGElement => {
 
   return overlay;
 };
+
