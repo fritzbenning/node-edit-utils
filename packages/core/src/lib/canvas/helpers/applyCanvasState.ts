@@ -1,7 +1,7 @@
 import { getCanvasWindowValue } from "./getCanvasWindowValue";
 
 export const applyCanvasState = (canvasName: string = "canvas") => {
-  const zoom: number = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;
+  const zoom: number = (getCanvasWindowValue(["zoom", "current"], canvasName) as number | undefined) ?? 1;
 
   document.body.style.setProperty("--zoom", zoom.toFixed(5));
   document.body.style.setProperty("--stroke-width", (2 / zoom).toFixed(3));

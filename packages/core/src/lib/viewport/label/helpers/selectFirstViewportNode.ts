@@ -1,4 +1,5 @@
 import { getNodeTools } from "../../../helpers/getNodeTools";
+import { sendPostMessage } from "../../../post-message/sendPostMessage";
 
 /**
  * Selects the first child node inside a viewport element.
@@ -12,7 +13,14 @@ export const selectFirstViewportNode = (viewportElement: HTMLElement): void => {
   if (firstChild) {
     const nodeTools = getNodeTools();
     if (nodeTools?.selectNode) {
+      const wasAlreadySelected = nodeTools.getSelectedNode() === firstChild;
       nodeTools.selectNode(firstChild);
+
+      // Always emit postMessage when selecting via viewport label click,
+      // even if the node was already selected (to match behavior of direct node clicks)
+      if (wasAlreadySelected) {
+        sendPostMessage("selectedNodeChanged", firstChild.getAttribute("data-node-id") ?? null);
+      }
     }
   }
 };
