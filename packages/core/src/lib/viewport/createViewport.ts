@@ -4,7 +4,8 @@ import { getNodeProvider } from "../helpers/getNodeProvider";
 import { getNodeTools } from "../helpers/getNodeTools";
 import { refreshHighlightFrame } from "../node-tools/highlight/refreshHighlightFrame";
 import { DEFAULT_WIDTH } from "./constants";
-import { refreshViewportLabels } from "./label/refreshViewportLabels";
+import { refreshViewportLabel } from "./label/refreshViewportLabel";
+import { removeViewportLabel } from "./label/removeViewportLabel";
 import { createResizeHandle } from "./resize/createResizeHandle";
 import { createResizePresets } from "./resize/createResizePresets";
 import type { Viewport } from "./types";
@@ -69,20 +70,22 @@ export const createViewport = (container: HTMLElement, initialWidth?: number): V
 
   document.addEventListener("mouseleave", handleMouseLeave);
 
-  refreshViewportLabels();
+  // Create/refresh the label for this viewport
+  refreshViewportLabel(container);
 
   const cleanup = (): void => {
     removeDragListeners();
     document.removeEventListener("mouseleave", handleMouseLeave);
     resizeHandle.remove();
 
-    refreshViewportLabels();
+    // Remove the label for this viewport
+    removeViewportLabel(container);
   };
 
   return {
     setWidth: (width: number): void => {
       updateWidth(container, width);
-      refreshViewportLabels();
+      refreshViewportLabel(container);
 
       const nodeTools = getNodeTools();
       const selectedNode = nodeTools?.getSelectedNode?.();
