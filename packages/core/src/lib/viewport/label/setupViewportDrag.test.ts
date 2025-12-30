@@ -185,7 +185,7 @@ describe("setupViewportDrag", () => {
     expect(mockNodeTools.refreshHighlightFrame).toHaveBeenCalled();
   });
 
-  it("should send postMessage with final position on drag stop", () => {
+  it("should send postMessage with final position on drag stop when hasDragged is true", () => {
     vi.mocked(getTransformValuesModule.getTransformValues).mockReturnValue({ x: 150, y: 250 });
 
     let onStopCallback: ((event: MouseEvent, state: DragState) => void) | undefined;
@@ -205,6 +205,29 @@ describe("setupViewportDrag", () => {
       viewportName: "test-viewport",
       x: 150,
       y: 250,
+    });
+  });
+
+  it("should send postMessage with final position on drag stop even when hasDragged is false", () => {
+    vi.mocked(getTransformValuesModule.getTransformValues).mockReturnValue({ x: 100, y: 200 });
+
+    let onStopCallback: ((event: MouseEvent, state: DragState) => void) | undefined;
+
+    vi.mocked(createDragHandlerModule.createDragHandler).mockImplementation((_element, callbacks) => {
+      onStopCallback = callbacks.onStop;
+      return mockCleanup;
+    });
+
+    setupViewportDrag(labelElement, viewportElement, "test-viewport");
+
+    const mockEvent = new MouseEvent("mouseup");
+    const mockState: DragState = { isDragging: false, hasDragged: false, startX: 0, startY: 0 };
+    onStopCallback?.(mockEvent, mockState);
+
+    expect(sendPostMessageModule.sendPostMessage).toHaveBeenCalledWith("viewport-position-changed", {
+      viewportName: "test-viewport",
+      x: 100,
+      y: 200,
     });
   });
 

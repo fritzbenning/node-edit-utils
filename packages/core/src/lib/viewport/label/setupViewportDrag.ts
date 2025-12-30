@@ -44,23 +44,23 @@ export const setupViewportDrag = (labelElement: SVGTextElement, viewportElement:
     onStop: (_event, { hasDragged }) => {
       setViewportDragging(false);
 
+      const finalTransform = getTransformValues(viewportElement);
+
       // If it was a drag, handle drag completion
       if (hasDragged) {
-        const finalTransform = getTransformValues(viewportElement);
-
         // Trigger refresh after drag completes to update highlight frame and labels
         const nodeTools = getNodeTools();
         if (nodeTools?.refreshHighlightFrame) {
           nodeTools.refreshHighlightFrame();
         }
-
-        // Notify parent about the new position
-        sendPostMessage("viewport-position-changed", {
-          viewportName,
-          x: finalTransform.x,
-          y: finalTransform.y,
-        });
       }
+
+      // Always notify parent about the new position on drag stop
+      sendPostMessage("viewport-position-changed", {
+        viewportName,
+        x: finalTransform.x,
+        y: finalTransform.y,
+      });
     },
     onCancel: () => {
       setViewportDragging(false);
