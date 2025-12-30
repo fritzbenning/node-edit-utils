@@ -98,7 +98,7 @@
 
 @media (prefers-color-scheme: dark) {
   .viewport-label-text {
-    fill: oklch(0.3 0 0);
+    fill: oklch(0.5 0 0);
   }
 
   .viewport-label-text:hover {
