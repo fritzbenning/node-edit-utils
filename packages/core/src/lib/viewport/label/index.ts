@@ -1,3 +1,4 @@
+export { createViewportLabel } from "./createViewportLabel";
 export { getViewportLabelsOverlay } from "./getViewportLabelsOverlay";
 export { isViewportLabelDragging } from "./isViewportLabelDragging";
 export { refreshViewportLabels } from "./refreshViewportLabels";
