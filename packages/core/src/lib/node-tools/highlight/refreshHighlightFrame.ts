@@ -53,7 +53,7 @@ export const refreshHighlightFrame = (node: HTMLElement, nodeProvider: HTMLEleme
   const toolsWrapper = container.querySelector(".highlight-frame-tools-wrapper") as HTMLElement | null;
   const nodeTools = toolsWrapper?.querySelector(".node-tools") as HTMLElement | null;
 
-  const zoom = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;
+  const zoom = (getCanvasWindowValue(["zoom", "current"], canvasName) as number | undefined) ?? 1;
   const bounds = getScreenBounds(node);
 
   // Calculate all values before any DOM writes

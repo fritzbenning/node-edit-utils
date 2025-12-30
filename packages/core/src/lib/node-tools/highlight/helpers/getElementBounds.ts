@@ -17,7 +17,7 @@ export function getElementBounds(
   const relativeTop = elementRect.top - componentRootRect.top;
   const relativeLeft = elementRect.left - componentRootRect.left;
 
-  const zoom = getCanvasWindowValue(["zoom", "current"], canvasName) ?? 1;
+  const zoom = (getCanvasWindowValue(["zoom", "current"], canvasName) as number | undefined) ?? 1;
 
   const top = adjustForZoom(relativeTop, zoom);
   const left = adjustForZoom(relativeLeft, zoom);
