@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as getNodeToolsModule from "../../../helpers/getNodeTools";
+import type { NodeTools } from "../../../node-tools/types";
 import * as sendPostMessageModule from "../../../post-message/sendPostMessage";
 import { selectFirstViewportNode } from "./selectFirstViewportNode";
 
@@ -26,7 +27,7 @@ describe("selectFirstViewportNode", () => {
       getSelectedNode: vi.fn(),
     };
 
-    vi.mocked(getNodeToolsModule.getNodeTools).mockReturnValue(mockNodeTools as any);
+    vi.mocked(getNodeToolsModule.getNodeTools).mockReturnValue(mockNodeTools as Partial<NodeTools> as NodeTools);
     vi.mocked(sendPostMessageModule.sendPostMessage).mockImplementation(() => {});
   });
 
