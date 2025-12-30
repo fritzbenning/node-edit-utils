@@ -8,6 +8,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
+    "test": "turbo run test",
+    "test:run": "turbo run test:run",
     "format": "biome format --write .",
     "check": "biome check .",
     "version:patch": "node scripts/bump-version.js patch",
