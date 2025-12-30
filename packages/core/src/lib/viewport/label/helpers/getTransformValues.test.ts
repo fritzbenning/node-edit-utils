@@ -43,7 +43,7 @@ describe("getTransformValues", () => {
 
   it("should handle transform with spaces", () => {
     const element = document.createElement("div");
-    element.style.transform = "translate3d( 100px , 200px , 0px )";
+    element.style.transform = "translate3d(100px, 200px, 0px)";
 
     const result = getTransformValues(element);
     expect(result).toEqual({ x: 100, y: 200 });

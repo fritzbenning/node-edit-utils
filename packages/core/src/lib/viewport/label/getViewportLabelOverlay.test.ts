@@ -55,8 +55,8 @@ describe("getViewportLabelOverlay", () => {
     const overlay = getViewportLabelOverlay();
 
     expect(overlay.style.position).toBe("absolute");
-    expect(overlay.style.top).toBe("0");
-    expect(overlay.style.left).toBe("0");
+    expect(overlay.style.top).toBe("0px");
+    expect(overlay.style.left).toBe("0px");
     expect(overlay.style.width).toBe("100vw");
     expect(overlay.style.height).toBe("100vh");
     expect(overlay.style.pointerEvents).toBe("none");

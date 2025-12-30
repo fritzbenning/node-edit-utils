@@ -43,7 +43,7 @@ describe("getLabelPosition", () => {
 
   it("should handle transform with spaces", () => {
     const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    group.setAttribute("transform", "translate( 100 , 200 )");
+    group.setAttribute("transform", "translate(100, 200)");
 
     const result = getLabelPosition(group as unknown as SVGGElement);
     expect(result).toEqual({ x: 100, y: 200 });

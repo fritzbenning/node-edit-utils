@@ -100,14 +100,21 @@ describe("setupViewportDrag", () => {
   });
 
   it("should update viewport and label positions during drag", () => {
+    let onStartCallback: ((event: MouseEvent, state: DragState) => void) | undefined;
     let onDragCallback: ((event: MouseEvent, state: DragState & { deltaX: number; deltaY: number }) => void) | undefined;
 
     vi.mocked(createDragHandlerModule.createDragHandler).mockImplementation((_element, callbacks) => {
+      onStartCallback = callbacks.onStart;
       onDragCallback = callbacks.onDrag;
       return mockCleanup;
     });
 
     setupViewportDrag(labelElement, viewportElement, "test-viewport");
+
+    // Call onStart first to capture initial positions
+    const startEvent = new MouseEvent("mousedown");
+    const startState: DragState = { isDragging: true, hasDragged: false, startX: 0, startY: 0 };
+    onStartCallback?.(startEvent, startState);
 
     const mockEvent = new MouseEvent("mousemove");
     const mockState: DragState & { deltaX: number; deltaY: number } = {
@@ -129,14 +136,21 @@ describe("setupViewportDrag", () => {
   it("should account for zoom level during drag", () => {
     vi.mocked(getZoomValueModule.getZoomValue).mockReturnValue(2);
 
+    let onStartCallback: ((event: MouseEvent, state: DragState) => void) | undefined;
     let onDragCallback: ((event: MouseEvent, state: DragState & { deltaX: number; deltaY: number }) => void) | undefined;
 
     vi.mocked(createDragHandlerModule.createDragHandler).mockImplementation((_element, callbacks) => {
+      onStartCallback = callbacks.onStart;
       onDragCallback = callbacks.onDrag;
       return mockCleanup;
     });
 
     setupViewportDrag(labelElement, viewportElement, "test-viewport");
+
+    // Call onStart first to capture initial positions
+    const startEvent = new MouseEvent("mousedown");
+    const startState: DragState = { isDragging: true, hasDragged: false, startX: 0, startY: 0 };
+    onStartCallback?.(startEvent, startState);
 
     const mockEvent = new MouseEvent("mousemove");
     const mockState: DragState & { deltaX: number; deltaY: number } = {
